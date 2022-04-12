@@ -1,17 +1,22 @@
 <?php
-class block_exaquest extends block_base {
+class block_exaquest extends block_list {
     public function init() {
         $this->title = get_string('exaquest', 'block_exaquest');
     }
 
     public function get_content() {
+        global $CFG, $COURSE;
         if ($this->content !== null) {
             return $this->content;
         }
 
-        $this->content         =  new stdClass;
-        $this->content->text   = 'The content of our planningtool block!';
+
+        $this->content = new stdClass;
+        $this->content->items = array();
+        $this->content->icons = array();
         $this->content->footer = 'Footer here...';
+
+        $this->content->items[] = html_writer::tag('a', 'get questions', array('href' => $CFG->wwwroot . '/blocks/exaquest/questbank.php?courseid=' . $COURSE->id));
 
         return $this->content;
     }
