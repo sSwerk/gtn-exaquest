@@ -16,7 +16,9 @@ class block_exaquest extends block_list {
         $this->content->icons = array();
         $this->content->footer = 'Footer here...';
 
-        $this->content->items[] = html_writer::tag('a', 'get questions', array('href' => $CFG->wwwroot . '/blocks/exaquest/questbank.php?courseid=' . $COURSE->id));
+        $this->content->items[] = html_writer::tag('a', get_string('get_questions', 'block_exaquest'), array('href' => $CFG->wwwroot . '/blocks/exaquest/questbank.php?courseid=' . $COURSE->id));
+        $this->content->items[] = html_writer::tag('a', get_string('dashboard', 'block_exaquest'), array('href' => $CFG->wwwroot . '/blocks/exaquest/dashboard.php?courseid=' . $COURSE->id));
+
 
         return $this->content;
     }
