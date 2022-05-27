@@ -7,6 +7,7 @@ use core\event\question_category_viewed;
 
 
 require_once($CFG->dirroot . '/question/editlib.php');
+require_once(__DIR__ . '/exaquest_view.php');
 
 list($thispageurl, $contexts, $cmid, $cm, $module, $pagevars) =
     question_edit_setup('questions', '/question/edit.php');
@@ -34,7 +35,7 @@ if (($lastchanged = optional_param('lastchanged', 0, PARAM_INT)) !== 0) {
 
 
 
-$questionbank = new core_question\local\bank\view($contexts, $url, $COURSE, $cm);
+$questionbank = new core_question\local\bank\exaquest_view($contexts, $url, $COURSE, $cm);
 
 echo '<div class="questionbankwindow boxwidthwide boxaligncenter">';
 $questionbank->display($pagevars, 'editq');

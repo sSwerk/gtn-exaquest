@@ -1,4 +1,8 @@
 <?php
+
+
+use qbank_editquestion\editquestion_helper;
+
 class block_exaquest extends block_list {
     public function init() {
         $this->title = get_string('exaquest', 'block_exaquest');
@@ -15,6 +19,9 @@ class block_exaquest extends block_list {
         $this->content->items = array();
         $this->content->icons = array();
         $this->content->footer = 'Footer here...';
+
+        // this is to get the button for creating a new question
+        //$this->content->items[] = editquestion_helper::create_new_question_button(2, array('courseid' => $COURSE->id), true);
 
         $this->content->items[] = html_writer::tag('a', 'get questions', array('href' => $CFG->wwwroot . '/blocks/exaquest/questbank.php?courseid=' . $COURSE->id));
 
