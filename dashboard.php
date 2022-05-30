@@ -16,5 +16,27 @@ $PAGE->set_url($url);
 $PAGE->set_heading(get_string('dashboard', 'block_exaquest'));
 $PAGE->set_title(get_string('dashboard', 'block_exaquest'));
 
-echo $OUTPUT->header($context, $courseid, get_string('dashboard', 'block_exaquest'));
-echo $OUTPUT->footer();
+block_exaquest_init_js_css();
+
+$output = $PAGE->get_renderer('block_exaquest');
+
+echo $output->header($context, $courseid, get_string('dashboard', 'block_exaquest'));
+
+
+echo '<div id="exaquest">';
+// TODO: get role
+$role = 0;
+switch ($role) {
+    case 0: // Modulverantwortlicher
+        // TODO: button "bitte fragen erstellen!"
+        echo $output->dashboard_request_questions();
+        echo $output->dashboard_request_questions();
+        break;
+    case 1:
+        break;
+    default:
+        break;
+}
+
+echo '</div>';
+echo $output->footer();
