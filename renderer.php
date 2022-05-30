@@ -21,16 +21,18 @@ defined('MOODLE_INTERNAL') || die;
 
 class block_exaquest_renderer extends plugin_renderer_base  {
     public function dashboard_request_questions(){
-        global $PAGE;
+        global $PAGE, $COURSE;
 
         $request_questions_text = html_writer::tag('p', get_string('request_questions_label', 'block_exaquest'));
 
-        $input_submit = html_writer::empty_tag('input', array('type' => 'submit', 'value' => get_string('save', 'admin'), 'class' => 'btn btn-primary'));
+        $input_submit = html_writer::empty_tag('input', array('type' => 'submit', 'value' => get_string('request_questions_button', 'block_exaquest'), 'class' => 'btn btn-primary'));
 
         $button = html_writer::div(html_writer::tag('form',
             $input_submit,
-            array('action' => 'edit_course.php?&sesskey=' . sesskey(), 'method' => 'post')), 'block_excomp_center');
+            array('method' => 'post', 'action' => $PAGE->url->out(false, array('action' => 'request_questions', 'sesskey' => sesskey(), 'courseid' => $COURSE->id)), 'block_excomp_center')));
 
+
+        //return html_writer::tag("form", $header . $table_html, array("method" => "post", "action" => $PAGE->url->out(false, array('action' => 'delete_selected', 'sesskey' => sesskey())), "id" => "exa-selector"));
 
         $content = html_writer::tag("div", $request_questions_text . $button, array("class" => ""));
 

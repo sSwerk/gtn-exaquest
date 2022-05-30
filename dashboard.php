@@ -23,6 +23,13 @@ $output = $PAGE->get_renderer('block_exaquest');
 echo $output->header($context, $courseid, get_string('dashboard', 'block_exaquest'));
 
 
+$action = optional_param('action', "", PARAM_ALPHAEXT);
+if ($action == 'request_questions') {
+    // TODO get all the users with role "fragesteller" and send them a notification
+    //block_exaquest_send_moodle_notification();
+}
+
+
 echo '<div id="exaquest">';
 // TODO: get role
 $role = 0;

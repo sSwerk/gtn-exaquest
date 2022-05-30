@@ -47,3 +47,31 @@ function block_exaquest_init_js_css(){
     }
 
 }
+
+
+function block_exaquest_send_moodle_notification($notificationtype, $userfrom, $userto, $subject, $message, $context, $contexturl = null, $dakoramessage = false, $courseid = 0, $customdata = null, $messageformat = FORMAT_HTML)
+{
+    global $CFG, $DB;
+
+    require_once($CFG->dirroot . '/message/lib.php');
+
+    $eventdata = new core\message\message();
+
+    $eventdata->modulename = 'block_exaquest';
+    $eventdata->userfrom = $userfrom;
+    $eventdata->userto = $userto;
+    $eventdata->fullmessage = $message;
+    $eventdata->name = $notificationtype;
+    $eventdata->subject = $subject;
+    $eventdata->fullmessageformat = $messageformat;
+    $eventdata->fullmessagehtml = $message;
+    $eventdata->smallmessage = $subject;
+    $eventdata->component = 'block_exaquest';
+    $eventdata->notification = 1;
+    $eventdata->contexturl = $contexturl;
+    $eventdata->contexturlname = $context;
+    $eventdata->courseid = $courseid;
+    $eventdata->customdata = $customdata;    // version must be 3.7 or higher, otherwise this field does not yet exist
+
+    message_send($eventdata);
+}
