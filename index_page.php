@@ -13,7 +13,28 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+global $CFG, $PAGE, $COURSE;
+require_once(__DIR__ . '/../../config.php');
+require_once($CFG->libdir.'/adminlib.php');
 
-require_once __DIR__ . "/../../config.php";
-//require_once __DIR__ . '/vendor/autoload.php';
-require_once __DIR__ . "/lib/lib.php";
+$courseid=2;
+require_login($courseid);
+$context = context_course::instance($courseid);
+
+// Set up the page.
+$title = get_string('dashboard', 'block_exaquest');
+$pagetitle = $title;
+$url = new moodle_url('/blocks/exaquest/index_page.php');
+$PAGE->set_url($url);
+$PAGE->set_title($title);
+$PAGE->set_heading($title);
+
+$output = $PAGE->get_renderer('block_exaquest');
+
+echo $output->header();
+echo $output->heading($pagetitle);
+
+$renderable = new \block_exaquest\output\index_page('Some text');
+echo $output->render($renderable);
+
+echo $output->footer();
