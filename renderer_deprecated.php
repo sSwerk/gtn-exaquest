@@ -37,6 +37,6 @@
 //
 //        $content = html_writer::tag("div", $request_questions_text . $button, array("class" => ""));
 //
-//        return html_writer::div($content, "dasboardcard");
+//        return html_writer::div($content, "dashboardcard");
 //    }
 //}

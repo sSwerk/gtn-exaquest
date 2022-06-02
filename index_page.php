@@ -34,7 +34,7 @@ $output = $PAGE->get_renderer('block_exaquest');
 echo $output->header();
 echo $output->heading($pagetitle);
 
-$renderable = new \block_exaquest\output\index_page('Some text');
+$renderable = new \block_exaquest\output\index_page('asdfasdf');
 echo $output->render($renderable);
 
 echo $output->footer();

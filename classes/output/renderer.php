@@ -22,11 +22,11 @@ defined('MOODLE_INTERNAL') || die;
 use plugin_renderer_base;
 use html_writer;
 
-
 /*
  * Useful sources for development
  * https://docs.moodle.org/dev/Output_API
  * http://componentlibrary.moodle.com/admin/tool/componentlibrary/docspage.php/moodle/components/dom-modal/
+ * https://docs.moodle.org/dev/Templates#Simple_example
  */
 
 class renderer extends plugin_renderer_base {
@@ -42,27 +42,32 @@ class renderer extends plugin_renderer_base {
         return parent::render_from_template('block_exaquest/index_page', $data);
     }
 
+    public function render_dashboard($page) {
+        $data = $page->export_for_template($this);
+        return parent::render_from_template('block_exaquest/dashboard', $data);
+    }
 
-
-
-    public function dashboard_request_questions(){
+    // this will be deprecated... use template instead
+    public function dashboard_request_questions() {
         global $PAGE, $COURSE;
 
         $request_questions_text = html_writer::tag('p', get_string('request_questions_label', 'block_exaquest'));
 
-        $input_submit = html_writer::empty_tag('input', array('type' => 'submit', 'value' => get_string('request_questions_button', 'block_exaquest'), 'class' => 'btn btn-primary'));
+        $input_submit = html_writer::empty_tag('input',
+            array('type' => 'submit', 'value' => get_string('request_questions_button', 'block_exaquest'),
+                'class' => 'btn btn-primary'));
 
         $button = html_writer::div(html_writer::tag('form',
             $input_submit,
-            array('method' => 'post', 'action' => $PAGE->url->out(false, array('action' => 'request_questions', 'sesskey' => sesskey(), 'courseid' => $COURSE->id)), 'block_excomp_center')));
-
+            array('method' => 'post', 'action' => $PAGE->url->out(false,
+                array('action' => 'request_questions', 'sesskey' => sesskey(), 'courseid' => $COURSE->id)),
+                'block_excomp_center')));
 
         //return html_writer::tag("form", $header . $table_html, array("method" => "post", "action" => $PAGE->url->out(false, array('action' => 'delete_selected', 'sesskey' => sesskey())), "id" => "exa-selector"));
 
         $content = html_writer::tag("div", $request_questions_text . $button, array("class" => ""));
 
-        return html_writer::div($content, "dasboardcard");
+        return html_writer::div($content, "dashboardcard");
     }
-
 
 }

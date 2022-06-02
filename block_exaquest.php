@@ -1,6 +1,5 @@
 <?php
 
-
 use qbank_editquestion\editquestion_helper;
 
 class block_exaquest extends block_list {
@@ -25,10 +24,10 @@ class block_exaquest extends block_list {
 
         // this is to get the button for creating a new question
         //$this->content->items[] = editquestion_helper::create_new_question_button(2, array('courseid' => $COURSE->id), true);
-
-        $this->content->items[] = html_writer::tag('a', 'get questions', array('href' => $CFG->wwwroot . '/blocks/exaquest/questbank.php?courseid=' . $COURSE->id));
-
-
+        $this->content->items[] = html_writer::tag('a', get_string('dashboard', 'block_exaquest'),
+            array('href' => $CFG->wwwroot . '/blocks/exaquest/dashboard.php?courseid=' . $COURSE->id));
+        $this->content->items[] = html_writer::tag('a', 'get questions',
+            array('href' => $CFG->wwwroot . '/blocks/exaquest/questbank.php?courseid=' . $COURSE->id));
 
         return $this->content;
     }
