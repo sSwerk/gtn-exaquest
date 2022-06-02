@@ -14,12 +14,37 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+// Standard GPL and phpdocs
+namespace block_exaquest\output;
 
 defined('MOODLE_INTERNAL') || die;
 
-// https://docs.moodle.org/dev/Renderer_best_practices
+use plugin_renderer_base;
+use html_writer;
 
-class block_exaquest_renderer extends plugin_renderer_base  {
+
+/*
+ * Useful sources for development
+ * https://docs.moodle.org/dev/Output_API
+ * http://componentlibrary.moodle.com/admin/tool/componentlibrary/docspage.php/moodle/components/dom-modal/
+ */
+
+class renderer extends plugin_renderer_base {
+    /**
+     * Defer to template.
+     *
+     * @param index_page $page
+     *
+     * @return string html for the page
+     */
+    public function render_index_page($page) {
+        $data = $page->export_for_template($this);
+        return parent::render_from_template('block_exaquest/index_page', $data);
+    }
+
+
+
+
     public function dashboard_request_questions(){
         global $PAGE, $COURSE;
 
@@ -38,4 +63,6 @@ class block_exaquest_renderer extends plugin_renderer_base  {
 
         return html_writer::div($content, "dasboardcard");
     }
+
+
 }
