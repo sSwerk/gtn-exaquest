@@ -29,4 +29,9 @@ $capabilities = array(
         'contextlevel' => CONTEXT_COURSE,
         //this has to be manually applied to the role "fragenersteller"... is there a way to do it automatically?
     ),
+    'block/exaquest:modulverantwortlicher' => array(
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_COURSE,
+        //this has to be manually applied to the role "modulverantwortlicher"
+    ),
 );

@@ -1,7 +1,7 @@
 <?php
 require __DIR__ . '/inc.php';
 
-global $DB, $CFG, $COURSE, $PAGE, $OUTPUT;
+global $DB, $CFG, $COURSE, $PAGE, $OUTPUT, $USER;
 
 $courseid = required_param('courseid', PARAM_INT);
 require_login($courseid);
@@ -31,21 +31,19 @@ if ($action == 'request_questions') {
 
 
 echo '<div id="exaquest">';
-// TODO: get role
-$role = 0;
-switch ($role) {
-    case 0: // Modulverantwortlicher
-        // TODO: button "bitte fragen erstellen!"
-        $frageneersteller = block_exaquest_get_fragenersteller_by_courseid($courseid);
-        $dashboardcard = new \block_exaquest\output\dashboard($frageneersteller);
-        echo $output->render($dashboardcard);
-        //echo $output->dashboard_request_questions();
-        break;
-    case 1:
-        break;
-    default:
-        break;
+
+//get role does not work like that ==> use capabilities instead... noone should have multiple of those capabilities, otherwise this system would not work
+if(is_enrolled($context, $USER, "block/exaquest:modulverantwortlicher")){
+    $frageneersteller = block_exaquest_get_fragenersteller_by_courseid($courseid);
+    $dashboardcard = new \block_exaquest\output\dashboardcard_request_questions($frageneersteller);
+    echo $output->render($dashboardcard);
+}else if(is_enrolled($context, $USER, "block/exaquest:fragenersteller")){
+    // TODO: get questions
+    $questions = [];
+    $dashboardcard = new \block_exaquest\output\dashboardcard_revise_questions($questions);
+    echo $output->render($dashboardcard);
 }
+
 
 echo '</div>';
 echo $output->footer();

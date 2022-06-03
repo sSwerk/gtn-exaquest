@@ -42,9 +42,14 @@ class renderer extends plugin_renderer_base {
         return parent::render_from_template('block_exaquest/index_page', $data);
     }
 
-    public function render_dashboard($page) {
+    public function render_dashboardcard_request_questions($page) {
         $data = $page->export_for_template($this);
-        return parent::render_from_template('block_exaquest/dashboard', $data);
+        return parent::render_from_template('block_exaquest/dashboardcard_request_questions', $data);
+    }
+
+    public function render_dashboardcard_revise_questions($page) {
+        $data = $page->export_for_template($this);
+        return parent::render_from_template('block_exaquest/dashboardcard_revise_questions', $data);
     }
 
     // this will be deprecated... use template instead
