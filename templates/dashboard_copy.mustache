@@ -1,0 +1,32 @@
+<div class="dashboardcard">
+    <p>{{#str}}
+        request_questions_label, block_exaquest {{/str}}
+        <!--      : {{#fragenersteller}}{{firstname}} {{lastname}} {{/fragenersteller}}</p>-->
+        <!--    <p>{{fragenersteller}}</p>-->
+
+
+    <p>{{grades}}</p>
+
+
+    <ul>
+        {{#grades}}
+            <div>
+                course = {{ course }}
+            </div>
+        {{/grades}}
+    </ul>
+
+
+        <!--    {{#response.resultPacket}}-->
+        <!--        {{#results}}-->
+        <!--            {{title}}-->
+        <!--            {{meta.filetype}}-->
+        <!--            {{meta.keywords}}-->
+            <!--        {{/results}}-->
+        <!--    {{/response.resultPacket}}-->
+
+    <form method="post" action="{{action}}">
+        <input type="submit" value="{{#str}} request_questions_button, block_exaquest {{/str}}"
+               class="btn btn-primary">
+    </form>
+</div>

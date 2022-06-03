@@ -9,5 +9,7 @@ $string['dashboard'] = 'Dashboard';
 $string['request_questions_label'] = 'Click this button to request new questions from xxx';
 $string['request_questions_button'] = 'Request';
 
+$string['exaquest:fragenersteller'] = 'Create questions in Exaquest block';
+
 
 
