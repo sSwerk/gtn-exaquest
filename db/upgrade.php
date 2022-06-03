@@ -25,4 +25,5 @@ function xmldb_block_exaquest_upgrade($oldversion)
         // Exaquest savepoint reached.
         upgrade_block_savepoint(true, 2022060300, 'exaquest');
     }
+    return $return_result;
 }
