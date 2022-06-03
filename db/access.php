@@ -23,4 +23,10 @@ $capabilities = array(
 
         'clonepermissionsfrom' => 'moodle/site:manageblocks'
     ),
+
+    'block/exaquest:fragenersteller' => array(
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_COURSE,
+        //this has to be manually applied to the role "fragenersteller"... is there a way to do it automatically?
+    ),
 );

@@ -36,9 +36,10 @@ $role = 0;
 switch ($role) {
     case 0: // Modulverantwortlicher
         // TODO: button "bitte fragen erstellen!"
-        $dashboardcard = new \block_exaquest\output\dashboard('asdfasdf');
+        $frageneersteller = block_exaquest_get_fragenersteller_by_courseid($courseid);
+        $dashboardcard = new \block_exaquest\output\dashboard($frageneersteller);
         echo $output->render($dashboardcard);
-        echo $output->dashboard_request_questions();
+        //echo $output->dashboard_request_questions();
         break;
     case 1:
         break;

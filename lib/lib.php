@@ -14,6 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+
 /**
  * ${PLUGINNAME} file description here.
  *
@@ -22,8 +23,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-
-function block_exaquest_init_js_css(){
+function block_exaquest_init_js_css() {
     global $PAGE, $CFG;
 
     // only allowed to be called once
@@ -32,7 +32,6 @@ function block_exaquest_init_js_css(){
         return;
     }
     $js_inited = true;
-
 
     // main block CSS
     $PAGE->requires->css('/blocks/exaquest/css/block_exaquest.css');
@@ -48,9 +47,8 @@ function block_exaquest_init_js_css(){
 
 }
 
-
-function block_exaquest_send_moodle_notification($notificationtype, $userfrom, $userto, $subject, $message, $context, $contexturl = null, $dakoramessage = false, $courseid = 0, $customdata = null, $messageformat = FORMAT_HTML)
-{
+function block_exaquest_send_moodle_notification($notificationtype, $userfrom, $userto, $subject, $message, $context,
+    $contexturl = null, $dakoramessage = false, $courseid = 0, $customdata = null, $messageformat = FORMAT_HTML) {
     global $CFG, $DB;
 
     require_once($CFG->dirroot . '/message/lib.php');
@@ -74,4 +72,15 @@ function block_exaquest_send_moodle_notification($notificationtype, $userfrom, $
     $eventdata->customdata = $customdata;    // version must be 3.7 or higher, otherwise this field does not yet exist
 
     message_send($eventdata);
+}
+
+/**
+ *
+ * Returns all teacher enroled to a course
+ *
+ * @param unknown_type $courseid
+ */
+function block_exaquest_get_fragenersteller_by_courseid($courseid) {
+    $context = context_course::instance($courseid);
+    return get_enrolled_users($context, 'block/exaquest:fragenersteller');
 }
