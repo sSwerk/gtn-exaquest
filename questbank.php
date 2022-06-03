@@ -7,7 +7,7 @@ use core\event\question_category_viewed;
 
 
 require_once($CFG->dirroot . '/question/editlib.php');
-require_once(__DIR__ . '/exaquest_view.php');
+require_once(__DIR__ . '/questionbank_extensions/exaquest_view.php');
 
 list($thispageurl, $contexts, $cmid, $cm, $module, $pagevars) =
     question_edit_setup('questions', '/question/edit.php');
