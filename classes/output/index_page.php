@@ -23,6 +23,15 @@ class index_page implements renderable, templatable {
     public function export_for_template(renderer_base $output) {
         $data = new stdClass();
         $data->sometext = $this->sometext;
+        $obj1 = new stdClass();
+        $obj1->a = "obj1 a";
+        $obj1->b = "obj1 b";
+        $obj2 = new stdClass();
+        $obj2->a = 111;
+        $obj2->b = 222;
+
+        $data->grades = [$obj1, $obj2];
+
         return $data;
     }
 }

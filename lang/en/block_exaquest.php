@@ -6,7 +6,7 @@ $string['exaquest:myaddinstance'] = 'Add a new exaquest block to the My Moodle p
 
 $string['get_questions'] = 'Get questions';
 $string['dashboard'] = 'Dashboard';
-$string['request_questions_label'] = 'Click this button to request new questions from xxx';
+$string['request_questions_label'] = 'Click this button to request new questions from ';
 $string['request_questions_button'] = 'Request';
 
 $string['exaquest:fragenersteller'] = 'Create questions in Exaquest block';

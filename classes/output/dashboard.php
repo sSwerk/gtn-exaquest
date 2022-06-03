@@ -23,28 +23,16 @@ class dashboard implements renderable, templatable {
     public function export_for_template(renderer_base $output) {
         global $PAGE, $COURSE;
         $data = new stdClass();
-        $data->fragenersteller = json_encode($this->fragenersteller);
-
         // https://www.sitepoint.com/community/t/help-accessing-deep-level-json-in-mustache-template-solved/290780
-
-        $data->grades = <<<EOD
-                        {
-                            "grades": [
-                                {
-                                    "course": "Arithmetic",
-                                    "grade": "8/10"
-                                },
-                                {
-                                    "course": "Geometry",
-                                    "grade": "10/10"
-                                },
-                                {
-                                    "course": "ASDF",
-                                    "grade": "22/22"
-                                }
-                            ]
-                        }
-                        EOD;
+        // https://stackoverflow.com/questions/35999024/how-to-iterate-an-array-of-objects-in-mustache
+        //$data->fragenersteller_selfmade = [(object)["username"  => array_pop($this->fragenersteller)->username], (object)["username"  =>array_pop($this->fragenersteller)->username]];
+        // this would work, but is not feasable to write like this
+        // The problem with $data->fragenersteller = $this->fragenersteller; is that there is an associative array, e.g. 3 => stdClass(), 10 => stdClass() etc.... it MUST start counting at 0, otherwise it will break mustache
+        $data->fragenersteller = array_values($this->fragenersteller);
+        foreach ($data->fragenersteller as $fragensteller){
+            $fragensteller->comma = true;
+        }
+        end($data->fragenersteller)->comma = false;
 
         $data->action =
             $PAGE->url->out(false, array('action' => 'request_questions', 'sesskey' => sesskey(), 'courseid' => $COURSE->id));
