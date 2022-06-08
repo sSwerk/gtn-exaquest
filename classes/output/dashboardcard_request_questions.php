@@ -32,7 +32,9 @@ class dashboardcard_request_questions implements renderable, templatable {
         foreach ($data->fragenersteller as $fragensteller){
             $fragensteller->comma = true;
         }
-        end($data->fragenersteller)->comma = false;
+        if(isset($data->fragenersteller)){
+            end($data->fragenersteller)->comma = false;
+        }
 
         $data->action =
             $PAGE->url->out(false, array('action' => 'request_questions', 'sesskey' => sesskey(), 'courseid' => $COURSE->id));
