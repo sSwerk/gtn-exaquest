@@ -34,8 +34,17 @@ echo $output->header($context, $courseid, get_string('dashboard', 'block_exaques
 
 $action = optional_param('action', "", PARAM_ALPHAEXT);
 if ($action == 'request_questions') {
-    // TODO get all the users with role "fragesteller" and send them a notification
-    //block_exaquest_send_moodle_notification();
+    // get all the users with role "fragesteller" and send them a notification
+    $frageneersteller = block_exaquest_get_fragenersteller_by_courseid($courseid);
+    foreach ($frageneersteller as $ersteller){
+        $messageobject = new stdClass();
+        $messageobject->fullname = $COURSE->fullname;
+        $messageobject->url = new moodle_url('/blocks/exaquest/dashboard.php', ['courseid' => $COURSE->id]);
+        $messageobject->url = $messageobject->url->raw_out(false);
+        $message = get_string('please_create_new_questions', 'block_exaquest', $messageobject);
+        block_exaquest_send_moodle_notification("newquestionsrequest", $USER->id, $ersteller->id, $message, $message, "Frageerstellung");
+    }
+
 }
 
 
@@ -43,7 +52,9 @@ echo '<div id="exaquest">';
 
 //get role does not work like that ==> use capabilities instead... noone should have multiple of those capabilities, otherwise this system would not work
 if(is_enrolled($context, $USER, "block/exaquest:modulverantwortlicher")){
-    $frageneersteller = block_exaquest_get_fragenersteller_by_courseid($courseid);
+    if(!isset($frageneersteller)){
+        $frageneersteller = block_exaquest_get_fragenersteller_by_courseid($courseid);
+    }
     $dashboardcard = new \block_exaquest\output\dashboardcard_request_questions($frageneersteller);
     echo $output->render($dashboardcard);
 }else if(is_enrolled($context, $USER, "block/exaquest:fragenersteller")){
@@ -60,7 +71,7 @@ if(is_enrolled($context, $USER, "block/exaquest:modulverantwortlicher")){
 
     // QUESTIONS TO REVIEW
     $questions = block_exaquest_get_questions_to_revise($courseid, $USER->id);
-    if(!$questions){
+    if(!isset($questions)){
         $questions = [];
     }
     $dashboardcard = new \block_exaquest\output\dashboardcard_revise_questions($questions);
