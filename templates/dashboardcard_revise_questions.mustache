@@ -1,3 +1,7 @@
 <div class="dashboardcard">
     <p>{{#str}}revise_questions_label, block_exaquest {{/str}}</p>
+    {{#questions}}
+        <a href={{editlink}}>{{name}}</a>
+        {{#comma}}<br>{{/comma}}
+    {{/questions}}
 </div>

@@ -26,7 +26,12 @@ class dashboardcard_revise_questions implements renderable, templatable {
         foreach ($data->questions as $question){
             $question->comma = true;
         }
-        end($data->questions)->comma = false;
+        if($data->questions){
+            end($data->questions)->comma = false;
+            foreach ($data->questions as $question){
+                $question->editlink = $question->editlink->raw_out(false); // this "false" removes the &amp; which leads to problem in this case
+            }
+        }
         return $data;
     }
 }

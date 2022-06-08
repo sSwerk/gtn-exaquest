@@ -182,4 +182,19 @@ class exaquest_view extends view {
         echo \html_writer::end_tag('form');
     }
 
+
+    /**
+     * Create a new question form in dashboard.
+     *
+     * @param false|mixed|\stdClass $category
+     * @param bool $canadd
+     */
+    function create_new_question_form_dashboard($category, $canadd): void {
+        $this->create_new_question_form($category, $canadd);
+    }
+
+    function get_current_category_dashboard($categoryandcontext) {
+        return $this->get_current_category($categoryandcontext);
+    }
+
 }
