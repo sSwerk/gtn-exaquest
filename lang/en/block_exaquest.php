@@ -10,13 +10,19 @@ $string['request_questions_label'] = 'Click this button to request new questions
 $string['request_questions_button'] = 'Request';
 $string['revise_questions_label'] = 'The following questions are marked for revision: ';
 
-$string['exaquest:fragenersteller'] = 'Create questions in Exaquest block';
-$string['exaquest:modulverantwortlicher'] = 'Responsible for a module';
 
 
+
+
+
+// Messages
+$string['messageprovider:newquestionsrequest'] = 'New questions have been requested';
 $string['please_create_new_questions'] = 'Please create new questions in <a href="{$a->url}">{$a->fullname}</a>';
 
-$string['messageprovider:newquestionsrequest'] = 'New questions have been requested';
+// Roles and Capabilities
+$string['exaquest:fragenersteller'] = 'Create questions in Exaquest block';
+$string['exaquest:modulverantwortlicher'] = 'Responsible for a module';
+$string['setuproles'] = 'Set up roles and capabilities';
 
 
 

@@ -14,13 +14,14 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-
 require_once __DIR__ . '/../inc.php';
 
-use \core_customfield\field_controller;
+use core_customfield\field_controller;
 
 // called when installing a plugin
 function xmldb_block_exaquest_install() {
+    global $DB;
+
     $handler = qbank_customfields\customfield\question_handler::create();
     $c1id = $handler->create_category();
     $c1 = $handler->get_categories_with_fields()[$c1id];
@@ -48,7 +49,13 @@ function xmldb_block_exaquest_install() {
         'includetime' => 1,
     ];
     $record->configdata = json_encode($configdata);
-    $field = field_controller::create(0, (object)['type' => $record->type], $c1);
+    $field = field_controller::create(0, (object) ['type' => $record->type], $c1);
     $handler->save_field_configuration($field, $record);
 
+    // Creating roles and assigning capabilities
+    // Done as a task AFTER the installation, because the capabilities only exist at the end/after the installation.
+    // create the instance
+    $setuptask = new \block_exaquest\task\set_up_roles();
+    // queue it
+    \core\task\manager::queue_adhoc_task($setuptask);
 }

@@ -27,6 +27,7 @@ $PAGE->set_title(get_string('dashboard', 'block_exaquest'));
 
 block_exaquest_init_js_css();
 
+
 $output = $PAGE->get_renderer('block_exaquest');
 
 echo $output->header($context, $courseid, get_string('dashboard', 'block_exaquest'));

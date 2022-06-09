@@ -24,29 +24,50 @@ $capabilities = array(
         'clonepermissionsfrom' => 'moodle/site:manageblocks'
     ),
 
+    // Roles are written in the German name. Capabilities in english.
+    // The capabilities are created and assigned upon installing the block
     'block/exaquest:fragenersteller' => array(
         'captype' => 'write',
         'contextlevel' => CONTEXT_COURSE,
-        'legacy' => array(
-            'fragenersteller' => CAP_ALLOW,
-        ),
-        //this has to be manually applied to the role "fragenersteller"... is there a way to do it automatically?
     ),
     'block/exaquest:createquestion' => array(
         'captype' => 'write',
         'contextlevel' => CONTEXT_COURSE,
-        'legacy' => array(
-            'fragenersteller' => CAP_ALLOW,
-        ),
-        //this has to be manually applied to the role "fragenersteller"... is there a way to do it automatically?
     ),
     'block/exaquest:modulverantwortlicher' => array(
         'captype' => 'write',
         'contextlevel' => CONTEXT_COURSE,
-        'legacy' => array(
-            'modulverantwortlicher' => CAP_ALLOW,
-        ),
-        //this has to be manually applied to the role "modulverantwortlicher"
     ),
-
+    'block/exaquest:admintechnprufungsdurchf' => array(
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_COURSE,
+    ),
+    'block/exaquest:prufungskoordination' => array(
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_COURSE,
+    ),
+    'block/exaquest:prufungsstudmis' => array(
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_COURSE,
+    ),
+    'block/exaquest:fachlfragenreviewer' => array(
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_COURSE,
+    ),
+    'block/exaquest:beurteilungsmitwirkende' => array(
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_COURSE,
+    ),
+    'block/exaquest:fachlicherpruefer' => array(
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_COURSE,
+    ),
+    'block/exaquest:prufungsmitwirkende' => array(
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_COURSE,
+    ),
+    'block/exaquest:fachlicherzweitprufer' => array(
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_COURSE,
+    ),
 );
