@@ -30,15 +30,16 @@ const BLOCK_EXAQUEST_DB_QUESTIONSTATUS = 'block_exaquestquestionstatus';
 /**
  * Question Status
  */
-const BLOCK_EXAQUEST_QUESTIONSTATUS_NEW= 0;
+const BLOCK_EXAQUEST_QUESTIONSTATUS_NEW = 0;
 const BLOCK_EXAQUEST_QUESTIONSTATUS_TO_ASSESS = 1;
 const BLOCK_EXAQUEST_QUESTIONSTATUS_FORMAL_REVIEW_DONE = 2;
 const BLOCK_EXAQUEST_QUESTIONSTATUS_TECHNICAL_REVIEW_DONE = 3;
-const BLOCK_EXAQUEST_QUESTIONSTATUS_TO_REVISE = 4;
-const BLOCK_EXAQUEST_QUESTIONSTATUS_RELEASE_REVIEW= 5;
-const BLOCK_EXAQUEST_QUESTIONSTATUS_RELEASE = 6;
-const BLOCK_EXAQUEST_QUESTIONSTATUS_IN_QUIZ= 7;
-const BLOCK_EXAQUEST_QUESTIONSTATUS_LOCKED = 8;
+const BLOCK_EXAQUEST_QUESTIONSTATUS_TECHNICAL_AND_FORMAL_REVIEW_DONE = 4;
+const BLOCK_EXAQUEST_QUESTIONSTATUS_TO_REVISE = 5;
+const BLOCK_EXAQUEST_QUESTIONSTATUS_RELEASE_REVIEW = 6;
+const BLOCK_EXAQUEST_QUESTIONSTATUS_RELEASE = 7;
+const BLOCK_EXAQUEST_QUESTIONSTATUS_IN_QUIZ = 8;
+const BLOCK_EXAQUEST_QUESTIONSTATUS_LOCKED = 9;
 
 function block_exaquest_init_js_css() {
     global $PAGE, $CFG;
@@ -120,9 +121,10 @@ function block_exaquest_get_questions_to_revise($courseid, $userid) {
 			AND qs.status = :status";
 
     $questions = $DB->get_records_sql($sql, array("createdby" => $userid, "status" => BLOCK_EXAQUEST_QUESTIONSTATUS_TO_REVISE));
-    foreach ($questions as $question){
+    foreach ($questions as $question) {
         // TODO: returnurl... like in this function: protected function edit_question_link(question_attempt $qa, question_display_options $options) {
-        $question->editlink = new \moodle_url('/question/bank/editquestion/question.php', ['courseid' => $courseid, 'id' => $question->id]);
+        $question->editlink =
+            new \moodle_url('/question/bank/editquestion/question.php', ['courseid' => $courseid, 'id' => $question->id]);
     }
 
     return $questions;
