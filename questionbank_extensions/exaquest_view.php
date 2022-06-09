@@ -7,6 +7,10 @@ defined('MOODLE_INTERNAL') || die();
 global $CFG;
 
 require_once($CFG->dirroot . '/question/editlib.php');
+
+require_once('open_question_for_review.php');
+require_once('plugin_feature.php');
+
 use core_plugin_manager;
 use core_question\bank\search\condition;
 use qbank_columnsortorder\column_manager;
@@ -111,6 +115,10 @@ class exaquest_view extends view {
                 unset($questionbankclasscolumns[$shortname]);
             }
         }
+
+        $specialpluginentrypointobject = new \qbank_openquestionforreview\plugin_feature();
+        $specialplugincolumnobjects = $specialpluginentrypointobject->get_question_columns($this);
+        $questionbankclasscolumns["open_question_for_review"] = $specialplugincolumnobjects[0];
 
         return $questionbankclasscolumns;
     }

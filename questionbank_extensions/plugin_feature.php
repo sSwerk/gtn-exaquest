@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace qbank_questiontodescriptor;
+namespace qbank_openquestionforreview;
 
 use core_question\local\bank\plugin_features_base;
 
@@ -30,7 +30,7 @@ class plugin_feature extends \core_question\local\bank\plugin_features_base {
 
     public function get_question_columns(\core_question\local\bank\view $qbank): array {
         return [
-            new descriptor_link_column($qbank)
+            new open_question_for_review($qbank)
         ];
     }
 }
