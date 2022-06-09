@@ -22,6 +22,9 @@ use core_customfield\field_controller;
 function xmldb_block_exaquest_install() {
     global $DB;
 
+    // TODO: only do it once, if those fields do not exist yet
+    // TODO: this is just a test, remove or finish
+
     $handler = qbank_customfields\customfield\question_handler::create();
     $c1id = $handler->create_category();
     $c1 = $handler->get_categories_with_fields()[$c1id];

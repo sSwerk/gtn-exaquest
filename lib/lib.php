@@ -50,6 +50,8 @@ function block_exaquest_init_js_css() {
         return;
     }
     $js_inited = true;
+    $PAGE->requires->jquery();
+    $PAGE->requires->js('/blocks/exaquest/javascript/block_exaquest.js', false);
 
     // main block CSS
     $PAGE->requires->css('/blocks/exaquest/css/block_exaquest.css');
