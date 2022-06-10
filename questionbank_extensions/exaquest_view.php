@@ -9,6 +9,9 @@ global $CFG;
 require_once($CFG->dirroot . '/question/editlib.php');
 
 require_once('open_question_for_review.php');
+require_once('formal_review_done.php');
+require_once('technical_review_done.php');
+require_once('release_question.php');
 require_once('plugin_feature.php');
 
 use core_plugin_manager;
@@ -119,6 +122,9 @@ class exaquest_view extends view {
         $specialpluginentrypointobject = new \qbank_openquestionforreview\plugin_feature();
         $specialplugincolumnobjects = $specialpluginentrypointobject->get_question_columns($this);
         $questionbankclasscolumns["open_question_for_review"] = $specialplugincolumnobjects[0];
+        $questionbankclasscolumns["formal_review_done"] = $specialplugincolumnobjects[1];
+        $questionbankclasscolumns["technical_review_done"] = $specialplugincolumnobjects[2];
+        $questionbankclasscolumns["release_question"] = $specialplugincolumnobjects[3];
 
         return $questionbankclasscolumns;
     }

@@ -30,7 +30,10 @@ class plugin_feature extends \core_question\local\bank\plugin_features_base {
 
     public function get_question_columns(\core_question\local\bank\view $qbank): array {
         return [
-            new open_question_for_review($qbank)
+            new open_question_for_review($qbank),
+            new formal_review_done($qbank),
+            new technical_review_done($qbank),
+            new release_question($qbank)
         ];
     }
 }
