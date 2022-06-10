@@ -18,6 +18,8 @@ namespace qbank_openquestionforreview;
 
 use core_question\local\bank\column_base;
 
+
+$PAGE->requires->js('/blocks/exaquest/javascript/jquery.js',true);
 /**
  * A column type for the name of the question creator.
  *
@@ -39,7 +41,7 @@ class open_question_for_review extends column_base {
 
     protected function display_content($question, $rowclasses): void {
         global $USER, $DB;
-        echo '<a href="#" class=" btn btn-primary btn-sm review' . $question->id . '" role="button"> Frage zur Begutachtung freigeben</a>';
+        echo '<a href="#" id="review'.$question->id.'" class=" btn btn-primary btn-sm" role="button"> Frage zur Begutachtung freigeben</a>';
 
 
         $cache = \cache::make('block_exacomp', 'visibility_cache');
@@ -49,17 +51,11 @@ class open_question_for_review extends column_base {
 
         <script type="text/javascript">
 
-            $(".review<?php echo $question->id; ?>").click(function() {
-                alert("Hallo");
-            });
-
-            window.jQueryExaquest = jQuery;
-            var $ = jQuery;
-            jQueryExaquest(function ($) {
-                $(".review<?php echo $question->id; ?>").on("click", function () {
-                    alert();
+            $(document).ready(function() {
+                $("#review<?php echo $question->id; ?>").click(function () {
                     var data = {
-                        action: 'open_question_for_review'
+                        action: 'open_question_for_review',
+                        questionid: <?php echo $question->id; ?>
                     };
 
                     var ajax = $.ajax({
@@ -76,11 +72,9 @@ class open_question_for_review extends column_base {
                         }
                         console.log("Error in action '" + data.action + "'", errorMsg, 'ret', ret);
                     });
-
-                    event.preventDefault();
-                    return false;
                 });
-            })(jQueryExaquest);
+            });
+
         </script>
         <?php
 
