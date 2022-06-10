@@ -129,6 +129,44 @@ class exaquest_view extends view {
         return $questionbankclasscolumns;
     }
 
+    /**
+     * The filters for the question bank.
+     *
+     * @param string $cat 'categoryid,contextid'
+     * @param array $tagids current list of selected tags
+     * @param bool $showhidden whether deleted questions should be displayed
+     * @param int $recurse Whether to include subcategories
+     * @param array $editcontexts parent contexts
+     * @param bool $showquestiontext whether the text of each question should be shown in the list
+     */
+    public function wanted_filters($cat, $tagids, $showhidden, $recurse, $editcontexts, $showquestiontext): void {
+        global $CFG;
+        list(, $contextid) = explode(',', $cat);
+        $catcontext = \context::instance_by_id($contextid);
+        $thiscontext = $this->get_most_specific_context();
+        // Category selection form.
+        $this->display_question_bank_header();
+
+        // Display tag filter if usetags setting is enabled/enablefilters is true.
+        if ($this->enablefilters) {
+            if (is_array($this->customfilterobjects)) {
+                foreach ($this->customfilterobjects as $filterobjects) {
+                    $this->searchconditions[] = $filterobjects;
+                }
+            } else {
+                if ($CFG->usetags) {
+                    array_unshift($this->searchconditions,
+                        new \core_question\bank\search\tag_condition([$catcontext, $thiscontext], $tagids));
+                }
+
+                array_unshift($this->searchconditions, new \core_question\bank\search\hidden_condition(!$showhidden));
+                array_unshift($this->searchconditions, new \core_question\bank\search\category_condition(
+                    $cat, $recurse, $editcontexts, $this->baseurl, $this->course));
+            }
+        }
+        $this->display_options_form($showquestiontext);
+    }
+
 
     /**
      * Prints the table of questions in a category with interactions
