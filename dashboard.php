@@ -40,6 +40,7 @@ if ($action == 'request_questions') {
         $messageobject->url = new moodle_url('/blocks/exaquest/dashboard.php', ['courseid' => $COURSE->id]);
         $messageobject->url = $messageobject->url->raw_out(false);
         $message = get_string('please_create_new_questions', 'block_exaquest', $messageobject);
+        $message = get_string('please_create_new_questions_subject', 'block_exaquest', $messageobject);
         block_exaquest_send_moodle_notification("newquestionsrequest", $USER->id, $ersteller->id, $message, $message,
             "Frageerstellung");
     }

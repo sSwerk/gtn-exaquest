@@ -18,6 +18,7 @@ $string['revise_questions_label'] = 'The following questions are marked for revi
 // Messages
 $string['messageprovider:newquestionsrequest'] = 'New questions have been requested';
 $string['please_create_new_questions'] = 'Please create new questions in <a href="{$a->url}">{$a->fullname}</a>';
+$string['please_create_new_questions_subject'] = 'Please create new questions in {$a->fullname}';
 
 // Roles and Capabilities
 $string['exaquest:fragenersteller'] = 'Create questions in Exaquest block';
