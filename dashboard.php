@@ -27,22 +27,26 @@ block_exaquest_init_js_css();
 $output = $PAGE->get_renderer('block_exaquest');
 
 echo $output->header($context, $courseid, get_string('dashboard', 'block_exaquest'));
-
+$frageneersteller= array();
 $action = optional_param('action', "", PARAM_ALPHAEXT);
 if ($action == 'request_questions') {
     // get all the users with role "fragesteller" and send them a notification
     $allfragenersteller = block_exaquest_get_fragenersteller_by_courseid($courseid);
-    $selectedfragenersteller = $_POST["selectedusers"];
-    $frageneersteller = array_intersect_key($allfragenersteller, $selectedfragenersteller);
-    foreach ($frageneersteller as $ersteller) {
-        $messageobject = new stdClass();
-        $messageobject->fullname = $COURSE->fullname;
-        $messageobject->url = new moodle_url('/blocks/exaquest/dashboard.php', ['courseid' => $COURSE->id]);
-        $messageobject->url = $messageobject->url->raw_out(false);
-        $message = get_string('please_create_new_questions', 'block_exaquest', $messageobject);
-        $message = get_string('please_create_new_questions_subject', 'block_exaquest', $messageobject);
-        block_exaquest_send_moodle_notification("newquestionsrequest", $USER->id, $ersteller->id, $message, $message,
-            "Frageerstellung");
+    if(array_key_exists("selectedusers", $_POST)){
+        $selectedfragenersteller = $_POST["selectedusers"];
+        if($selectedfragenersteller){
+            $frageneersteller = array_intersect_key($allfragenersteller, $selectedfragenersteller);
+            foreach ($frageneersteller as $ersteller) {
+                $messageobject = new stdClass();
+                $messageobject->fullname = $COURSE->fullname;
+                $messageobject->url = new moodle_url('/blocks/exaquest/dashboard.php', ['courseid' => $COURSE->id]);
+                $messageobject->url = $messageobject->url->raw_out(false);
+                $message = get_string('please_create_new_questions', 'block_exaquest', $messageobject);
+                $message = get_string('please_create_new_questions_subject', 'block_exaquest', $messageobject);
+                block_exaquest_send_moodle_notification("newquestionsrequest", $USER->id, $ersteller->id, $message, $message,
+                    "Frageerstellung");
+            }
+        }
     }
 
 }
