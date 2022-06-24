@@ -88,8 +88,6 @@ class change_status extends column_base {
 
             $(document).ready(function() {
                 $(".changestatus<?php echo $question->id; ?>").click(function () {
-                    alert("hallo");
-                    alert($(this).attr("value"));
                     var data = {
                         action: $(this).attr("value"),
                         questionid: <?php echo $question->id; ?>
