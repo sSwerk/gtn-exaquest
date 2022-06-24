@@ -82,7 +82,7 @@ if (is_enrolled($context, $USER, "block/exaquest:fragenersteller")) {
 }
 if (is_enrolled($context, $USER, "block/exaquest:fachlfragenreviewer")) {
     // QUESTIONS TO REVIEW
-    $questions = block_exaquest_get_questions_to_revise($courseid, $USER->id);
+    $questions = block_exaquest_get_questions_to_formal_review($courseid, $USER->id);
     if (!isset($questions)) {
         $questions = [];
     }
@@ -91,7 +91,7 @@ if (is_enrolled($context, $USER, "block/exaquest:fachlfragenreviewer")) {
 }
 if (is_enrolled($context, $USER, "block/exaquest:pruefungskoordination") || is_enrolled($context, $USER, "block/exaquest:pruefungsstudmis")) {
     // QUESTIONS TO REVIEW
-    $questions = block_exaquest_get_questions_to_revise($courseid, $USER->id);
+    $questions = block_exaquest_get_questions_to_fachlich_review($courseid, $USER->id);
     if (!isset($questions)) {
         $questions = [];
     }

@@ -26,6 +26,7 @@
  * DATABSE TABLE NAMES
  */
 const BLOCK_EXAQUEST_DB_QUESTIONSTATUS = 'block_exaquestquestionstatus';
+const BLOCK_EXAQUEST_DB_REVIEWASSIGN = 'block_exaquestreviewassign';
 
 /**
  * Question Status
@@ -40,6 +41,13 @@ const BLOCK_EXAQUEST_QUESTIONSTATUS_RELEASE_REVIEW = 6;
 const BLOCK_EXAQUEST_QUESTIONSTATUS_RELEASE = 7;
 const BLOCK_EXAQUEST_QUESTIONSTATUS_IN_QUIZ = 8;
 const BLOCK_EXAQUEST_QUESTIONSTATUS_LOCKED = 9;
+
+/**
+ * Misc
+ */
+const BLOCK_EXAQUEST_DB_REVIEWTYPE_FORMAL = 0;
+const BLOCK_EXAQUEST_DB_REVIEWTYPE_FACHLICH = 1;
+
 
 function block_exaquest_init_js_css() {
     global $PAGE, $CFG;
@@ -124,7 +132,59 @@ function block_exaquest_get_questions_to_revise($courseid, $userid) {
 
     $questions = $DB->get_records_sql($sql, array("createdby" => $userid, "status" => BLOCK_EXAQUEST_QUESTIONSTATUS_TO_REVISE));
     foreach ($questions as $question) {
-        // TODO: returnurl... like in this function: protected function edit_question_link(question_attempt $qa, question_display_options $options) {
+        // returnurl... like in this function: protected function edit_question_link(question_attempt $qa, question_display_options $options) {
+        $question->editlink =
+            new \moodle_url('/question/bank/editquestion/question.php', ['courseid' => $courseid, 'id' => $question->id]);
+    }
+
+    return $questions;
+}
+
+/**
+ * Returns all questions that have to be formally reviewed
+ * used e.g. for the prüfungscoordination or the studmis to see which questions they should revise
+ *
+ * @param $courseid
+ * @param $userid
+ * @return array
+ */
+function block_exaquest_get_questions_to_formal_review($courseid, $userid) {
+    global $DB;
+    $sql = "SELECT q.*
+			FROM {" . BLOCK_EXAQUEST_DB_REVIEWASSIGN . "} ra
+			JOIN {question} q ON ra.questionid = q.id
+			WHERE ra.reviewerid = :reviewerid
+			AND ra.reviewtype = :reviewtype";
+
+    $questions = $DB->get_records_sql($sql, array("reviewerid" => $userid, "reviewtype" => BLOCK_EXAQUEST_DB_REVIEWTYPE_FORMAL));
+    foreach ($questions as $question) {
+        // returnurl... like in this function: protected function edit_question_link(question_attempt $qa, question_display_options $options) {
+        $question->editlink =
+            new \moodle_url('/question/bank/editquestion/question.php', ['courseid' => $courseid, 'id' => $question->id]);
+    }
+
+    return $questions;
+}
+
+/**
+ * Returns all questions that have to be fachlich reviewed
+ * used e.g. for the fachlicherreviewer to see which questions they should revise
+ *
+ * @param $courseid
+ * @param $userid
+ * @return array
+ */
+function block_exaquest_get_questions_to_fachlich_review($courseid, $userid) {
+    global $DB;
+    $sql = "SELECT q.*
+			FROM {" . BLOCK_EXAQUEST_DB_REVIEWASSIGN . "} ra
+			JOIN {question} q ON ra.questionid = q.id
+			WHERE ra.reviewerid = :reviewerid
+			AND ra.reviewtype = :reviewtype";
+
+    $questions = $DB->get_records_sql($sql, array("reviewerid" => $userid, "reviewtype" => BLOCK_EXAQUEST_DB_REVIEWTYPE_FACHLICH));
+    foreach ($questions as $question) {
+        // returnurl... like in this function: protected function edit_question_link(question_attempt $qa, question_display_options $options) {
         $question->editlink =
             new \moodle_url('/question/bank/editquestion/question.php', ['courseid' => $courseid, 'id' => $question->id]);
     }
@@ -139,21 +199,22 @@ function block_exaquest_set_up_roles() {
     global $DB;
     $context = \context_system::instance();
     $options = array(
-        'shortname'     => 0,
-        'name'          => 0,
-        'description'   => 0,
-        'permissions'   => 1,
-        'archetype'     => 0,
+        'shortname' => 0,
+        'name' => 0,
+        'description' => 0,
+        'permissions' => 1,
+        'archetype' => 0,
         'contextlevels' => 1,
-        'allowassign'   => 1,
+        'allowassign' => 1,
         'allowoverride' => 1,
-        'allowswitch'   => 1,
-        'allowview'   => 1);
+        'allowswitch' => 1,
+        'allowview' => 1);
     if (!$DB->record_exists('role', ['shortname' => 'fragenersteller'])) {
         $roleid = create_role('Fragenersteller', 'fragenersteller', '', 'editingteacher');
         $archetype = $DB->get_record('role', ['shortname' => 'editingteacher'])->id; // editingteacher archetype
         $definitiontable = new core_role_define_role_table_advanced($context, $roleid); //
-        $definitiontable->force_duplicate($archetype, $options); // overwrites everything that is set in the options. The rest stays.
+        $definitiontable->force_duplicate($archetype,
+            $options); // overwrites everything that is set in the options. The rest stays.
         $definitiontable->read_submitted_permissions(); // just to not throw a warning because some array is null
         $definitiontable->save_changes();
     } else {
@@ -166,7 +227,8 @@ function block_exaquest_set_up_roles() {
         $roleid = create_role('admin./techn. Prüfungsdurchf.', 'admintechnpruefungsdurchf', '', 'editingteacher');
         $archetype = $DB->get_record('role', ['shortname' => 'editingteacher'])->id; // editingteacher archetype
         $definitiontable = new core_role_define_role_table_advanced($context, $roleid); //
-        $definitiontable->force_duplicate($archetype, $options); // overwrites everything that is set in the options. The rest stays.
+        $definitiontable->force_duplicate($archetype,
+            $options); // overwrites everything that is set in the options. The rest stays.
         $definitiontable->read_submitted_permissions(); // just to not throw a warning because some array is null
         $definitiontable->save_changes();
     } else {
@@ -178,7 +240,8 @@ function block_exaquest_set_up_roles() {
         $roleid = create_role('Prüfungskoordination', 'pruefungskoordination', '', 'manager');
         $archetype = $DB->get_record('role', ['shortname' => 'manager'])->id; // manager archetype
         $definitiontable = new core_role_define_role_table_advanced($context, $roleid); //
-        $definitiontable->force_duplicate($archetype, $options); // overwrites everything that is set in the options. The rest stays.
+        $definitiontable->force_duplicate($archetype,
+            $options); // overwrites everything that is set in the options. The rest stays.
         $definitiontable->read_submitted_permissions(); // just to not throw a warning because some array is null
         $definitiontable->save_changes();
     } else {
@@ -190,7 +253,8 @@ function block_exaquest_set_up_roles() {
         $roleid = create_role('PrüfungsStudMis', 'pruefungsstudmis', '', 'editingteacher');
         $archetype = $DB->get_record('role', ['shortname' => 'editingteacher'])->id; // editingteacher archetype
         $definitiontable = new core_role_define_role_table_advanced($context, $roleid); //
-        $definitiontable->force_duplicate($archetype, $options); // overwrites everything that is set in the options. The rest stays.
+        $definitiontable->force_duplicate($archetype,
+            $options); // overwrites everything that is set in the options. The rest stays.
         $definitiontable->read_submitted_permissions(); // just to not throw a warning because some array is null
         $definitiontable->save_changes();
     } else {
@@ -202,7 +266,8 @@ function block_exaquest_set_up_roles() {
         $roleid = create_role('Modulverantwortlicher', 'modulverantwortlicher', '', 'editingteacher');
         $archetype = $DB->get_record('role', ['shortname' => 'editingteacher'])->id; // editingteacher archetype
         $definitiontable = new core_role_define_role_table_advanced($context, $roleid); //
-        $definitiontable->force_duplicate($archetype, $options); // overwrites everything that is set in the options. The rest stays.
+        $definitiontable->force_duplicate($archetype,
+            $options); // overwrites everything that is set in the options. The rest stays.
         $definitiontable->read_submitted_permissions(); // just to not throw a warning because some array is null
         $definitiontable->save_changes();
     } else {
@@ -214,7 +279,8 @@ function block_exaquest_set_up_roles() {
         $roleid = create_role('fachl. Fragenreviewer', 'fachlfragenreviewer', '', 'editingteacher');
         $archetype = $DB->get_record('role', ['shortname' => 'editingteacher'])->id; // editingteacher archetype
         $definitiontable = new core_role_define_role_table_advanced($context, $roleid); //
-        $definitiontable->force_duplicate($archetype, $options); // overwrites everything that is set in the options. The rest stays.
+        $definitiontable->force_duplicate($archetype,
+            $options); // overwrites everything that is set in the options. The rest stays.
         $definitiontable->read_submitted_permissions(); // just to not throw a warning because some array is null
         $definitiontable->save_changes();
     } else {
@@ -226,7 +292,8 @@ function block_exaquest_set_up_roles() {
         $roleid = create_role('Beurteilungsmitwirkende', 'beurteilungsmitwirkende', '', 'editingteacher');
         $archetype = $DB->get_record('role', ['shortname' => 'editingteacher'])->id; // editingteacher archetype
         $definitiontable = new core_role_define_role_table_advanced($context, $roleid); //
-        $definitiontable->force_duplicate($archetype, $options); // overwrites everything that is set in the options. The rest stays.
+        $definitiontable->force_duplicate($archetype,
+            $options); // overwrites everything that is set in the options. The rest stays.
         $definitiontable->read_submitted_permissions(); // just to not throw a warning because some array is null
         $definitiontable->save_changes();
     } else {
@@ -238,7 +305,8 @@ function block_exaquest_set_up_roles() {
         $roleid = create_role('fachlicher Prüfer', 'fachlicherpruefer', '', 'editingteacher');
         $archetype = $DB->get_record('role', ['shortname' => 'editingteacher'])->id; // editingteacher archetype
         $definitiontable = new core_role_define_role_table_advanced($context, $roleid); //
-        $definitiontable->force_duplicate($archetype, $options); // overwrites everything that is set in the options. The rest stays.
+        $definitiontable->force_duplicate($archetype,
+            $options); // overwrites everything that is set in the options. The rest stays.
         $definitiontable->read_submitted_permissions(); // just to not throw a warning because some array is null
         $definitiontable->save_changes();
     } else {
@@ -250,7 +318,8 @@ function block_exaquest_set_up_roles() {
         $roleid = create_role('Prüfungsmitwirkende', 'pruefungsmitwirkende', '', 'editingteacher');
         $archetype = $DB->get_record('role', ['shortname' => 'editingteacher'])->id; // editingteacher archetype
         $definitiontable = new core_role_define_role_table_advanced($context, $roleid); //
-        $definitiontable->force_duplicate($archetype, $options); // overwrites everything that is set in the options. The rest stays.
+        $definitiontable->force_duplicate($archetype,
+            $options); // overwrites everything that is set in the options. The rest stays.
         $definitiontable->read_submitted_permissions(); // just to not throw a warning because some array is null
         $definitiontable->save_changes();
     } else {
@@ -262,7 +331,8 @@ function block_exaquest_set_up_roles() {
         $roleid = create_role('Fachlicher Zweitprüfer', 'fachlicherzweitpruefer', '', 'editingteacher');
         $archetype = $DB->get_record('role', ['shortname' => 'editingteacher'])->id; // editingteacher archetype
         $definitiontable = new core_role_define_role_table_advanced($context, $roleid); //
-        $definitiontable->force_duplicate($archetype, $options); // overwrites everything that is set in the options. The rest stays.
+        $definitiontable->force_duplicate($archetype,
+            $options); // overwrites everything that is set in the options. The rest stays.
         $definitiontable->read_submitted_permissions(); // just to not throw a warning because some array is null
         $definitiontable->save_changes();
     } else {
