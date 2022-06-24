@@ -80,6 +80,24 @@ if (is_enrolled($context, $USER, "block/exaquest:fragenersteller")) {
     $dashboardcard = new \block_exaquest\output\dashboardcard_revise_questions($questions);
     echo $output->render($dashboardcard);
 }
+if (is_enrolled($context, $USER, "block/exaquest:fragenersteller")) {
+    // QUESTIONS TO REVIEW
+    $questions = block_exaquest_get_questions_to_revise($courseid, $USER->id);
+    if (!isset($questions)) {
+        $questions = [];
+    }
+    $dashboardcard = new \block_exaquest\output\dashboardcard_revise_questions($questions);
+    echo $output->render($dashboardcard);
+}
+if (is_enrolled($context, $USER, "block/exaquest:pruefungskoordination")) {
+    // QUESTIONS TO REVIEW
+    $questions = block_exaquest_get_questions_to_revise($courseid, $USER->id);
+    if (!isset($questions)) {
+        $questions = [];
+    }
+    $dashboardcard = new \block_exaquest\output\dashboardcard_revise_questions($questions);
+    echo $output->render($dashboardcard);
+}
 
 echo '</div>';
 echo $output->footer();

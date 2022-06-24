@@ -35,5 +35,49 @@ function xmldb_block_exaquest_upgrade($oldversion)
         // Exaquest savepoint reached.
         upgrade_block_savepoint(true, 2022060902, 'exaquest');
     }
+    if ($oldversion < 2022062401) {
+
+        // TODO add reference to block_exaquestquestionstatus ? or is it enough to have it in the install.xml?
+
+        // Define table block_exaquestreviewassign to be created.
+        $table = new xmldb_table('block_exaquestreviewassign');
+
+        // Adding fields to table block_exaquestreviewassign.
+        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+        $table->add_field('questionid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('reviewerid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('reviewtype', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+
+        // Adding keys to table block_exaquestreviewassign.
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
+
+        // Conditionally launch create table for block_exaquestreviewassign.
+        if (!$dbman->table_exists($table)) {
+            $dbman->create_table($table);
+        }
+
+        // Exaquest savepoint reached.
+        upgrade_block_savepoint(true, 2022062401, 'exaquest');
+    }
+
+    if ($oldversion < 2022062404) {
+        // add keys block_exaquestquestionstatus and block_exaquestreviewassign
+        $table = new xmldb_table('block_exaquestquestionstatus');
+        $key = new xmldb_key('questionid', XMLDB_KEY_FOREIGN, array('questionid'), 'question', array('id'));
+        // Launch add key questionid.
+        $dbman->add_key($table, $key);
+
+        $table = new xmldb_table('block_exaquestreviewassign');
+        $key = new xmldb_key('questionid', XMLDB_KEY_FOREIGN, array('questionid'), 'question', array('id'));
+        // Launch add key questionid.
+        $dbman->add_key($table, $key);
+        $key = new xmldb_key('reviewerid', XMLDB_KEY_FOREIGN, array('reviewerid'), 'user', array('id'));
+        // Launch add key reviewerid.
+        $dbman->add_key($table, $key);
+
+        // Exaquest savepoint reached.
+        upgrade_block_savepoint(true, 2022062404, 'exaquest');
+    }
+
     return $return_result;
 }

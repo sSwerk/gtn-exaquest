@@ -162,41 +162,41 @@ function block_exaquest_set_up_roles() {
     assign_capability('block/exaquest:fragenersteller', CAP_ALLOW, $roleid, $context);
     assign_capability('block/exaquest:createquestion', CAP_ALLOW, $roleid, $context);
 
-    if (!$DB->record_exists('role', ['shortname' => 'admintechnprufungsdurchf'])) {
-        $roleid = create_role('admin./techn. Prüfungsdurchf.', 'admintechnprufungsdurchf', '', 'editingteacher');
+    if (!$DB->record_exists('role', ['shortname' => 'admintechnpruefungsdurchf'])) {
+        $roleid = create_role('admin./techn. Prüfungsdurchf.', 'admintechnpruefungsdurchf', '', 'editingteacher');
         $archetype = $DB->get_record('role', ['shortname' => 'editingteacher'])->id; // editingteacher archetype
         $definitiontable = new core_role_define_role_table_advanced($context, $roleid); //
         $definitiontable->force_duplicate($archetype, $options); // overwrites everything that is set in the options. The rest stays.
         $definitiontable->read_submitted_permissions(); // just to not throw a warning because some array is null
         $definitiontable->save_changes();
     } else {
-        $roleid = $DB->get_record('role', ['shortname' => 'admintechnprufungsdurchf'])->id;
+        $roleid = $DB->get_record('role', ['shortname' => 'admintechnpruefungsdurchf'])->id;
     }
-    assign_capability('block/exaquest:admintechnprufungsdurchf', CAP_ALLOW, $roleid, $context);
+    assign_capability('block/exaquest:admintechnpruefungsdurchf', CAP_ALLOW, $roleid, $context);
 
-    if (!$DB->record_exists('role', ['shortname' => 'prufungskoordination'])) {
-        $roleid = create_role('Prüfungskoordination', 'prufungskoordination', '', 'manager');
+    if (!$DB->record_exists('role', ['shortname' => 'pruefungskoordination'])) {
+        $roleid = create_role('Prüfungskoordination', 'pruefungskoordination', '', 'manager');
         $archetype = $DB->get_record('role', ['shortname' => 'manager'])->id; // manager archetype
         $definitiontable = new core_role_define_role_table_advanced($context, $roleid); //
         $definitiontable->force_duplicate($archetype, $options); // overwrites everything that is set in the options. The rest stays.
         $definitiontable->read_submitted_permissions(); // just to not throw a warning because some array is null
         $definitiontable->save_changes();
     } else {
-        $roleid = $DB->get_record('role', ['shortname' => 'prufungskoordination'])->id;
+        $roleid = $DB->get_record('role', ['shortname' => 'pruefungskoordination'])->id;
     }
-    assign_capability('block/exaquest:prufungskoordination', CAP_ALLOW, $roleid, $context);
+    assign_capability('block/exaquest:pruefungskoordination', CAP_ALLOW, $roleid, $context);
 
-    if (!$DB->record_exists('role', ['shortname' => 'prufungsstudmis'])) {
-        $roleid = create_role('PrüfungsStudMis', 'prufungsstudmis', '', 'editingteacher');
+    if (!$DB->record_exists('role', ['shortname' => 'pruefungsstudmis'])) {
+        $roleid = create_role('PrüfungsStudMis', 'pruefungsstudmis', '', 'editingteacher');
         $archetype = $DB->get_record('role', ['shortname' => 'editingteacher'])->id; // editingteacher archetype
         $definitiontable = new core_role_define_role_table_advanced($context, $roleid); //
         $definitiontable->force_duplicate($archetype, $options); // overwrites everything that is set in the options. The rest stays.
         $definitiontable->read_submitted_permissions(); // just to not throw a warning because some array is null
         $definitiontable->save_changes();
     } else {
-        $roleid = $DB->get_record('role', ['shortname' => 'prufungsstudmis'])->id;
+        $roleid = $DB->get_record('role', ['shortname' => 'pruefungsstudmis'])->id;
     }
-    assign_capability('block/exaquest:prufungsstudmis', CAP_ALLOW, $roleid, $context);
+    assign_capability('block/exaquest:pruefungsstudmis', CAP_ALLOW, $roleid, $context);
 
     if (!$DB->record_exists('role', ['shortname' => 'modulverantwortlicher'])) {
         $roleid = create_role('Modulverantwortlicher', 'modulverantwortlicher', '', 'editingteacher');
@@ -246,29 +246,29 @@ function block_exaquest_set_up_roles() {
     }
     assign_capability('block/exaquest:fachlicherpruefer', CAP_ALLOW, $roleid, $context);
 
-    if (!$DB->record_exists('role', ['shortname' => 'prufungsmitwirkende'])) {
-        $roleid = create_role('Prüfungsmitwirkende', 'prufungsmitwirkende', '', 'editingteacher');
+    if (!$DB->record_exists('role', ['shortname' => 'pruefungsmitwirkende'])) {
+        $roleid = create_role('Prüfungsmitwirkende', 'pruefungsmitwirkende', '', 'editingteacher');
         $archetype = $DB->get_record('role', ['shortname' => 'editingteacher'])->id; // editingteacher archetype
         $definitiontable = new core_role_define_role_table_advanced($context, $roleid); //
         $definitiontable->force_duplicate($archetype, $options); // overwrites everything that is set in the options. The rest stays.
         $definitiontable->read_submitted_permissions(); // just to not throw a warning because some array is null
         $definitiontable->save_changes();
     } else {
-        $roleid = $DB->get_record('role', ['shortname' => 'prufungsmitwirkende'])->id;
+        $roleid = $DB->get_record('role', ['shortname' => 'pruefungsmitwirkende'])->id;
     }
-    assign_capability('block/exaquest:prufungsmitwirkende', CAP_ALLOW, $roleid, $context);
+    assign_capability('block/exaquest:pruefungsmitwirkende', CAP_ALLOW, $roleid, $context);
 
-    if (!$DB->record_exists('role', ['shortname' => 'fachlicherzweitprufer'])) {
-        $roleid = create_role('Fachlicher Zweitprüfer', 'fachlicherzweitprufer', '', 'editingteacher');
+    if (!$DB->record_exists('role', ['shortname' => 'fachlicherzweitpruefer'])) {
+        $roleid = create_role('Fachlicher Zweitprüfer', 'fachlicherzweitpruefer', '', 'editingteacher');
         $archetype = $DB->get_record('role', ['shortname' => 'editingteacher'])->id; // editingteacher archetype
         $definitiontable = new core_role_define_role_table_advanced($context, $roleid); //
         $definitiontable->force_duplicate($archetype, $options); // overwrites everything that is set in the options. The rest stays.
         $definitiontable->read_submitted_permissions(); // just to not throw a warning because some array is null
         $definitiontable->save_changes();
     } else {
-        $roleid = $DB->get_record('role', ['shortname' => 'fachlicherzweitprufer'])->id;
+        $roleid = $DB->get_record('role', ['shortname' => 'fachlicherzweitpruefer'])->id;
     }
-    assign_capability('block/exaquest:fachlicherzweitprufer', CAP_ALLOW, $roleid, $context);
+    assign_capability('block/exaquest:fachlicherzweitpruefer', CAP_ALLOW, $roleid, $context);
 
     //
     //role_assign($roleid, $USER->id, $contextid);

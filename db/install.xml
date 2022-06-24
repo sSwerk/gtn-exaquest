@@ -12,6 +12,20 @@
             </FIELDS>
             <KEYS>
                 <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+                <KEY NAME="questionid" TYPE="foreign" FIELDS="questionid" REFTABLE="question" REFFIELDS="id"/>
+            </KEYS>
+        </TABLE>
+        <TABLE NAME="block_exaquestreviewassign" COMMENT="Assignment of reviews. Questions are assigned to persons that should to fachlich or formal review.">
+            <FIELDS>
+                <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" COMMENT="id"/>
+                <FIELD NAME="questionid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="questionid"/>
+                <FIELD NAME="reviewerid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="the assigned reviewer"/>
+                <FIELD NAME="reviewtype" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="type of the review 0=formal, 1=fachlich"/>
+            </FIELDS>
+            <KEYS>
+                <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+                <KEY NAME="questionid" TYPE="foreign" FIELDS="questionid" REFTABLE="question" REFFIELDS="id"/>
+                <KEY NAME="reviewerid" TYPE="foreign" FIELDS="reviewerid" REFTABLE="user" REFFIELDS="id"/>
             </KEYS>
         </TABLE>
     </TABLES>
