@@ -80,7 +80,7 @@ if (is_enrolled($context, $USER, "block/exaquest:fragenersteller")) {
     $dashboardcard = new \block_exaquest\output\dashboardcard_revise_questions($questions);
     echo $output->render($dashboardcard);
 }
-if (is_enrolled($context, $USER, "block/exaquest:fragenersteller")) {
+if (is_enrolled($context, $USER, "block/exaquest:fachlfragenreviewer")) {
     // QUESTIONS TO REVIEW
     $questions = block_exaquest_get_questions_to_revise($courseid, $USER->id);
     if (!isset($questions)) {
@@ -89,7 +89,7 @@ if (is_enrolled($context, $USER, "block/exaquest:fragenersteller")) {
     $dashboardcard = new \block_exaquest\output\dashboardcard_revise_questions($questions);
     echo $output->render($dashboardcard);
 }
-if (is_enrolled($context, $USER, "block/exaquest:pruefungskoordination")) {
+if (is_enrolled($context, $USER, "block/exaquest:pruefungskoordination") || is_enrolled($context, $USER, "block/exaquest:pruefungsstudmis")) {
     // QUESTIONS TO REVIEW
     $questions = block_exaquest_get_questions_to_revise($courseid, $USER->id);
     if (!isset($questions)) {

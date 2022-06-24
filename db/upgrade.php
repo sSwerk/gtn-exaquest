@@ -79,5 +79,20 @@ function xmldb_block_exaquest_upgrade($oldversion)
         upgrade_block_savepoint(true, 2022062404, 'exaquest');
     }
 
+    if ($oldversion < 2022062407) {
+        // remove the roles, because of typos
+        $DB->delete_records('role', ['shortname' => 'admintechnprufungsdurchf']);
+        $DB->delete_records('role', ['shortname' => 'prufungskoordination']);
+        $DB->delete_records('role', ['shortname' => 'prufungsstudmis']);
+        $DB->delete_records('role', ['shortname' => 'fachlicherprufer']);
+        $DB->delete_records('role', ['shortname' => 'prufungsmitwirkende']);
+        $DB->delete_records('role', ['shortname' => 'fachlicherzweitprufer']);
+        // redo the set_up_roles
+        $setuptask = new \block_exaquest\task\set_up_roles();
+        // queue it
+        \core\task\manager::queue_adhoc_task($setuptask);
+        upgrade_block_savepoint(true, 2022062407, 'exaquest');
+    }
+
     return $return_result;
 }
