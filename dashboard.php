@@ -9,11 +9,15 @@ require_once(__DIR__ . '/questionbank_extensions/exaquest_view.php');
 $courseid = required_param('courseid', PARAM_INT);
 require_login($courseid);
 
-list($thispageurl, $contexts, $cmid, $cm, $module, $pagevars) =
-    question_edit_setup('questions', '/question/edit.php');
+
 
 //$course = $DB->get_record('course', array('id' => $courseid));
 $context = context_course::instance($courseid);
+
+if (is_enrolled($context, $USER, "block/exaquest:createquestion")) {
+    list($thispageurl, $contexts, $cmid, $cm, $module, $pagevars) =
+        question_edit_setup('questions', '/question/edit.php');
+}
 
 $page_params = array('courseid' => $courseid);
 
@@ -82,20 +86,20 @@ if (is_enrolled($context, $USER, "block/exaquest:fragenersteller")) {
 }
 if (is_enrolled($context, $USER, "block/exaquest:fachlfragenreviewer")) {
     // QUESTIONS TO REVIEW
-    $questions = block_exaquest_get_questions_to_formal_review($courseid, $USER->id);
-    if (!isset($questions)) {
-        $questions = [];
-    }
-    $dashboardcard = new \block_exaquest\output\dashboardcard_revise_questions($questions);
-    echo $output->render($dashboardcard);
-}
-if (is_enrolled($context, $USER, "block/exaquest:pruefungskoordination") || is_enrolled($context, $USER, "block/exaquest:pruefungsstudmis")) {
-    // QUESTIONS TO REVIEW
     $questions = block_exaquest_get_questions_to_fachlich_review($courseid, $USER->id);
     if (!isset($questions)) {
         $questions = [];
     }
-    $dashboardcard = new \block_exaquest\output\dashboardcard_revise_questions($questions);
+    $dashboardcard = new \block_exaquest\output\dashboardcard_fachlich_review_questions($questions);
+    echo $output->render($dashboardcard);
+}
+if (is_enrolled($context, $USER, "block/exaquest:pruefungskoordination") || is_enrolled($context, $USER, "block/exaquest:pruefungsstudmis")) {
+    // QUESTIONS TO REVIEW
+    $questions = block_exaquest_get_questions_to_formal_review($courseid, $USER->id);
+    if (!isset($questions)) {
+        $questions = [];
+    }
+    $dashboardcard = new \block_exaquest\output\dashboardcard_formal_review_questions($questions);
     echo $output->render($dashboardcard);
 }
 
