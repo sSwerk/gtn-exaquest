@@ -3,33 +3,47 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
-  <TABLES>
-    <TABLE NAME="block_exaquestquestionstatus" COMMENT="Status of questions">
-      <FIELDS>
-        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" COMMENT="id"/>
-        <FIELD NAME="questionid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="questionid"/>
-        <FIELD NAME="status" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="status"/>
-      </FIELDS>
-      <KEYS>
-        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
-      </KEYS>
-    </TABLE>
-    <TABLE NAME="block_exaquest_similarity" COMMENT="This table is used as persistence store for the gtn-jku-similarity-comparison extension, see https://gitea.swerk.priv.at/stefan/gtn-jku-similarity-comparison">
-      <FIELDS>
-        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
-        <FIELD NAME="question_id1" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="The first question ID for the similarity comparison (foreign key)."/>
-        <FIELD NAME="question_id2" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="The second question id for the similarity comparison"/>
-        <FIELD NAME="is_similar" TYPE="int" LENGTH="1" NOTNULL="false" SEQUENCE="false" COMMENT="Boolean value, 0 &amp;lt;=&amp;gt; not similar, 1&amp;lt;=&amp;gt; is similar"/>
-        <FIELD NAME="similarity" TYPE="number" LENGTH="20" NOTNULL="false" SEQUENCE="false" DECIMALS="19" COMMENT="Normalized similarity value between [0.0-1.0]"/>
-        <FIELD NAME="timestamp_calculation" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="The UNIX timestamp when this similarity value was calculated."/>
-        <FIELD NAME="threshold" TYPE="number" LENGTH="20" NOTNULL="false" SEQUENCE="false" DECIMALS="19" COMMENT="The threshold/cutoff value for determining similarity, range [0.0 - 1.0]"/>
-        <FIELD NAME="algorithm" TYPE="char" LENGTH="20" NOTNULL="false" SEQUENCE="false" COMMENT="The similarity algorithm or metric that was utilized for computing the similarity distance."/>
-      </FIELDS>
-      <KEYS>
-        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
-        <KEY NAME="fk_questionid_1" TYPE="foreign" FIELDS="question_id1" REFTABLE="question" REFFIELDS="id" COMMENT="Foreign key to the first question ID."/>
-        <KEY NAME="fk_questionid_2" TYPE="foreign" FIELDS="question_id2" REFTABLE="question" REFFIELDS="id" COMMENT="Foreign key to the second question ID."/>
-      </KEYS>
-    </TABLE>
-  </TABLES>
+    <TABLES>
+        <TABLE NAME="block_exaquestquestionstatus" COMMENT="Status of questions">
+            <FIELDS>
+                <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" COMMENT="id"/>
+                <FIELD NAME="questionid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="questionid"/>
+                <FIELD NAME="status" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="status"/>
+            </FIELDS>
+            <KEYS>
+                <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+                <KEY NAME="questionid" TYPE="foreign" FIELDS="questionid" REFTABLE="question" REFFIELDS="id"/>
+            </KEYS>
+        </TABLE>
+        <TABLE NAME="block_exaquestreviewassign" COMMENT="Assignment of reviews. Questions are assigned to persons that should to fachlich or formal review.">
+            <FIELDS>
+                <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" COMMENT="id"/>
+                <FIELD NAME="questionid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="questionid"/>
+                <FIELD NAME="reviewerid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="the assigned reviewer"/>
+                <FIELD NAME="reviewtype" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="type of the review 0=formal, 1=fachlich"/>
+            </FIELDS>
+            <KEYS>
+                <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+                <KEY NAME="questionid" TYPE="foreign" FIELDS="questionid" REFTABLE="question" REFFIELDS="id"/>
+                <KEY NAME="reviewerid" TYPE="foreign" FIELDS="reviewerid" REFTABLE="user" REFFIELDS="id"/>
+            </KEYS>
+        </TABLE>
+        <TABLE NAME="block_exaquest_similarity" COMMENT="This table is used as persistence store for the gtn-jku-similarity-comparison extension, see https://gitea.swerk.priv.at/stefan/gtn-jku-similarity-comparison">
+          <FIELDS>
+            <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+            <FIELD NAME="question_id1" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="The first question ID for the similarity comparison (foreign key)."/>
+            <FIELD NAME="question_id2" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="The second question id for the similarity comparison"/>
+            <FIELD NAME="is_similar" TYPE="int" LENGTH="1" NOTNULL="false" SEQUENCE="false" COMMENT="Boolean value, 0 &amp;lt;=&amp;gt; not similar, 1&amp;lt;=&amp;gt; is similar"/>
+            <FIELD NAME="similarity" TYPE="number" LENGTH="20" NOTNULL="false" SEQUENCE="false" DECIMALS="19" COMMENT="Normalized similarity value between [0.0-1.0]"/>
+            <FIELD NAME="timestamp_calculation" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="The UNIX timestamp when this similarity value was calculated."/>
+            <FIELD NAME="threshold" TYPE="number" LENGTH="20" NOTNULL="false" SEQUENCE="false" DECIMALS="19" COMMENT="The threshold/cutoff value for determining similarity, range [0.0 - 1.0]"/>
+            <FIELD NAME="algorithm" TYPE="char" LENGTH="20" NOTNULL="false" SEQUENCE="false" COMMENT="The similarity algorithm or metric that was utilized for computing the similarity distance."/>
+          </FIELDS>
+          <KEYS>
+            <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+            <KEY NAME="fk_questionid_1" TYPE="foreign" FIELDS="question_id1" REFTABLE="question" REFFIELDS="id" COMMENT="Foreign key to the first question ID."/>
+            <KEY NAME="fk_questionid_2" TYPE="foreign" FIELDS="question_id2" REFTABLE="question" REFFIELDS="id" COMMENT="Foreign key to the second question ID."/>
+          </KEYS>
+        </TABLE>
+    </TABLES>
 </XMLDB>

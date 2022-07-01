@@ -3,12 +3,11 @@
         <p>{{#str}}
             request_questions_label, block_exaquest {{/str}}
             <br>
-            <a class="selectallornone">selectallornone</a>
+            <a class="selectallornone-userselection">select all/none</a>
             {{#fragenersteller}}
-                <!--                TODO: Select all/none -->
                 <br>
                 <!--                {{firstname}} {{lastname}}{{#comma}},{{/comma}}{{^comma}}.{{/comma}}-->
-                <input type="checkbox" id={{id}} name="selectedusers[{{id}}]" value={{id}}>
+                <input type="checkbox" id={{id}} class="userselectioncheckbox" name="selectedusers[{{id}}]" value={{id}}>
                 <label for="selectedusers[{{id}}]">{{firstname}} {{lastname}}</label>
             {{/fragenersteller}}
         </p>

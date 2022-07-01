@@ -9,11 +9,15 @@ require_once(__DIR__ . '/questionbank_extensions/exaquest_view.php');
 $courseid = required_param('courseid', PARAM_INT);
 require_login($courseid);
 
-list($thispageurl, $contexts, $cmid, $cm, $module, $pagevars) =
-    question_edit_setup('questions', '/question/edit.php');
+
 
 //$course = $DB->get_record('course', array('id' => $courseid));
 $context = context_course::instance($courseid);
+
+if (is_enrolled($context, $USER, "block/exaquest:createquestion")) {
+    list($thispageurl, $contexts, $cmid, $cm, $module, $pagevars) =
+        question_edit_setup('questions', '/question/edit.php');
+}
 
 $page_params = array('courseid' => $courseid);
 
@@ -27,22 +31,26 @@ block_exaquest_init_js_css();
 $output = $PAGE->get_renderer('block_exaquest');
 
 echo $output->header($context, $courseid, get_string('dashboard', 'block_exaquest'));
-
+$frageneersteller= array();
 $action = optional_param('action', "", PARAM_ALPHAEXT);
 if ($action == 'request_questions') {
     // get all the users with role "fragesteller" and send them a notification
     $allfragenersteller = block_exaquest_get_fragenersteller_by_courseid($courseid);
-    $selectedfragenersteller = $_POST["selectedusers"];
-    $frageneersteller = array_intersect_key($allfragenersteller, $selectedfragenersteller);
-    foreach ($frageneersteller as $ersteller) {
-        $messageobject = new stdClass();
-        $messageobject->fullname = $COURSE->fullname;
-        $messageobject->url = new moodle_url('/blocks/exaquest/dashboard.php', ['courseid' => $COURSE->id]);
-        $messageobject->url = $messageobject->url->raw_out(false);
-        $message = get_string('please_create_new_questions', 'block_exaquest', $messageobject);
-        $message = get_string('please_create_new_questions_subject', 'block_exaquest', $messageobject);
-        block_exaquest_send_moodle_notification("newquestionsrequest", $USER->id, $ersteller->id, $message, $message,
-            "Frageerstellung");
+    if(array_key_exists("selectedusers", $_POST)){
+        $selectedfragenersteller = $_POST["selectedusers"];
+        if($selectedfragenersteller){
+            $frageneersteller = array_intersect_key($allfragenersteller, $selectedfragenersteller);
+            foreach ($frageneersteller as $ersteller) {
+                $messageobject = new stdClass();
+                $messageobject->fullname = $COURSE->fullname;
+                $messageobject->url = new moodle_url('/blocks/exaquest/dashboard.php', ['courseid' => $COURSE->id]);
+                $messageobject->url = $messageobject->url->raw_out(false);
+                $message = get_string('please_create_new_questions', 'block_exaquest', $messageobject);
+                $message = get_string('please_create_new_questions_subject', 'block_exaquest', $messageobject);
+                block_exaquest_send_moodle_notification("newquestionsrequest", $USER->id, $ersteller->id, $message, $message,
+                    "Frageerstellung");
+            }
+        }
     }
 
 }
@@ -74,6 +82,24 @@ if (is_enrolled($context, $USER, "block/exaquest:fragenersteller")) {
         $questions = [];
     }
     $dashboardcard = new \block_exaquest\output\dashboardcard_revise_questions($questions);
+    echo $output->render($dashboardcard);
+}
+if (is_enrolled($context, $USER, "block/exaquest:fachlfragenreviewer")) {
+    // QUESTIONS TO REVIEW
+    $questions = block_exaquest_get_questions_to_fachlich_review($courseid, $USER->id);
+    if (!isset($questions)) {
+        $questions = [];
+    }
+    $dashboardcard = new \block_exaquest\output\dashboardcard_fachlich_review_questions($questions);
+    echo $output->render($dashboardcard);
+}
+if (is_enrolled($context, $USER, "block/exaquest:pruefungskoordination") || is_enrolled($context, $USER, "block/exaquest:pruefungsstudmis")) {
+    // QUESTIONS TO REVIEW
+    $questions = block_exaquest_get_questions_to_formal_review($courseid, $USER->id);
+    if (!isset($questions)) {
+        $questions = [];
+    }
+    $dashboardcard = new \block_exaquest\output\dashboardcard_formal_review_questions($questions);
     echo $output->render($dashboardcard);
 }
 
