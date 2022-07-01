@@ -38,15 +38,15 @@ $capabilities = array(
         'captype' => 'write',
         'contextlevel' => CONTEXT_COURSE,
     ),
-    'block/exaquest:admintechnprufungsdurchf' => array(
+    'block/exaquest:admintechnpruefungsdurchf' => array(
         'captype' => 'write',
         'contextlevel' => CONTEXT_COURSE,
     ),
-    'block/exaquest:prufungskoordination' => array(
+    'block/exaquest:pruefungskoordination' => array(
         'captype' => 'write',
         'contextlevel' => CONTEXT_COURSE,
     ),
-    'block/exaquest:prufungsstudmis' => array(
+    'block/exaquest:pruefungsstudmis' => array(
         'captype' => 'write',
         'contextlevel' => CONTEXT_COURSE,
     ),
@@ -62,11 +62,11 @@ $capabilities = array(
         'captype' => 'write',
         'contextlevel' => CONTEXT_COURSE,
     ),
-    'block/exaquest:prufungsmitwirkende' => array(
+    'block/exaquest:pruefungsmitwirkende' => array(
         'captype' => 'write',
         'contextlevel' => CONTEXT_COURSE,
     ),
-    'block/exaquest:fachlicherzweitprufer' => array(
+    'block/exaquest:fachlicherzweitpruefer' => array(
         'captype' => 'write',
         'contextlevel' => CONTEXT_COURSE,
     ),

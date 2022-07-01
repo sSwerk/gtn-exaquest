@@ -49,5 +49,13 @@ switch ($action) {
         $data->id = $DB->get_field('block_exaquestquestionstatus','id', array("questionid" => $questionid));
         $DB->update_record('block_exaquestquestionstatus', $data);
         break;
+    case ('rework_question'):
+        //$DB->record_exists('block_exaquestquestionstatus', array("questionid" => $questionid));
+        $data = new stdClass;
+        $data->questionid = $questionid;
+        $data->status = BLOCK_EXAQUEST_QUESTIONSTATUS_TO_REVISE;
+        $data->id = $DB->get_field('block_exaquestquestionstatus','id', array("questionid" => $questionid));
+        $DB->update_record('block_exaquestquestionstatus', $data);
+        break;
 
 }

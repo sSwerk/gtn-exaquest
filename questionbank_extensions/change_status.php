@@ -45,27 +45,25 @@ class change_status extends column_base {
         switch(intval($question->teststatus)){
 
             case BLOCK_EXAQUEST_QUESTIONSTATUS_NEW:
+            case BLOCK_EXAQUEST_QUESTIONSTATUS_TO_REVISE:
                 echo '<a href="#" class="changestatus'.$question->id.' btn btn-primary btn-lg" role="button" value="open_question_for_review"> Frage zur Begutachtung freigeben</a>';
                 break;
             case BLOCK_EXAQUEST_QUESTIONSTATUS_TO_ASSESS:
                 echo '<a href="#" class="changestatus'.$question->id.' btn btn-primary btn-lg" role="button" value="formal_review_done"> Formales Review finalisieren</a>';
                 echo '<a href="#" class="changestatus'.$question->id.' btn btn-primary btn-lg" role="button" value="technical_review_done"> Fachliches Review finalisieren</a>';
-                echo '<a href="#" class="changestatus'.$question->id.' btn btn-secondary btn-lg" role="button" value="open_question_for_review"> Zur Überarbeitung freigeben</a>';
+                echo '<a href="#" class="changestatus'.$question->id.' btn btn-secondary btn-lg" role="button" value="rework_question"> Zur Überarbeitung freigeben</a>';
                 break;
             case BLOCK_EXAQUEST_QUESTIONSTATUS_FORMAL_REVIEW_DONE:
                 echo '<a href="#" class="changestatus'.$question->id.' btn btn-primary btn-lg" role="button" value="technical_review_done"> Fachliches Review finalisieren</a>';
-                echo '<a href="#" class="changestatus'.$question->id.' btn btn-secondary btn-lg" role="button" value="open_question_for_review"> Zur Überarbeitung freigeben</a>';
+                echo '<a href="#" class="changestatus'.$question->id.' btn btn-secondary btn-lg" role="button" value="rework_question"> Zur Überarbeitung freigeben</a>';
                 break;
             case BLOCK_EXAQUEST_QUESTIONSTATUS_TECHNICAL_REVIEW_DONE:
                 echo '<a href="#" class="changestatus'.$question->id.' btn btn-primary btn-lg" role="button" value="formal_review_done"> Formales Review finalisieren</a>';
-                echo '<a href="#" class="changestatus'.$question->id.' btn btn-secondary btn-lg" role="button" value="open_question_for_review"> Zur Überarbeitung freigeben</a>';
+                echo '<a href="#" class="changestatus'.$question->id.' btn btn-secondary btn-lg" role="button" value="rework_question"> Zur Überarbeitung freigeben</a>';
                 break;
             case BLOCK_EXAQUEST_QUESTIONSTATUS_TECHNICAL_AND_FORMAL_REVIEW_DONE:
                 echo '<a href="#" class="changestatus'.$question->id.' btn btn-primary btn-lg" role="button" value="release_question"> Frage freigeben</a>';
-                echo '<a href="#" class="changestatus'.$question->id.' btn btn-secondary btn-lg" role="button" value="open_question_for_review"> Zur Überarbeitung freigeben</a>';
-                break;
-            case BLOCK_EXAQUEST_QUESTIONSTATUS_TO_REVISE:
-                echo '<a href="#" class="changestatus'.$question->id.' btn btn-primary btn-lg" role="button" value="open_question_for_review"> Zur Überarbeitung freigeben</a>';
+                echo '<a href="#" class="changestatus'.$question->id.' btn btn-secondary btn-lg" role="button" value="rework_question"> Zur Überarbeitung freigeben</a>';
                 break;
             case BLOCK_EXAQUEST_QUESTIONSTATUS_RELEASE_REVIEW:
                 break;
