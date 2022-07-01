@@ -1,0 +1,25 @@
+{
+  "name": "stefan/gtn_jku_similarity_comparison",
+  "description": "description",
+  "minimum-stability": "stable",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "stefan",
+      "email": "stefan@swerk.priv.at"
+    }
+  ],
+  "require": {
+    "phpunit/phpunit": "^9.5",
+    "ext-mbstring": "*",
+    "phpoffice/phpspreadsheet": "1.22.0",
+    "monolog/monolog": "^2.0",
+    "amphp/amp": "^2.6",
+    "amphp/parallel": "^1.4"
+  },
+  "autoload": {
+    "psr-4": {
+      "GTN\\": "com.gtn-solutions/src"
+    }
+  }
+}

@@ -25,5 +25,5 @@ $string['exaquest:fragenersteller'] = 'Create questions in Exaquest block';
 $string['exaquest:modulverantwortlicher'] = 'Responsible for a module';
 $string['setuproles'] = 'Set up roles and capabilities';
 
-
-
+// Similarity Comparison
+$string['exaquest:similarity_title'] = 'Similarity Comparison';
