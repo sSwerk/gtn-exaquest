@@ -13,3 +13,7 @@ $(document).on('click', '.selectallornone-userselection', function () {
         }
     }
 });
+
+// This is the hacky but simple solution to getting the button to where it belongs. The buttion is rendered using functions from moodle-core which use echo.
+// This cannot be included nicely into mustache ==> after rendering, put the button to the correct position with javascript.
+$("#createnewquestion_button").appendTo("#dashboard_create_questions_div");

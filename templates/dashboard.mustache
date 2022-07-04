@@ -1,0 +1,66 @@
+<div id="exaquest">
+    <!--    General Information-->
+    <div class="dashboardcard">
+        <p>{{#str}}questions_overview_title, block_exaquest {{/str}}</p>
+        <ul>
+            <li>{{questions_count}} {{#str}}questions_overall_count, block_exaquest {{/str}}</li>
+            <li>{{questions_reviewed_count}} {{#str}}questions_reviewed_count, block_exaquest {{/str}}</li>
+            <li>{{questions_to_review_count}} {{#str}}questions_to_review_count, block_exaquest {{/str}}</li>
+            <li>{{questions_finalised_count}} {{#str}}questions_finalised_count, block_exaquest {{/str}}</li>
+            <li>{{questions_released_count}} {{#str}}questions_released_count, block_exaquest {{/str}}</li>
+            <li>{{questions_released_to_review_count}} {{#str}}
+                questions_released_to_review_count, block_exaquest {{/str}}</li>
+        </ul>
+
+    </div>
+
+    <!--    Meine Fragen-->
+    <div class="dashboardcard" id="my_questions_dashboardcard">
+        <p>{{#str}}my_questions_title, block_exaquest {{/str}}</p>
+        <ul>
+            <li>{{my_questions_count}} {{#str}}my_questions_count, block_exaquest {{/str}}</li>
+            <li>{{my_questions_reviewed_count}} {{#str}}my_questions_reviewed_count, block_exaquest {{/str}}</li>
+            <li>{{my_questions_to_review_count}} {{#str}}my_questions_to_review_count, block_exaquest {{/str}}</li>
+            <li>{{my_questions_finalised_count}} {{#str}}my_questions_finalised_count, block_exaquest {{/str}}</li>
+        </ul>
+        {{#capabilities}}
+            {{#createquestions}} <!-- createquestions is a key in the capabilities array.. if it is false: don't show, if it is true: show-->
+                <div id="dashboard_create_questions_div"></div>
+            {{/createquestions}}
+        {{/capabilities}}
+    </div>
+
+    <!--    Prüfungen-->
+    <div class="dashboardcard">
+        <p>{{#str}}examinations_title, block_exaquest {{/str}}</p>
+    </div>
+
+    <!--    TODOs-->
+    <div class="dashboardcard">
+        <p>{{#str}}todos_title, block_exaquest {{/str}}</p>
+    </div>
+
+    <!--    Statistik-->
+    <div class="dashboardcard">
+        <p>{{#str}}statistics_title, block_exaquest {{/str}}</p>
+    </div>
+
+
+    <!-- IF we want to split it up for some reason: this code... otherwise delete-->
+    <!--    &lt;!&ndash;    General Information&ndash;&gt;-->
+
+    <!--    {{>block_exaquest/dashboardcard_questions_overview}}-->
+
+    <!--    &lt;!&ndash;    Meine Fragen&ndash;&gt;-->
+    <!--    {{>block_exaquest/dashboardcard_my_questions}}-->
+
+    <!--    &lt;!&ndash;    Prüfungen&ndash;&gt;-->
+    <!--    {{>block_exaquest/dashboardcard_examinations}}-->
+
+    <!--    &lt;!&ndash;    TODOs&ndash;&gt;-->
+    <!--    {{>block_exaquest/dashboardcard_todos}}-->
+
+    <!--    &lt;!&ndash;    Statistik&ndash;&gt;-->
+    <!--    {{>block_exaquest/dashboardcard_statistics}}-->
+</div>
+

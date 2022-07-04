@@ -28,3 +28,31 @@ $string['setuproles'] = 'Set up roles and capabilities';
 
 
 
+// Dasboardcard
+$string['questions_overview_title'] = 'QUESTIONS';
+$string['my_questions_title'] = 'MY QUESTIONS';
+$string['examinations_title'] = 'EXAMINATIONS';
+$string['todos_title'] = 'TODOs';
+$string['statistics_title'] = 'STATISTICS';
+
+$string['questions_overall_count'] = 'questions overall';
+$string['questions_reviewed_count'] = 'questions are reviewed';
+$string['questions_to_review_count'] = 'questions have to be reviewed';
+$string['questions_finalised_count'] = 'questions finalised';
+$string['questions_released_count'] = 'questions released';
+$string['questions_released_to_review_count'] = 'questions are released and should be reviewed again';
+
+$string['my_questions_count'] = 'questions from me';
+$string['my_questions_reviewed_count'] = 'of my questions are reviewed';
+$string['my_questions_to_review_count'] = 'of my questions have to be reviewed';
+$string['my_questions_finalised_count'] = 'of my questions are finalised';
+
+
+
+
+
+
+
+
+
+
