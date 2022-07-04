@@ -35,6 +35,12 @@ class dashboard implements renderable, templatable {
         $data->questions_released_count = 0;
         $data->questions_released_to_review_count = 0;
 
+        $data->my_questions_count = 0;
+        $data->my_questions_reviewed_count = 0;
+        $data->my_questions_to_review_count = 0;
+        $data->my_questions_finalised_count = 0;
+
+
         //$data->questions = array_values($this->questions);
         //foreach ($data->questions as $question){
         //    $question->comma = true;
