@@ -72,7 +72,7 @@ if (is_enrolled($context, $USER, "block/exaquest:modulverantwortlicher")) {
     if (!isset($frageneersteller) || empty($data->fragenersteller)) {
         $frageneersteller = block_exaquest_get_fragenersteller_by_courseid($courseid);
     }
-    $dashboardcard = new \block_exaquest\output\dashboardcard_request_questions($frageneersteller);
+    $dashboardcard = new \block_exaquest\output\popup_request_questions($frageneersteller);
     echo $output->render($dashboardcard);
 }
 if (is_enrolled($context, $USER, "block/exaquest:fragenersteller")) {

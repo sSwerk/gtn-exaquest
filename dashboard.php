@@ -70,7 +70,6 @@ if ($capabilities["createquestions"]) {
 $dashboard = new \block_exaquest\output\dashboard($capabilities, $frageneersteller);
 echo $output->render($dashboard);
 
-//echo '<div id="exaquest">';
 // This is the code for rendering the create-questions-button with moodle-core functions. It is moved to the correct position with javascript.
 if (is_enrolled($context, $USER, "block/exaquest:createquestion")) {
     // ADD QUESTION
@@ -84,40 +83,6 @@ if (is_enrolled($context, $USER, "block/exaquest:createquestion")) {
     $questionbank->create_new_question_form_dashboard($category, $canadd);
     echo "</div>";
 }
-//if (is_enrolled($context, $USER, "block/exaquest:modulverantwortlicher")) {
-//    if (!isset($frageneersteller) || empty($data->fragenersteller)) {
-//        $frageneersteller = block_exaquest_get_fragenersteller_by_courseid($courseid);
-//    }
-//    $dashboardcard = new \block_exaquest\output\dashboardcard_request_questions($frageneersteller);
-//    echo $output->render($dashboardcard);
-//}
-//if (is_enrolled($context, $USER, "block/exaquest:fragenersteller")) {
-//        // QUESTIONS TO REVIEW
-//    $questions = block_exaquest_get_questions_to_revise($courseid, $USER->id);
-//    if (!isset($questions)) {
-//        $questions = [];
-//    }
-//    $dashboardcard = new \block_exaquest\output\dashboardcard_revise_questions($questions);
-//    echo $output->render($dashboardcard);
-//}
-//if (is_enrolled($context, $USER, "block/exaquest:fachlfragenreviewer")) {
-//    // QUESTIONS TO REVIEW
-//    $questions = block_exaquest_get_questions_to_fachlich_review($courseid, $USER->id);
-//    if (!isset($questions)) {
-//        $questions = [];
-//    }
-//    $dashboardcard = new \block_exaquest\output\dashboardcard_fachlich_review_questions($questions);
-//    echo $output->render($dashboardcard);
-//}
-//if (is_enrolled($context, $USER, "block/exaquest:pruefungskoordination") || is_enrolled($context, $USER, "block/exaquest:pruefungsstudmis")) {
-//    // QUESTIONS TO REVIEW
-//    $questions = block_exaquest_get_questions_to_formal_review($courseid, $USER->id);
-//    if (!isset($questions)) {
-//        $questions = [];
-//    }
-//    $dashboardcard = new \block_exaquest\output\dashboardcard_formal_review_questions($questions);
-//    echo $output->render($dashboardcard);
-//}
 
 echo '</div>';
 echo $output->footer();

@@ -48,6 +48,16 @@ $string['my_questions_to_review_count'] = 'of my questions have to be reviewed';
 $string['my_questions_finalised_count'] = 'of my questions are finalised';
 
 
+$string['list_of_exams_with_status'] = 'List of exams with status:';
+$string['create_new_exam_button'] = 'create new exam';
+
+$string['request_questions'] = 'Request new questions';
+$string['questions_for_me_to_review'] = 'Questions for me to review';
+$string['questions_for_me_to_revise'] = 'Questions for me to revise';
+$string['questions_for_me_to_finalise'] = 'Questions for me to finalise';
+$string['compare_questions'] = 'Compare questions';
+
+
 
 
 
