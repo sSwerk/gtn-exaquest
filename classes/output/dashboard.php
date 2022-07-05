@@ -11,10 +11,16 @@ class dashboard implements renderable, templatable {
     var $questions = null;
     private $capabilities;
     private $courseid;
+    private $userid;
+    /**
+     * @var popup_request_questions
+     */
+    private $request_questions_popup;
 
-    public function __construct($courseid, $capabilities, $fragenersteller) {
+    public function __construct($userid, $courseid, $capabilities, $fragenersteller) {
         $this->courseid = $courseid;
         $this->capabilities = $capabilities;
+        $this->userid = $userid;
         //$this->questions = $questions;
         // when using subtemplates: call them HERE and add the capabilities and other data that is needed in the parameters
         // ... see "class search_form implements renderable, templatable {"
@@ -39,7 +45,7 @@ class dashboard implements renderable, templatable {
         $data->questions_released_count = 0;
         $data->questions_released_to_review_count = 0;
 
-        $data->my_questions_count = 0;
+        $data->my_questions_count = block_exaquest_get_questionbankentries_by_courseid_and_userid_count($this->userid, $this->courseid);
         $data->my_questions_reviewed_count = 0;
         $data->my_questions_to_review_count = 0;
         $data->my_questions_finalised_count = 0;
