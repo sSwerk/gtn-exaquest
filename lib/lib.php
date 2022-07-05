@@ -191,7 +191,7 @@ function block_exaquest_get_questionbankentries_by_courseid_count($courseid) {
 			FROM {" . BLOCK_EXAQUEST_DB_QUESTIONSTATUS . "} qs
 			WHERE qs.courseid = :courseid";
 
-    // we simple count the exaquestquestionstatus entries for this course, so we do not need to have the category, do not read unneccesary entries in the question_bank_entries etc
+    // we simply count the exaquestquestionstatus entries for this course, so we do not need to have the category, do not read unneccesary entries in the question_bank_entries etc
 
     $questions = count($DB->get_records_sql($sql, array("courseid" => $courseid)));
 

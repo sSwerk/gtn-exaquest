@@ -168,7 +168,7 @@ class exaquest_view extends view {
      * @param array $editcontexts parent contexts
      * @param bool $showquestiontext whether the text of each question should be shown in the list
      */
-    public function wanted_filters($cat, $tagids, $showhidden, $recurse, $editcontexts, $showquestiontext, $filteroption): void {
+    public function wanted_filters($cat, $tagids, $showhidden, $recurse, $editcontexts, $showquestiontext, $filteroption=null): void {
         global $CFG;
         list(, $contextid) = explode(',', $cat);
         $catcontext = \context::instance_by_id($contextid);
