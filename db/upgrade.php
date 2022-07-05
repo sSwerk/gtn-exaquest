@@ -124,15 +124,30 @@ function xmldb_block_exaquest_upgrade($oldversion)
         // add keys block_exaquestquestionstatus and block_exaquestreviewassign with questionbankentryid instead of questionid
         $table = new xmldb_table('block_exaquestquestionstatus');
         $key = new xmldb_key('questionbankentryid', XMLDB_KEY_FOREIGN, array('questionbankentryid'), 'question_bank_entries', array('id'));
-        // Launch add key questionid.
+        // Launch add key questionbankentryid.
         $dbman->add_key($table, $key);
 
         $table = new xmldb_table('block_exaquestreviewassign');
         $key = new xmldb_key('questionbankentryid', XMLDB_KEY_FOREIGN, array('questionbankentryid'), 'question_bank_entries', array('id'));
-        // Launch add key questionid.
+        // Launch add key questionbankentryid.
         $dbman->add_key($table, $key);
 
         upgrade_block_savepoint(true, 2022070500, 'exaquest');
+    }
+
+    if ($oldversion < 2022070501) {
+        // add field courseid
+        $table = new xmldb_table('block_exaquestquestionstatus');
+        $field = new xmldb_field('courseid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, 0);
+        $dbman->add_field($table, $field);
+
+        // add key courseid
+        $table = new xmldb_table('block_exaquestquestionstatus');
+        $key = new xmldb_key('courseid', XMLDB_KEY_FOREIGN, array('courseid'), 'course', array('id'));
+        // Launch add key courseid.
+        $dbman->add_key($table, $key);
+
+        upgrade_block_savepoint(true, 2022070501, 'exaquest');
     }
 
     return $return_result;

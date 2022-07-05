@@ -10,8 +10,10 @@ use templatable;
 class dashboard implements renderable, templatable {
     var $questions = null;
     private $capabilities;
+    private $courseid;
 
-    public function __construct($capabilities, $fragenersteller) {
+    public function __construct($courseid, $capabilities, $fragenersteller) {
+        $this->courseid = $courseid;
         $this->capabilities = $capabilities;
         //$this->questions = $questions;
         // when using subtemplates: call them HERE and add the capabilities and other data that is needed in the parameters
@@ -30,7 +32,7 @@ class dashboard implements renderable, templatable {
         global $PAGE, $COURSE;
         $data = new stdClass();
         $data->capabilities = $this->capabilities;
-        $data->questions_count = 0;
+        $data->questions_count = block_exaquest_get_questionbankentries_by_courseid_count($this->courseid);
         $data->questions_reviewed_count = 0;
         $data->questions_to_review_count = 0;
         $data->questions_finalised_count = 0;

@@ -48,7 +48,6 @@ const BLOCK_EXAQUEST_QUESTIONSTATUS_LOCKED = 9;
 const BLOCK_EXAQUEST_DB_REVIEWTYPE_FORMAL = 0;
 const BLOCK_EXAQUEST_DB_REVIEWTYPE_FACHLICH = 1;
 
-
 function block_exaquest_init_js_css() {
     global $PAGE, $CFG;
 
@@ -115,79 +114,129 @@ function block_exaquest_get_fragenersteller_by_courseid($courseid) {
 }
 
 /**
- * Returns all questions that have to be revised of this course of this user
+ * Returns count of questionbankentries that have to be revised of this course of this user
  * used e.g. for the fragenersteller to see which questions they should revise
  *
  * @param $courseid
  * @param $userid
  * @return array
  */
-function block_exaquest_get_questions_to_revise($courseid, $userid) {
+function block_exaquest_get_questionbankentries_to_revise_count($courseid, $userid) {
     global $DB;
     $sql = "SELECT q.*
 			FROM {" . BLOCK_EXAQUEST_DB_QUESTIONSTATUS . "} qs
-			JOIN {question} q ON qs.questionid = q.id
-			WHERE q.createdby = :createdby
+			JOIN {question_bank_entries} qe ON qs.questionbankentryid = qe.id
+			WHERE qe.ownerid = :ownerid
 			AND qs.status = :status";
 
-    $questions = $DB->get_records_sql($sql, array("createdby" => $userid, "status" => BLOCK_EXAQUEST_QUESTIONSTATUS_TO_REVISE));
-    foreach ($questions as $question) {
-        // returnurl... like in this function: protected function edit_question_link(question_attempt $qa, question_display_options $options) {
-        $question->editlink =
-            new \moodle_url('/question/bank/editquestion/question.php', ['courseid' => $courseid, 'id' => $question->id]);
-    }
+    $questions =
+        count($DB->get_records_sql($sql, array("ownerid" => $userid, "status" => BLOCK_EXAQUEST_QUESTIONSTATUS_TO_REVISE)));
 
     return $questions;
 }
 
 /**
- * Returns all questions that have to be formally reviewed
+ * Returns all count of questionbankentries that have to be formally reviewed
  * used e.g. for the prüfungscoordination or the studmis to see which questions they should revise
  *
  * @param $courseid
  * @param $userid
  * @return array
  */
-function block_exaquest_get_questions_to_formal_review($courseid, $userid) {
+function block_exaquest_get_questionbankentries_to_formal_review_count($courseid, $userid) {
     global $DB;
     $sql = "SELECT q.*
 			FROM {" . BLOCK_EXAQUEST_DB_REVIEWASSIGN . "} ra
-			JOIN {question} q ON ra.questionid = q.id
+			JOIN {question_bank_entries} qe ON ra.questionbankentryid = qe.id
 			WHERE ra.reviewerid = :reviewerid
 			AND ra.reviewtype = :reviewtype";
 
-    $questions = $DB->get_records_sql($sql, array("reviewerid" => $userid, "reviewtype" => BLOCK_EXAQUEST_DB_REVIEWTYPE_FORMAL));
-    foreach ($questions as $question) {
-        // returnurl... like in this function: protected function edit_question_link(question_attempt $qa, question_display_options $options) {
-        $question->editlink =
-            new \moodle_url('/question/bank/editquestion/question.php', ['courseid' => $courseid, 'id' => $question->id]);
-    }
+    $questions =
+        count($DB->get_records_sql($sql, array("reviewerid" => $userid, "reviewtype" => BLOCK_EXAQUEST_DB_REVIEWTYPE_FORMAL)));
 
     return $questions;
 }
 
 /**
- * Returns all questions that have to be fachlich reviewed
+ * Returns count of questionbankentries that have to be fachlich reviewed
  * used e.g. for the fachlicherreviewer to see which questions they should revise
  *
  * @param $courseid
  * @param $userid
  * @return array
  */
-function block_exaquest_get_questions_to_fachlich_review($courseid, $userid) {
+function block_exaquest_get_questionbankentries_to_fachlich_review_count($courseid, $userid) {
     global $DB;
     $sql = "SELECT q.*
 			FROM {" . BLOCK_EXAQUEST_DB_REVIEWASSIGN . "} ra
-			JOIN {question} q ON ra.questionid = q.id
+			JOIN {question_bank_entries} qe ON ra.questionbankentryid = qe.id
 			WHERE ra.reviewerid = :reviewerid
 			AND ra.reviewtype = :reviewtype";
 
-    $questions = $DB->get_records_sql($sql, array("reviewerid" => $userid, "reviewtype" => BLOCK_EXAQUEST_DB_REVIEWTYPE_FACHLICH));
-    foreach ($questions as $question) {
-        // returnurl... like in this function: protected function edit_question_link(question_attempt $qa, question_display_options $options) {
-        $question->editlink =
-            new \moodle_url('/question/bank/editquestion/question.php', ['courseid' => $courseid, 'id' => $question->id]);
-    }
+    $questions =
+        count($DB->get_records_sql($sql, array("reviewerid" => $userid, "reviewtype" => BLOCK_EXAQUEST_DB_REVIEWTYPE_FACHLICH)));
+
+    return $questions;
+}
+
+/**
+ * Returns count of all questionbankentries (all entries in exaquestqeustionstatus)
+ *
+ * @param $courseid
+ * @return array
+ */
+function block_exaquest_get_questionbankentries_by_courseid_count($courseid) {
+    global $DB;
+    $sql = "SELECT qs.id
+			FROM {" . BLOCK_EXAQUEST_DB_QUESTIONSTATUS . "} qs
+			WHERE qs.courseid = :courseid";
+
+    // we simple count the exaquestquestionstatus entries for this course, so we do not need to have the category, do not read unneccesary entries in the question_bank_entries etc
+
+    $questions = count($DB->get_records_sql($sql, array("courseid" => $courseid)));
+
+    // TODO: check the questionlib for functions like get_question_bank_entry( that could be useful
+
+    return $questions;
+}
+
+/**
+ * Returns count of all questionbankentries (all entries in exaquestqeustionstatus)
+ *
+ * @param $courseid
+ * @return array
+ */
+function block_exaquest_get_reviewed_questionbankentries_count($courseid) {
+    global $DB;
+    $sql = "SELECT qs.id
+			FROM {" . BLOCK_EXAQUEST_DB_QUESTIONSTATUS . "} qs
+			WHERE qs.courseid = :courseid
+			AND qs.status = :status";
+
+    $questions = count($DB->get_records_sql($sql,
+        array("courseid" => $courseid, "status" => BLOCK_EXAQUEST_QUESTIONSTATUS_TECHNICAL_AND_FORMAL_REVIEW_DONE)));
+
+    return $questions;
+}
+
+/**
+ * Returns count of all questionbankentries (all entries in exaquestqeustionstatus)
+ *
+ * @param $courseid
+ * @return array
+ */
+function block_exaquest_get_questionbankentries_to_be_reviewed_count($courseid) {
+    global $DB;
+    $sql = "SELECT qs.id
+			FROM {" . BLOCK_EXAQUEST_DB_QUESTIONSTATUS . "} qs
+			WHERE qs.courseid = :courseid
+			AND qs.status = :fachlichreviewdone
+			OR qs.status = :formalreviewdone
+			OR qs.status = :toassess";
+
+    $questions = count($DB->get_records_sql($sql,
+        array("courseid" => $courseid, "fachlichreviewdone" => BLOCK_EXAQUEST_QUESTIONSTATUS_TECHNICAL_REVIEW_DONE,
+            "formalreviewdone" => BLOCK_EXAQUEST_QUESTIONSTATUS_FORMAL_REVIEW_DONE, "toassess" => BLOCK_EXAQUEST_QUESTIONSTATUS_TO_ASSESS)));
 
     return $questions;
 }
