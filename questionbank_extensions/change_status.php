@@ -130,7 +130,8 @@ class change_status extends column_base {
     }
 
     public function get_extra_joins(): array {
-        return ['qs' => 'JOIN {block_exaquestquestionstatus} qs ON qbe.id = qs.questionid'];
+        return ['qs' => 'JOIN {block_exaquestquestionstatus} qs ON qbe.id = qs.questionbankentryid',
+                'qra' => 'LEFT JOIN {block_exaquestreviewassign} qra ON qbe.id = qra.questionbankentryid'];
     }
 
 

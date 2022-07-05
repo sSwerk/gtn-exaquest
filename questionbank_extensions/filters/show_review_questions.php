@@ -44,7 +44,7 @@ class show_review_questions extends condition {
     /**
      * Constructor.
      */
-    public function __construct($onoff) {
+    public function __construct($onoff=false) {
         $this->onoff = $onoff;
 
         if($onoff) {

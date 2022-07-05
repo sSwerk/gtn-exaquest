@@ -13,7 +13,7 @@ list($thispageurl, $contexts, $cmid, $cm, $module, $pagevars) =
     question_edit_setup('questions', '/question/edit.php');
 
 $courseid = required_param('courseid', PARAM_INT);
-$showreviewquestions = required_param('showreviewquestions', PARAM_INT);
+$showreviewquestions = optional_param('showreviewquestions',false, PARAM_INT);
 
 
 $pagevars['showreviewquestions'] = $showreviewquestions;
