@@ -10,6 +10,7 @@ require_once($CFG->dirroot . '/question/editlib.php');
 
 require_once('change_status.php');
 require_once('plugin_feature.php');
+require_once('filters/show_review_questions.php');
 
 use core_plugin_manager;
 use core_question\bank\search\condition;
@@ -25,6 +26,8 @@ class exaquest_view extends view {
 
     public function __construct($contexts, $pageurl, $course, $cm = null) {
         parent::__construct($contexts, $pageurl, $course, $cm);
+
+
     }
 
 
@@ -123,6 +126,38 @@ class exaquest_view extends view {
         return $questionbankclasscolumns;
     }
 
+    public function display($pagevars, $tabname): void {
+
+        $page = $pagevars['qpage'];
+        $perpage = $pagevars['qperpage'];
+        $cat = $pagevars['cat'];
+        $recurse = $pagevars['recurse'];
+        $showhidden = $pagevars['showhidden'];
+        $showquestiontext = $pagevars['qbshowtext'];
+        $tagids = [];
+        $showreviewquestions = $pagevars['showreviewquestions'];
+        $filteroption = new \stdClass();
+        $filteroption->showreviewquestions = $showreviewquestions;
+
+
+        if (!empty($pagevars['qtagids'])) {
+            $tagids = $pagevars['qtagids'];
+        }
+
+        echo \html_writer::start_div('questionbankwindow boxwidthwide boxaligncenter');
+
+        $editcontexts = $this->contexts->having_one_edit_tab_cap($tabname);
+
+        // Show the filters and search options.
+        $this->wanted_filters($cat, $tagids, $showhidden, $recurse, $editcontexts, $showquestiontext, $filteroption);
+
+        // Continues with list of questions.
+        $this->display_question_list($this->baseurl, $cat, null, $page, $perpage,
+            $this->contexts->having_cap('moodle/question:add'));
+        echo \html_writer::end_div();
+
+    }
+
     /**
      * The filters for the question bank.
      *
@@ -133,7 +168,7 @@ class exaquest_view extends view {
      * @param array $editcontexts parent contexts
      * @param bool $showquestiontext whether the text of each question should be shown in the list
      */
-    public function wanted_filters($cat, $tagids, $showhidden, $recurse, $editcontexts, $showquestiontext): void {
+    public function wanted_filters($cat, $tagids, $showhidden, $recurse, $editcontexts, $showquestiontext, $filteroption): void {
         global $CFG;
         list(, $contextid) = explode(',', $cat);
         $catcontext = \context::instance_by_id($contextid);
@@ -154,6 +189,7 @@ class exaquest_view extends view {
                 }
 
                 array_unshift($this->searchconditions, new \core_question\bank\search\hidden_condition(!$showhidden));
+                array_unshift($this->searchconditions, new \core_question\bank\search\show_review_questions($filteroption->showreviewquestions));
                 array_unshift($this->searchconditions, new \core_question\bank\search\category_condition(
                     $cat, $recurse, $editcontexts, $this->baseurl, $this->course));
             }
@@ -242,5 +278,60 @@ class exaquest_view extends view {
     function get_current_category_dashboard($categoryandcontext) {
         return $this->get_current_category($categoryandcontext);
     }
+
+
+    /**
+     * Create the SQL query to retrieve the indicated questions, based on
+     * \core_question\bank\search\condition filters.
+     */
+    protected function build_query(): void {
+        // Get the required tables and fields.
+        $joins = [];
+        $fields = ['qv.status', 'qc.id as categoryid', 'qv.version', 'qv.id as versionid', 'qbe.id as questionbankentryid'];
+        if (!empty($this->requiredcolumns)) {
+            foreach ($this->requiredcolumns as $column) {
+                $extrajoins = $column->get_extra_joins();
+                foreach ($extrajoins as $prefix => $join) {
+                    if (isset($joins[$prefix]) && $joins[$prefix] != $join) {
+                        throw new \coding_exception('Join ' . $join . ' conflicts with previous join ' . $joins[$prefix]);
+                    }
+                    $joins[$prefix] = $join;
+                }
+                $fields = array_merge($fields, $column->get_required_fields());
+            }
+        }
+        $fields = array_unique($fields);
+
+        // Build the order by clause.
+        $sorts = [];
+        foreach ($this->sort as $sort => $order) {
+            list($colname, $subsort) = $this->parse_subsort($sort);
+            $sorts[] = $this->requiredcolumns[$colname]->sort_expression($order < 0, $subsort);
+        }
+
+        // Build the where clause.
+        $latestversion = 'qv.version = (SELECT MAX(v.version)
+                                          FROM {question_versions} v
+                                          JOIN {question_bank_entries} be
+                                            ON be.id = v.questionbankentryid
+                                         WHERE be.id = qbe.id)';
+        $tests = ['q.parent = 0', $latestversion];
+        $this->sqlparams = [];
+        foreach ($this->searchconditions as $searchcondition) {
+            if ($searchcondition->where()) {
+                $tests[] = '((' . $searchcondition->where() .'))';
+            }
+            if ($searchcondition->params()) {
+                $this->sqlparams = array_merge($this->sqlparams, $searchcondition->params());
+            }
+        }
+        // Build the SQL.
+        $sql = ' FROM {question} q ' . implode(' ', $joins);
+        $sql .= ' WHERE ' . implode(' AND ', $tests);
+        $this->countsql = 'SELECT count(1)' . $sql;
+        $this->loadsql = 'SELECT ' . implode(', ', $fields) . $sql . ' ORDER BY ' . implode(', ', $sorts);
+    }
+
+
 
 }

@@ -129,4 +129,9 @@ class change_status extends column_base {
 
     }
 
+    public function get_extra_joins(): array {
+        return ['qs' => 'JOIN {block_exaquestquestionstatus} qs ON qbe.id = qs.questionid'];
+    }
+
+
 }

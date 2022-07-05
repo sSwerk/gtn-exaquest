@@ -34,23 +34,23 @@ use core_question\local\bank\question_version_status;
  * @author    2021 Safat Shahin <safatshahin@catalyst-au.net>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class hidden_condition extends condition {
-    /** @var bool Whether to include old "deleted" questions. */
-    protected $hide;
+class show_review_questions extends condition {
 
     /** @var string SQL fragment to add to the where clause. */
     protected $where;
 
+    protected $onoff;
+
     /**
      * Constructor.
-     * @param bool $hide whether to include old "deleted" questions.
      */
-    public function __construct($hide = true) {
-        $this->hide = $hide;
-        if ($hide) {
-            $this->where = "qv.status = '" . question_version_status::QUESTION_STATUS_READY . "' " .
-                " OR qv.status = '" . question_version_status::QUESTION_STATUS_DRAFT . "' ";
+    public function __construct($onoff) {
+        $this->onoff = $onoff;
+
+        if($onoff) {
+            $this->where = "qs.status = '" . BLOCK_EXAQUEST_QUESTIONSTATUS_TO_ASSESS . "' ";
         }
+
     }
 
     /**
@@ -67,11 +67,21 @@ class hidden_condition extends condition {
      */
     public function display_options_adv() {
         global $PAGE;
-        $displaydata = [];
-        if (!$this->hide) {
-            $displaydata['checked'] = 'checked="true"';
+
+        if($this->onoff){
+            $checked = 'checked = "checked"';
+        } else {
+            $checked= '';
+
         }
-        return $PAGE->get_renderer('core_question', 'bank')->render_hidden_condition_advanced($displaydata);
+
+        $html = '<div class="show_review_questions">
+                 <input type="hidden" name="showreviewquestions" value="0">
+                 <input id="showreviewquestions_on" class="searchoptions mr-1" type="checkbox" value="1" name="showreviewquestions" '.$checked.'>
+                 <label for="showreviewquestions">show review questions</label>
+                 </div>';
+
+        return $html;
     }
 }
 
