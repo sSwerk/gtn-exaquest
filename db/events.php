@@ -16,8 +16,9 @@
 
 // List of observers.
 $observers = array(
-   array(
+    array(
         'eventname' => '\core\event\question_created',
         'callback' => 'block_exaquest_observer::question_created',
+        'internal' => false,
     ),
 );

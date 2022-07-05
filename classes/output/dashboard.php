@@ -4,18 +4,23 @@ namespace block_exaquest\output;
 
 use renderable;
 use renderer_base;
-use templatable;
 use stdClass;
+use templatable;
 
 class dashboard implements renderable, templatable {
     var $questions = null;
+    private $capabilities;
+    private $courseid;
 
-    public function __construct($capabilities, $fragenersteller) {
+    public function __construct($courseid, $capabilities, $fragenersteller) {
+        $this->courseid = $courseid;
         $this->capabilities = $capabilities;
-        $this->fragenersteller = $fragenersteller;
         //$this->questions = $questions;
-        // IF we use subtemplates: call them HERE and add the capabilities and other data that is needed in the parameters
+        // when using subtemplates: call them HERE and add the capabilities and other data that is needed in the parameters
         // ... see "class search_form implements renderable, templatable {"
+        //$this->fragenersteller = $fragenersteller; // not needed here, since it is given to popup_request_questions
+        $this->request_questions_popup = new popup_request_questions($fragenersteller);
+
     }
 
     /**
@@ -27,8 +32,7 @@ class dashboard implements renderable, templatable {
         global $PAGE, $COURSE;
         $data = new stdClass();
         $data->capabilities = $this->capabilities;
-        $data->fragenersteller = $this->fragenersteller;
-        $data->questions_count = 0;
+        $data->questions_count = block_exaquest_get_questionbankentries_by_courseid_count($this->courseid);
         $data->questions_reviewed_count = 0;
         $data->questions_to_review_count = 0;
         $data->questions_finalised_count = 0;
@@ -40,17 +44,10 @@ class dashboard implements renderable, templatable {
         $data->my_questions_to_review_count = 0;
         $data->my_questions_finalised_count = 0;
 
+        // REQUEST NEW QUESTIONS
+        // this adds the subtemplate. The data, in this case fragenersteller, does not have to be given to THIS data, because it is in the data for request_questions_popup already
+        $data->request_questions_popup = $this->request_questions_popup->export_for_template($output);
 
-        //$data->questions = array_values($this->questions);
-        //foreach ($data->questions as $question){
-        //    $question->comma = true;
-        //}
-        //if($data->questions){
-        //    end($data->questions)->comma = false;
-        //    foreach ($data->questions as $question){
-        //        $question->editlink = $question->editlink->raw_out(false); // this "false" removes the &amp; which leads to problem in this case
-        //    }
-        //}
         return $data;
     }
 }
