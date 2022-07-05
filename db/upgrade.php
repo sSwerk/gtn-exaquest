@@ -94,5 +94,46 @@ function xmldb_block_exaquest_upgrade($oldversion)
         upgrade_block_savepoint(true, 2022062407, 'exaquest');
     }
 
+    if ($oldversion < 2022070500) {
+        // rename fields questionid to questionbanentryid
+        $table = new xmldb_table('block_exaquestquestionstatus');
+        $field = new xmldb_field('questionid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        if ($dbman->field_exists($table, $field)) {
+            $dbman->rename_field($table, $field, 'questionbankentryid');
+        }
+
+        $table = new xmldb_table('block_exaquestreviewassign');
+        $field = new xmldb_field('questionid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        if ($dbman->field_exists($table, $field)) {
+            $dbman->rename_field($table, $field, 'questionbankentryid');
+        }
+
+
+        // drop keys because we want to use questionbankentryid instead of questionid
+        $table = new xmldb_table('block_exaquestquestionstatus');
+        $key = new xmldb_key('questionid', XMLDB_KEY_FOREIGN, array('questionid'), 'question', array('id'));
+        // Launch drop key primary.
+        $dbman->drop_key($table, $key);
+
+        $table = new xmldb_table('block_exaquestreviewassign');
+        $key = new xmldb_key('questionid', XMLDB_KEY_FOREIGN, array('questionid'), 'question', array('id'));
+        // Launch drop key primary.
+        $dbman->drop_key($table, $key);
+
+
+        // add keys block_exaquestquestionstatus and block_exaquestreviewassign with questionbankentryid instead of questionid
+        $table = new xmldb_table('block_exaquestquestionstatus');
+        $key = new xmldb_key('questionbankentryid', XMLDB_KEY_FOREIGN, array('questionbankentryid'), 'question_bank_entries', array('id'));
+        // Launch add key questionid.
+        $dbman->add_key($table, $key);
+
+        $table = new xmldb_table('block_exaquestreviewassign');
+        $key = new xmldb_key('questionbankentryid', XMLDB_KEY_FOREIGN, array('questionbankentryid'), 'question_bank_entries', array('id'));
+        // Launch add key questionid.
+        $dbman->add_key($table, $key);
+
+        upgrade_block_savepoint(true, 2022070500, 'exaquest');
+    }
+
     return $return_result;
 }
