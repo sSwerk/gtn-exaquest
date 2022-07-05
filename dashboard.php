@@ -67,7 +67,7 @@ if ($capabilities["createquestions"]) {
     }
 }
 
-$dashboard = new \block_exaquest\output\dashboard($courseid, $capabilities, $frageneersteller);
+$dashboard = new \block_exaquest\output\dashboard($USER->id, $courseid, $capabilities, $frageneersteller);
 echo $output->render($dashboard);
 
 // This is the code for rendering the create-questions-button with moodle-core functions. It is moved to the correct position with javascript.
