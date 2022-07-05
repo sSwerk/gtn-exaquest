@@ -88,7 +88,7 @@ class change_status extends column_base {
                 $(".changestatus<?php echo $question->id; ?>").click(function () {
                     var data = {
                         action: $(this).attr("value"),
-                        questionid: <?php echo $question->id; ?>
+                        questionbankentryid: <?php echo $question->id; ?>
                     };
 
                     var ajax = $.ajax({
@@ -120,7 +120,7 @@ class change_status extends column_base {
         $questionstatusdb = $DB->get_records("block_exaquestquestionstatus");
         $questionstatus = array();
         foreach($questionstatusdb as $qs){
-            $questionstatus[$qs->questionid] = $qs->status;
+            $questionstatus[$qs->questionbankentryid] = $qs->status;
         }
 
         foreach($questions as $question){
