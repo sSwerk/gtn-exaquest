@@ -420,5 +420,43 @@ function block_exaquest_set_up_roles() {
 }
 
 
+/**
+ * Build navigtion tabs, depending on role and version
+ *
+ * @param object $context
+ * @param int $courseid
+ */
+function block_exaquest_build_navigation_tabs($context, $courseid) {
+    global $USER;
+
+    //$globalcontext = context_system::instance();
+
+    //$courseSettings = block_exacomp_get_settings_by_course($courseid);
+    //$ready_for_use = block_exacomp_is_ready_for_use($courseid);
+
+    //$de = false;
+    //$lang = current_language();
+    //if (isset($lang) && substr($lang, 0, 2) === 'de') {
+    //    $de = true;
+    //}
+    //
+    //$rows = array();
+
+    //$isTeacher = block_exacomp_is_teacher($context) && $courseid != 1;
+    //$isStudent = has_capability('block/exacomp:student', $context) && $courseid != 1 && !has_capability('block/exacomp:admin', $context);
+    //$isTeacherOrStudent = $isTeacher || $isStudent;
+
+
+    $rows[] = new tabobject('tab_dashboard',
+        new moodle_url('/blocks/exaquest/dashboard.php', array("courseid" => $courseid)),
+        get_string('dashboard', 'block_exaquest'), null, true);
+
+    $rows[] = new tabobject('tab_get_questions',
+        new moodle_url('/blocks/exaquest/questbank.php', array("courseid" => $courseid)),
+        get_string('get_questions', 'block_exaquest'), null, true);
+
+
+    return $rows;
+}
 
 
