@@ -68,7 +68,7 @@ class edit_action_column_exaquest extends menu_action_column_base {
     }
 
     public function get_name() {
-        return 'editaction';
+        return 'editnewaction';
     }
 
     /**

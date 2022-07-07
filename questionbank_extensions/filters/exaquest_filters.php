@@ -97,7 +97,7 @@ class exaquest_filters extends condition {
         $selected[$this->filterstatus] = 'selected="selected"';
 
 
-        $html ='<select class="select custom-select searchoptions custom-select" id="id_filterstatus" style="margin-bottom:50px" name="filterstatus">
+        $html ='<div><div style="padding:5.5px;float:left">Select Questions:</div><select class="select custom-select searchoptions custom-select" id="id_filterstatus" style="margin-left:5px;margin-bottom:50px" name="filterstatus">
                     <option '.$selected[BLOCK_EXAQUEST_FILTERSTATUS_ALL_QUESTIONS].' value="'.BLOCK_EXAQUEST_FILTERSTATUS_ALL_QUESTIONS.'">Show all questions</option>
                     <optgroup label="Created:">
                         <option '.$selected[BLOCK_EXAQUEST_FILTERSTATUS_MY_CREATED_QUESTIONS].' value="'.BLOCK_EXAQUEST_FILTERSTATUS_MY_CREATED_QUESTIONS.'">Show my created Questions</option>
@@ -115,7 +115,7 @@ class exaquest_filters extends condition {
                         <option '.$selected[BLOCK_EXAQUEST_FILTERSTATUS_MY_QUESTIONS_TO_RELEASE].' value="'.BLOCK_EXAQUEST_FILTERSTATUS_MY_QUESTIONS_TO_RELEASE.'">Show my questions to release</option>
                         <option '.$selected[BLOCK_EXAQUEST_FILTERSTATUS_All_RELEASED_QUESTIONS].' value="'.BLOCK_EXAQUEST_FILTERSTATUS_All_RELEASED_QUESTIONS.'">Show all released questions</option>
                     </optgroup>
-                </select>';
+                </select></div>';
 
         return $html;
     }

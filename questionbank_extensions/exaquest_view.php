@@ -10,6 +10,7 @@ require_once($CFG->dirroot . '/question/editlib.php');
 
 require_once('change_status.php');
 require_once('plugin_feature.php');
+require_once('edit_action_column_exaquest.php');
 require_once('filters/exaquest_filters.php');
 
 use core_plugin_manager;
@@ -101,11 +102,11 @@ class exaquest_view extends view {
             }
         }
 
+
         // New plugins added at the end of the array, will change in sorting feature.
         foreach ($newpluginclasscolumns as $key => $newpluginclasscolumn) {
             $questionbankclasscolumns[$key] = $newpluginclasscolumn;
         }
-
         // Check if qbank_columnsortorder is enabled.
         if (array_key_exists('columnsortorder', core_plugin_manager::instance()->get_enabled_plugins('qbank'))) {
             $columnorder = new column_manager();
@@ -182,13 +183,13 @@ class exaquest_view extends view {
                 }
             } else {
                 if ($CFG->usetags) {
-                    array_unshift($this->searchconditions,
-                        new \core_question\bank\search\tag_condition([$catcontext, $thiscontext], $tagids));
+                    //array_unshift($this->searchconditions,
+                    //    new \core_question\bank\search\tag_condition([$catcontext, $thiscontext], $tagids));
                 }
 
                 //array_unshift($this->searchconditions, new \core_question\bank\search\hidden_condition(!$showhidden));
                 array_unshift($this->searchconditions, new \core_question\bank\search\exaquest_filters($filterstatus));
-                //array_unshift($this->searchconditions, new \core_question\bank\search\category_condition($cat, $recurse, $editcontexts, $this->baseurl, $this->course));
+                array_unshift($this->searchconditions, new \core_question\bank\search\category_condition($cat, $recurse, $editcontexts, $this->baseurl, $this->course));
             }
         }
         $this->display_options_form($showquestiontext);
