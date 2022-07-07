@@ -10,7 +10,7 @@ require_once($CFG->dirroot . '/question/editlib.php');
 
 require_once('change_status.php');
 require_once('plugin_feature.php');
-require_once('filters/show_review_questions.php');
+require_once('filters/exaquest_filters.php');
 
 use core_plugin_manager;
 use core_question\bank\search\condition;
@@ -135,9 +135,7 @@ class exaquest_view extends view {
         $showhidden = $pagevars['showhidden'];
         $showquestiontext = $pagevars['qbshowtext'];
         $tagids = [];
-        $showreviewquestions = $pagevars['showreviewquestions'];
-        $filteroption = new \stdClass();
-        $filteroption->showreviewquestions = $showreviewquestions;
+        $filterstatus = $pagevars['filterstatus'];
 
 
         if (!empty($pagevars['qtagids'])) {
@@ -149,7 +147,7 @@ class exaquest_view extends view {
         $editcontexts = $this->contexts->having_one_edit_tab_cap($tabname);
 
         // Show the filters and search options.
-        $this->wanted_filters($cat, $tagids, $showhidden, $recurse, $editcontexts, $showquestiontext, $filteroption);
+        $this->wanted_filters($cat, $tagids, $showhidden, $recurse, $editcontexts, $showquestiontext, $filterstatus);
 
         // Continues with list of questions.
         $this->display_question_list($this->baseurl, $cat, null, $page, $perpage,
@@ -168,7 +166,7 @@ class exaquest_view extends view {
      * @param array $editcontexts parent contexts
      * @param bool $showquestiontext whether the text of each question should be shown in the list
      */
-    public function wanted_filters($cat, $tagids, $showhidden, $recurse, $editcontexts, $showquestiontext, $filteroption=null): void {
+    public function wanted_filters($cat, $tagids, $showhidden, $recurse, $editcontexts, $showquestiontext, $filterstatus=0): void {
         global $CFG;
         list(, $contextid) = explode(',', $cat);
         $catcontext = \context::instance_by_id($contextid);
@@ -188,10 +186,9 @@ class exaquest_view extends view {
                         new \core_question\bank\search\tag_condition([$catcontext, $thiscontext], $tagids));
                 }
 
-                array_unshift($this->searchconditions, new \core_question\bank\search\hidden_condition(!$showhidden));
-                array_unshift($this->searchconditions, new \core_question\bank\search\show_review_questions($filteroption->showreviewquestions));
-                array_unshift($this->searchconditions, new \core_question\bank\search\category_condition(
-                    $cat, $recurse, $editcontexts, $this->baseurl, $this->course));
+                //array_unshift($this->searchconditions, new \core_question\bank\search\hidden_condition(!$showhidden));
+                array_unshift($this->searchconditions, new \core_question\bank\search\exaquest_filters($filterstatus));
+                //array_unshift($this->searchconditions, new \core_question\bank\search\category_condition($cat, $recurse, $editcontexts, $this->baseurl, $this->course));
             }
         }
         $this->display_options_form($showquestiontext);
@@ -328,6 +325,7 @@ class exaquest_view extends view {
         // Build the SQL.
         $sql = ' FROM {question} q ' . implode(' ', $joins);
         $sql .= ' WHERE ' . implode(' AND ', $tests);
+
         $this->countsql = 'SELECT count(1)' . $sql;
         $this->loadsql = 'SELECT ' . implode(', ', $fields) . $sql . ' ORDER BY ' . implode(', ', $sorts);
     }
