@@ -13,6 +13,9 @@ list($thispageurl, $contexts, $cmid, $cm, $module, $pagevars) =
     question_edit_setup('questions', '/question/edit.php');
 
 $courseid = required_param('courseid', PARAM_INT);
+$filterstatus = optional_param('filterstatus',0, PARAM_INT);
+
+$pagevars['filterstatus'] = $filterstatus;
 
 $page_params = array('courseid' => $courseid);
 
@@ -25,7 +28,8 @@ $PAGE->set_heading('showQuestionBank');
 $PAGE->set_title('showQuestionBank');
 
 $context = context_course::instance($courseid);
-echo $OUTPUT->header($context, $courseid, 'showQuestionBank');
+$output = $PAGE->get_renderer('block_exaquest');
+echo $output->header($context, $courseid, get_string('get_questions', 'block_exaquest'));
 
 
 
@@ -41,4 +45,4 @@ echo '<div class="questionbankwindow boxwidthwide boxaligncenter">';
 $questionbank->display($pagevars, 'editq');
 echo "</div>\n";
 
-echo $OUTPUT->footer();
+echo $output->footer();

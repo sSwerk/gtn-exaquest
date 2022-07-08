@@ -30,10 +30,16 @@ class block_exaquest_observer {
      */
     public static function question_created(\core\event\question_created $event) {
         global $DB;
-        $insert = new stdClass();
-        $insert->questionid = $event->objectid;
-        $insert->status = BLOCK_EXAQUEST_QUESTIONSTATUS_NEW;
-        $DB->insert_record(BLOCK_EXAQUEST_DB_QUESTIONSTATUS, $insert);
+        // first check if for this questionbankentry there already exists an entry in our table:
+        $questionbankentry = get_question_bank_entry($event->objectid); // $event->objecid is the questionid
+        if(!$DB->record_exists(BLOCK_EXAQUEST_DB_QUESTIONSTATUS, ["questionbankentryid" => $questionbankentry->id])){
+            $insert = new stdClass();
+            // get the questionbankentry via a moodle function (simply a join from questions over the versions to the banke_entry)
+            $insert->questionbankentryid = $questionbankentry->id;
+            $insert->status = BLOCK_EXAQUEST_QUESTIONSTATUS_NEW;
+            $insert->courseid = $event->courseid;
+            $DB->insert_record(BLOCK_EXAQUEST_DB_QUESTIONSTATUS, $insert);
+        }
     }
 
 }
