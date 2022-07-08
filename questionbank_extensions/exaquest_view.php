@@ -12,6 +12,8 @@ require_once('change_status.php');
 require_once('plugin_feature.php');
 require_once('edit_action_column_exaquest.php');
 require_once('filters/exaquest_filters.php');
+require_once('edit_action_column_exaquest.php');
+require_once('delete_action_column_exaquest.php');
 
 use core_plugin_manager;
 use core_question\bank\search\condition;
@@ -46,14 +48,14 @@ class exaquest_view extends view {
             'question_name_idnumber_tags_column',
             'edit_menu_column',
             'edit_action_column',
-            'copy_action_column',
-            'tags_action_column',
+            //'copy_action_column',
+            //'tags_action_column',
             'preview_action_column',
-            'history_action_column',
+            //'history_action_column',
             'delete_action_column',
-            'export_xml_action_column',
-            'question_status_column',
-            'version_number_column',
+            //'export_xml_action_column',
+           // 'question_status_column',
+            //'version_number_column',
             'creator_name_column',
             'comment_count_column'
         ];
@@ -96,7 +98,7 @@ class exaquest_view extends view {
                         $questionbankclasscolumns[$columnname] = $columnobject;
                     } else {
                         // Any community plugin for column/action.
-                        $newpluginclasscolumns[$columnname] = $columnobject;
+                        //$newpluginclasscolumns[$columnname] = $columnobject;
                     }
                 }
             }
@@ -123,6 +125,10 @@ class exaquest_view extends view {
         $specialpluginentrypointobject = new \qbank_openquestionforreview\plugin_feature();
         $specialplugincolumnobjects = $specialpluginentrypointobject->get_question_columns($this);
         $questionbankclasscolumns["change_status"] = $specialplugincolumnobjects[0];
+        $questionbankclasscolumns["edit_action_column"] = $specialplugincolumnobjects[1];
+        $questionbankclasscolumns["delete_action_column"] = $specialplugincolumnobjects[2];
+
+
 
         return $questionbankclasscolumns;
     }
@@ -189,7 +195,7 @@ class exaquest_view extends view {
 
                 //array_unshift($this->searchconditions, new \core_question\bank\search\hidden_condition(!$showhidden));
                 array_unshift($this->searchconditions, new \core_question\bank\search\exaquest_filters($filterstatus));
-                array_unshift($this->searchconditions, new \core_question\bank\search\category_condition($cat, $recurse, $editcontexts, $this->baseurl, $this->course));
+                //array_unshift($this->searchconditions, new \core_question\bank\search\category_condition($cat, $recurse, $editcontexts, $this->baseurl, $this->course));
             }
         }
         $this->display_options_form($showquestiontext);
@@ -329,6 +335,19 @@ class exaquest_view extends view {
 
         $this->countsql = 'SELECT count(1)' . $sql;
         $this->loadsql = 'SELECT ' . implode(', ', $fields) . $sql . ' ORDER BY ' . implode(', ', $sorts);
+    }
+
+    /**
+     * Create a new question form.
+     *
+     * @param false|mixed|\stdClass $category
+     * @param bool $canadd
+     */
+    protected function create_new_question_form($category, $canadd): void {
+        if (\core\plugininfo\qbank::is_plugin_enabled('qbank_editquestion')) {
+            echo editquestion_helper::create_new_question_button($category->id,
+                $this->requiredcolumns['edit_action_column_exaquest']->editquestionurl->params(), $canadd);
+        }
     }
 
 
