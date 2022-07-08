@@ -13,6 +13,7 @@ require_once('plugin_feature.php');
 require_once('edit_action_column_exaquest.php');
 require_once('filters/exaquest_filters.php');
 require_once('edit_action_column_exaquest.php');
+require_once('delete_action_column_exaquest.php');
 
 use core_plugin_manager;
 use core_question\bank\search\condition;
@@ -125,6 +126,7 @@ class exaquest_view extends view {
         $specialplugincolumnobjects = $specialpluginentrypointobject->get_question_columns($this);
         $questionbankclasscolumns["change_status"] = $specialplugincolumnobjects[0];
         $questionbankclasscolumns["edit_action_column"] = $specialplugincolumnobjects[1];
+        $questionbankclasscolumns["delete_action_column"] = $specialplugincolumnobjects[2];
 
 
 
