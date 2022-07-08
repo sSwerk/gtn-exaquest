@@ -4,6 +4,7 @@
 namespace qbank_openquestionforreview;
 
 use core_question\local\bank\plugin_features_base;
+use core_question\local\bank\menu_action_column_base;
 
 /**
  * Class plugin_feature is the entrypoint for the columns.
@@ -18,6 +19,7 @@ class plugin_feature extends \core_question\local\bank\plugin_features_base {
     public function get_question_columns(\core_question\local\bank\view $qbank): array {
         return [
             new change_status($qbank),
+            new \qbank_editquestion\edit_action_column_exaquest($qbank),
         ];
     }
 }
