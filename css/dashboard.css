@@ -4,3 +4,7 @@
     padding: 10px;
     margin: 10px;
 }
+
+#exaquest .modalbutton {
+    cursor: pointer;
+}

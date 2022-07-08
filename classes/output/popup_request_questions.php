@@ -7,7 +7,7 @@ use renderer_base;
 use templatable;
 use stdClass;
 
-class dashboardcard_request_questions implements renderable, templatable {
+class popup_request_questions implements renderable, templatable {
     /** @var string $fragenersteller Part of the data that should be passed to the template. */
     var $fragenersteller = null;
 
