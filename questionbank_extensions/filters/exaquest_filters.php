@@ -65,19 +65,19 @@ class exaquest_filters extends condition {
             case BLOCK_EXAQUEST_FILTERSTATUS_ALL_QUESTIONS_TO_REVIEW:
                 $this->where = "qs.status = '" . BLOCK_EXAQUEST_QUESTIONSTATUS_TO_ASSESS . "' ";
                 break;
-            case BLOCK_EXAQUEST_FILTERSTATUS_MY_QUESTIONS_TO_REVIEW:
+            case BLOCK_EXAQUEST_FILTERSTATUS_QUESTIONS_FOR_ME_TO_REVIEW:
                 $this->where = "qs.status = '" . BLOCK_EXAQUEST_QUESTIONSTATUS_TO_ASSESS . "' AND qra.reviewerid = '" . $USER->id. "' ";
                 break;
             case BLOCK_EXAQUEST_FILTERSTATUS_ALL_QUESTIONS_TO_REVISE:
                 $this->where = "qs.status = '" . BLOCK_EXAQUEST_QUESTIONSTATUS_TO_REVISE . "' ";
                 break;
-            case BLOCK_EXAQUEST_FILTERSTATUS_MY_QUESTIONS_TO_REVISE:
+            case BLOCK_EXAQUEST_FILTERSTATUS_QUESTIONS_FOR_ME_TO_REVISE:
                 $this->where = "qs.status = '" . BLOCK_EXAQUEST_QUESTIONSTATUS_TO_REVISE . "' AND qra.reviewerid = '" . $USER->id. "' ";
                 break;
-            case BLOCK_EXAQUEST_FILTERSTATUS_ALL_QUESTIONS_TO_RELEASE:
+            case BLOCK_EXAQUEST_FILTERSTATUS_ALL_QUESTIONS_TO_FINALISE:
                 $this->where = "qs.status = '" . BLOCK_EXAQUEST_QUESTIONSTATUS_RELEASE_REVIEW . "' ";
                 break;
-            case BLOCK_EXAQUEST_FILTERSTATUS_MY_QUESTIONS_TO_RELEASE:
+            case BLOCK_EXAQUEST_FILTERSTATUS_QUESTIONS_FOR_ME_TO_FINALISE:
                 $this->where = "qs.status = '" . BLOCK_EXAQUEST_QUESTIONSTATUS_RELEASE_REVIEW . "' AND qra.reviewerid = '" . $USER->id. "' ";
                 break;
             case BLOCK_EXAQUEST_FILTERSTATUS_All_RELEASED_QUESTIONS:
@@ -104,15 +104,15 @@ class exaquest_filters extends condition {
                     </optgroup>
                     <optgroup label="Review:">
                         <option '.$selected[BLOCK_EXAQUEST_FILTERSTATUS_ALL_QUESTIONS_TO_REVIEW].' value="'.BLOCK_EXAQUEST_FILTERSTATUS_ALL_QUESTIONS_TO_REVIEW.'">Show all qustions to review</option>
-                        <option '.$selected[BLOCK_EXAQUEST_FILTERSTATUS_MY_QUESTIONS_TO_REVIEW].' value="'.BLOCK_EXAQUEST_FILTERSTATUS_MY_QUESTIONS_TO_REVIEW.'">Show my questions to review</option>
+                        <option '.$selected[BLOCK_EXAQUEST_FILTERSTATUS_QUESTIONS_FOR_ME_TO_REVIEW].' value="'.BLOCK_EXAQUEST_FILTERSTATUS_QUESTIONS_FOR_ME_TO_REVIEW.'">Show my questions to review</option>
                     </optgroup>
                     <optgroup label="Revise:">
                         <option '.$selected[BLOCK_EXAQUEST_FILTERSTATUS_ALL_QUESTIONS_TO_REVISE].' value="'.BLOCK_EXAQUEST_FILTERSTATUS_ALL_QUESTIONS_TO_REVISE.'">Show questions to revise</option>
-                        <option '.$selected[BLOCK_EXAQUEST_FILTERSTATUS_MY_QUESTIONS_TO_REVISE].' value="'.BLOCK_EXAQUEST_FILTERSTATUS_MY_QUESTIONS_TO_REVISE.'">Show my questions to revise</option>
+                        <option '.$selected[BLOCK_EXAQUEST_FILTERSTATUS_QUESTIONS_FOR_ME_TO_REVISE].' value="'.BLOCK_EXAQUEST_FILTERSTATUS_QUESTIONS_FOR_ME_TO_REVISE.'">Show my questions to revise</option>
                     </optgroup>
                     <optgroup label="Release:">
-                        <option '.$selected[BLOCK_EXAQUEST_FILTERSTATUS_ALL_QUESTIONS_TO_RELEASE].' value="'.BLOCK_EXAQUEST_FILTERSTATUS_ALL_QUESTIONS_TO_RELEASE.'">Show questions to release</option>
-                        <option '.$selected[BLOCK_EXAQUEST_FILTERSTATUS_MY_QUESTIONS_TO_RELEASE].' value="'.BLOCK_EXAQUEST_FILTERSTATUS_MY_QUESTIONS_TO_RELEASE.'">Show my questions to release</option>
+                        <option '.$selected[BLOCK_EXAQUEST_FILTERSTATUS_ALL_QUESTIONS_TO_FINALISE].' value="'.BLOCK_EXAQUEST_FILTERSTATUS_ALL_QUESTIONS_TO_FINALISE.'">Show questions to release</option>
+                        <option '.$selected[BLOCK_EXAQUEST_FILTERSTATUS_QUESTIONS_FOR_ME_TO_FINALISE].' value="'.BLOCK_EXAQUEST_FILTERSTATUS_QUESTIONS_FOR_ME_TO_FINALISE.'">Show my questions to release</option>
                         <option '.$selected[BLOCK_EXAQUEST_FILTERSTATUS_All_RELEASED_QUESTIONS].' value="'.BLOCK_EXAQUEST_FILTERSTATUS_All_RELEASED_QUESTIONS.'">Show all released questions</option>
                     </optgroup>
                 </select></div>';

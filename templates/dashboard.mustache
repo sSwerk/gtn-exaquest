@@ -71,15 +71,15 @@
         <p>{{#str}}questions_overview_title, block_exaquest {{/str}}</p>
         <ul>
             <li>
-                <a class="link" href="questbank.php"> {{questions_for_me_to_review_count}} {{#str}}
+                <a class="link" href={{questions_for_me_to_review_link}}> {{questions_for_me_to_review_count}} {{#str}}
                     questions_for_me_to_review, block_exaquest {{/str}}</a>
             </li>
             <li>
-                <a class="link">{{questions_for_me_to_revise_count}} {{#str}}
+                <a class="link" href={{questions_for_me_to_revise_link}}>{{questions_for_me_to_revise_count}} {{#str}}
                     questions_for_me_to_revise, block_exaquest {{/str}}</a>
             </li>
             <li>
-                <a class="link">{{questions_for_me_to_finalise_count}} {{#str}}
+                <a class="link" href={{questions_for_me_to_finalise_link}}>{{questions_for_me_to_finalise_count}} {{#str}}
                     questions_for_me_to_finalise, block_exaquest {{/str}}</a>
             </li>
         </ul>
@@ -92,6 +92,7 @@
     <div class="dashboardcard">
         <p>{{#str}}statistics_title, block_exaquest {{/str}}</p>
         <p>{{#str}}compare_questions, block_exaquest {{/str}}</p>
+        {{>block_exaquest/compare_questions}}
     </div>
 
 
