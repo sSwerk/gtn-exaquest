@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => 'stefan/gtn_jku_similarity_comparison',
-        'pretty_version' => 'dev-main',
-        'version' => 'dev-main',
-        'reference' => '0182d72d058b4a1f646ff340f5c54bd8a5e80019',
+        'pretty_version' => 'dev-master',
+        'version' => 'dev-master',
+        'reference' => '297887eb55fd2c1201eff689eff692432054ac1b',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -467,9 +467,9 @@
             'dev_requirement' => false,
         ),
         'stefan/gtn_jku_similarity_comparison' => array(
-            'pretty_version' => 'dev-main',
-            'version' => 'dev-main',
-            'reference' => '0182d72d058b4a1f646ff340f5c54bd8a5e80019',
+            'pretty_version' => 'dev-master',
+            'version' => 'dev-master',
+            'reference' => '297887eb55fd2c1201eff689eff692432054ac1b',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

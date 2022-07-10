@@ -21,5 +21,9 @@
     "psr-4": {
       "GTN\\": "com.gtn-solutions/src"
     }
+  },
+  "archive": {
+    "exclude": [ "!vendor/*", ".*", "!.gitignore", "!.gitmodules",
+      "moodle/", "moodle-docker/", ".idea/", "*.sh"]
   }
 }

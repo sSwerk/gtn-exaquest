@@ -44,10 +44,6 @@ class XlsImporter {
     private array $knownQuestionRowEntites; //[elementId -> QuestionRowEntity]
     private array $knownAnswerRowEntites;//[elementId -> AnswerRowEntity]
 
-    public static function test(): string {
-        return "TEST_SUCCESS";
-    }
-
     /**
      *
      * @param string $inputFilePath path to an Excel Moodle question/answer export file

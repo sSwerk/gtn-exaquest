@@ -57,3 +57,5 @@ $string['compare_questions'] = 'Compare questions';
 
 // Similarity Comparison
 $string['exaquest:similarity_title'] = 'Similarity Comparison';
+$string['exaquest:similarity_button_tooltip'] = "Go to the Similarity Comparison overview";
+$string['exaquest:similarity_button_label'] = "Question Similarity Comparison overview";
