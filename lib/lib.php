@@ -293,19 +293,8 @@ function block_exaquest_set_up_roles() {
         'allowoverride' => 1,
         'allowswitch' => 1,
         'allowview' => 1);
-    if (!$DB->record_exists('role', ['shortname' => 'fragenersteller'])) {
-        $roleid = create_role('Fragenersteller', 'fragenersteller', '', 'editingteacher');
-        $archetype = $DB->get_record('role', ['shortname' => 'editingteacher'])->id; // editingteacher archetype
-        $definitiontable = new core_role_define_role_table_advanced($context, $roleid); //
-        $definitiontable->force_duplicate($archetype,
-            $options); // overwrites everything that is set in the options. The rest stays.
-        $definitiontable->read_submitted_permissions(); // just to not throw a warning because some array is null
-        $definitiontable->save_changes();
-    } else {
-        $roleid = $DB->get_record('role', ['shortname' => 'fragenersteller'])->id;
-    }
-    assign_capability('block/exaquest:fragenersteller', CAP_ALLOW, $roleid, $context);
-    assign_capability('block/exaquest:createquestion', CAP_ALLOW, $roleid, $context);
+
+
 
     if (!$DB->record_exists('role', ['shortname' => 'admintechnpruefungsdurchf'])) {
         $roleid = create_role('admin./techn. Prüfungsdurchf.', 'admintechnpruefungsdurchf', '', 'editingteacher');
@@ -319,6 +308,8 @@ function block_exaquest_set_up_roles() {
         $roleid = $DB->get_record('role', ['shortname' => 'admintechnpruefungsdurchf'])->id;
     }
     assign_capability('block/exaquest:admintechnpruefungsdurchf', CAP_ALLOW, $roleid, $context);
+    assign_capability('block/exaquest:technicalreview', CAP_ALLOW, $roleid, $context);
+    assign_capability('block/exaquest:executeexam', CAP_ALLOW, $roleid, $context);
 
     if (!$DB->record_exists('role', ['shortname' => 'pruefungskoordination'])) {
         $roleid = create_role('Prüfungskoordination', 'pruefungskoordination', '', 'manager');
@@ -332,6 +323,20 @@ function block_exaquest_set_up_roles() {
         $roleid = $DB->get_record('role', ['shortname' => 'pruefungskoordination'])->id;
     }
     assign_capability('block/exaquest:pruefungskoordination', CAP_ALLOW, $roleid, $context);
+    assign_capability('block/exaquest:readallquestions', CAP_ALLOW, $roleid, $context);
+    assign_capability('block/exaquest:readquestionstatistics', CAP_ALLOW, $roleid, $context);
+    assign_capability('block/exaquest:changestatusofreleasedquestions', CAP_ALLOW, $roleid, $context);
+    assign_capability('block/exaquest:createquestion', CAP_ALLOW, $roleid, $context);
+    assign_capability('block/exaquest:setstatustoreview', CAP_ALLOW, $roleid, $context);
+    assign_capability('block/exaquest:setstatustofinalised', CAP_ALLOW, $roleid, $context);
+    assign_capability('block/exaquest:showquestionstoreview', CAP_ALLOW, $roleid, $context);
+    assign_capability('block/exaquest:editquestiontoreview', CAP_ALLOW, $roleid, $context);
+    assign_capability('block/exaquest:showfinalisedquestions', CAP_ALLOW, $roleid, $context);
+    assign_capability('block/exaquest:showquestionstorevise', CAP_ALLOW, $roleid, $context);
+    assign_capability('block/exaquest:editallquestions', CAP_ALLOW, $roleid, $context);
+    assign_capability('block/exaquest:addquestiontoexam', CAP_ALLOW, $roleid, $context);
+    assign_capability('block/exaquest:assignsecondexaminator', CAP_ALLOW, $roleid, $context);
+    assign_capability('block/exaquest:definequestionblockingtime', CAP_ALLOW, $roleid, $context);
 
     if (!$DB->record_exists('role', ['shortname' => 'pruefungsstudmis'])) {
         $roleid = create_role('PrüfungsStudMis', 'pruefungsstudmis', '', 'editingteacher');
@@ -345,6 +350,10 @@ function block_exaquest_set_up_roles() {
         $roleid = $DB->get_record('role', ['shortname' => 'pruefungsstudmis'])->id;
     }
     assign_capability('block/exaquest:pruefungsstudmis', CAP_ALLOW, $roleid, $context);
+    assign_capability('block/exaquest:readquestionstatistics', CAP_ALLOW, $roleid, $context);
+    assign_capability('block/exaquest:showquestionstorevise', CAP_ALLOW, $roleid, $context);
+    assign_capability('block/exaquest:addquestiontoexam', CAP_ALLOW, $roleid, $context);
+
 
     if (!$DB->record_exists('role', ['shortname' => 'modulverantwortlicher'])) {
         $roleid = create_role('Modulverantwortlicher', 'modulverantwortlicher', '', 'editingteacher');
@@ -358,6 +367,39 @@ function block_exaquest_set_up_roles() {
         $roleid = $DB->get_record('role', ['shortname' => 'modulverantwortlicher'])->id;
     }
     assign_capability('block/exaquest:modulverantwortlicher', CAP_ALLOW, $roleid, $context);
+    assign_capability('block/exaquest:readallquestions', CAP_ALLOW, $roleid, $context);
+    assign_capability('block/exaquest:readquestionstatistics', CAP_ALLOW, $roleid, $context);
+    assign_capability('block/exaquest:changestatusofreleasedquestions', CAP_ALLOW, $roleid, $context);
+    assign_capability('block/exaquest:reviseownquestion', CAP_ALLOW, $roleid, $context);
+    assign_capability('block/exaquest:setstatustofinalised', CAP_ALLOW, $roleid, $context);
+    assign_capability('block/exaquest:editquestiontoreview', CAP_ALLOW, $roleid, $context);
+    assign_capability('block/exaquest:showfinalisedquestions', CAP_ALLOW, $roleid, $context);
+    assign_capability('block/exaquest:showquestionstorevise', CAP_ALLOW, $roleid, $context);
+    assign_capability('block/exaquest:releasequestion', CAP_ALLOW, $roleid, $context);
+    assign_capability('block/exaquest:editallquestions', CAP_ALLOW, $roleid, $context);
+
+
+
+    if (!$DB->record_exists('role', ['shortname' => 'fragenersteller'])) {
+        $roleid = create_role('Fragenersteller', 'fragenersteller', '', 'editingteacher');
+        $archetype = $DB->get_record('role', ['shortname' => 'editingteacher'])->id; // editingteacher archetype
+        $definitiontable = new core_role_define_role_table_advanced($context, $roleid); //
+        $definitiontable->force_duplicate($archetype,
+            $options); // overwrites everything that is set in the options. The rest stays.
+        $definitiontable->read_submitted_permissions(); // just to not throw a warning because some array is null
+        $definitiontable->save_changes();
+    } else {
+        $roleid = $DB->get_record('role', ['shortname' => 'fragenersteller'])->id;
+    }
+    assign_capability('block/exaquest:fragenersteller', CAP_ALLOW, $roleid, $context);
+    assign_capability('block/exaquest:createquestion', CAP_ALLOW, $roleid, $context);
+    assign_capability('block/exaquest:readallquestions', CAP_ALLOW, $roleid, $context);
+    assign_capability('block/exaquest:changestatusofreleasedquestions', CAP_ALLOW, $roleid, $context);
+    assign_capability('block/exaquest:setstatustoreview', CAP_ALLOW, $roleid, $context);
+    assign_capability('block/exaquest:reviseownquestion', CAP_ALLOW, $roleid, $context);
+    assign_capability('block/exaquest:showownrevisedquestions', CAP_ALLOW, $roleid, $context);
+    assign_capability('block/exaquest:showquestionstorevise', CAP_ALLOW, $roleid, $context);
+
 
     if (!$DB->record_exists('role', ['shortname' => 'fachlfragenreviewer'])) {
         $roleid = create_role('fachl. Fragenreviewer', 'fachlfragenreviewer', '', 'editingteacher');
@@ -371,6 +413,10 @@ function block_exaquest_set_up_roles() {
         $roleid = $DB->get_record('role', ['shortname' => 'fachlfragenreviewer'])->id;
     }
     assign_capability('block/exaquest:fachlfragenreviewer', CAP_ALLOW, $roleid, $context);
+    assign_capability('block/exaquest:readallquestions', CAP_ALLOW, $roleid, $context);
+    assign_capability('block/exaquest:changestatusofreleasedquestions', CAP_ALLOW, $roleid, $context);
+    assign_capability('block/exaquest:showquestionstoreview', CAP_ALLOW, $roleid, $context);
+    assign_capability('block/exaquest:editquestiontoreview', CAP_ALLOW, $roleid, $context);
 
     if (!$DB->record_exists('role', ['shortname' => 'beurteilungsmitwirkende'])) {
         $roleid = create_role('Beurteilungsmitwirkende', 'beurteilungsmitwirkende', '', 'editingteacher');
@@ -397,6 +443,10 @@ function block_exaquest_set_up_roles() {
         $roleid = $DB->get_record('role', ['shortname' => 'fachlicherpruefer'])->id;
     }
     assign_capability('block/exaquest:fachlicherpruefer', CAP_ALLOW, $roleid, $context);
+    assign_capability('block/exaquest:changestatusofreleasedquestions', CAP_ALLOW, $roleid, $context);
+    assign_capability('block/exaquest:addquestiontoexam', CAP_ALLOW, $roleid, $context);
+    assign_capability('block/exaquest:releaseexam', CAP_ALLOW, $roleid, $context);
+    assign_capability('block/exaquest:assignsecondexaminator', CAP_ALLOW, $roleid, $context);
 
     if (!$DB->record_exists('role', ['shortname' => 'pruefungsmitwirkende'])) {
         $roleid = create_role('Prüfungsmitwirkende', 'pruefungsmitwirkende', '', 'editingteacher');
@@ -410,6 +460,7 @@ function block_exaquest_set_up_roles() {
         $roleid = $DB->get_record('role', ['shortname' => 'pruefungsmitwirkende'])->id;
     }
     assign_capability('block/exaquest:pruefungsmitwirkende', CAP_ALLOW, $roleid, $context);
+    assign_capability('block/exaquest:addquestiontoexam', CAP_ALLOW, $roleid, $context);
 
     if (!$DB->record_exists('role', ['shortname' => 'fachlicherzweitpruefer'])) {
         $roleid = create_role('Fachlicher Zweitprüfer', 'fachlicherzweitpruefer', '', 'editingteacher');
