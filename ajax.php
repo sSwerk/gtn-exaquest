@@ -27,7 +27,7 @@ switch ($action) {
         $data->id = $record->id;
         $data->questionbankentryid = $questionbankentryid;
         if($record->status == BLOCK_EXAQUEST_QUESTIONSTATUS_TECHNICAL_REVIEW_DONE){
-            $data->status = BLOCK_EXAQUEST_QUESTIONSTATUS_TECHNICAL_AND_FORMAL_REVIEW_DONE;
+            $data->status = BLOCK_EXAQUEST_QUESTIONSTATUS_FINALISED;
         } else {
             $data->status = BLOCK_EXAQUEST_QUESTIONSTATUS_FORMAL_REVIEW_DONE;
         }
@@ -39,7 +39,7 @@ switch ($action) {
         $data->id = $record->id;
         $data->questionbankentryid = $questionbankentryid;
         if($record->status == BLOCK_EXAQUEST_QUESTIONSTATUS_FORMAL_REVIEW_DONE){
-            $data->status = BLOCK_EXAQUEST_QUESTIONSTATUS_TECHNICAL_AND_FORMAL_REVIEW_DONE;
+            $data->status = BLOCK_EXAQUEST_QUESTIONSTATUS_FINALISED;
         } else {
             $data->status = BLOCK_EXAQUEST_QUESTIONSTATUS_TECHNICAL_REVIEW_DONE;
         }

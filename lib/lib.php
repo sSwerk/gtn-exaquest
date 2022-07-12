@@ -233,24 +233,6 @@ function block_exaquest_get_questionbankentries_by_courseid_and_userid_count($co
     return $questions;
 }
 
-/**
- * Returns count of
- *
- * @param $courseid
- * @return array
- */
-function block_exaquest_get_reviewed_questionbankentries_count($courseid) {
-    global $DB;
-    $sql = "SELECT qs.id
-			FROM {" . BLOCK_EXAQUEST_DB_QUESTIONSTATUS . "} qs
-			WHERE qs.courseid = :courseid
-			AND qs.status = :status";
-
-    $questions = count($DB->get_records_sql($sql,
-        array("courseid" => $courseid, "status" => BLOCK_EXAQUEST_QUESTIONSTATUS_TECHNICAL_AND_FORMAL_REVIEW_DONE)));
-
-    return $questions;
-}
 
 /**
  * Returns count of
@@ -278,6 +260,46 @@ function block_exaquest_get_questionbankentries_to_be_reviewed_count($courseid) 
 /**
  * Returns count of
  *
+ * TODO: reviewed == finalised ?
+ *
+ * @param $courseid
+ * @return array
+ */
+function block_exaquest_get_released_questionbankentries_count($courseid) {
+    global $DB;
+    $sql = "SELECT qs.id
+			FROM {" . BLOCK_EXAQUEST_DB_QUESTIONSTATUS . "} qs
+			WHERE qs.courseid = :courseid
+			AND qs.status = :finalised";
+
+    $questions = count($DB->get_records_sql($sql,
+        array("courseid" => $courseid, "finalised" => BLOCK_EXAQUEST_QUESTIONSTATUS_RELEASED)));
+
+    return $questions;
+}
+
+/**
+ * Returns count of
+ *
+ * @param $courseid
+ * @return array
+ */
+function block_exaquest_get_released_and_to_review_questionbankentries_count($courseid) {
+    global $DB;
+    $sql = "SELECT qs.id
+			FROM {" . BLOCK_EXAQUEST_DB_QUESTIONSTATUS . "} qs
+			WHERE qs.courseid = :courseid
+			AND qs.status = :finalised";
+
+    $questions = count($DB->get_records_sql($sql,
+        array("courseid" => $courseid, "finalised" => BLOCK_EXAQUEST_QUESTIONSTATUS_LOCKED)));
+
+    return $questions;
+}
+
+/**
+ * Returns count of
+ *
  * @param $courseid
  * @return array
  */
@@ -289,7 +311,7 @@ function block_exaquest_get_finalised_questionbankentries_count($courseid) {
 			AND qs.status = :finalised";
 
     $questions = count($DB->get_records_sql($sql,
-        array("courseid" => $courseid, "fachlichreviewdone" => BLOCK_EXAQUEST_QUESTIONSTATUS_FINALISED)));
+        array("courseid" => $courseid, "finalised" => BLOCK_EXAQUEST_QUESTIONSTATUS_FINALISED)));
 
     return $questions;
 }
