@@ -58,7 +58,7 @@ const BLOCK_EXAQUEST_FILTERSTATUS_QUESTIONS_FOR_ME_TO_REVIEW = 3;
 const BLOCK_EXAQUEST_FILTERSTATUS_ALL_QUESTIONS_TO_REVISE = 4;
 const BLOCK_EXAQUEST_FILTERSTATUS_QUESTIONS_FOR_ME_TO_REVISE = 5;
 const BLOCK_EXAQUEST_FILTERSTATUS_ALL_QUESTIONS_TO_RELEASE = 6;
-const BLOCK_EXAQUEST_FILTERSTATUS_QUESTIONS_FOR_ME_TO_RELEASE = 7;
+const BLOCK_EXAQUEST_FILTERSTATUS_QUESTIONS_FOR_ME_TO_release = 7;
 const BLOCK_EXAQUEST_FILTERSTATUS_All_RELEASED_QUESTIONS = 8;
 
 
@@ -290,7 +290,7 @@ function block_exaquest_get_questionbankentries_released_count($courseid) {
 			AND qs.status = :released";
 
     $questions = count($DB->get_records_sql($sql,
-        array("courseid" => $courseid, "released" => BLOCK_EXAQUEST_QUESTIONSTATUS_releaseD)));
+        array("courseid" => $courseid, "released" => BLOCK_EXAQUEST_QUESTIONSTATUS_RELEASED)));
 
     return $questions;
 }
@@ -347,10 +347,10 @@ function block_exaquest_set_up_roles() {
     assign_capability('block/exaquest:changestatusofreleasedquestions', CAP_ALLOW, $roleid, $context);
     assign_capability('block/exaquest:createquestion', CAP_ALLOW, $roleid, $context);
     assign_capability('block/exaquest:setstatustoreview', CAP_ALLOW, $roleid, $context);
-    assign_capability('block/exaquest:setstatustoreleased', CAP_ALLOW, $roleid, $context);
+    assign_capability('block/exaquest:setstatustofinalised', CAP_ALLOW, $roleid, $context);
     assign_capability('block/exaquest:showquestionstoreview', CAP_ALLOW, $roleid, $context);
     assign_capability('block/exaquest:editquestiontoreview', CAP_ALLOW, $roleid, $context);
-    assign_capability('block/exaquest:showreleasedquestions', CAP_ALLOW, $roleid, $context);
+    assign_capability('block/exaquest:showfinalisedquestions', CAP_ALLOW, $roleid, $context);
     assign_capability('block/exaquest:showquestionstorevise', CAP_ALLOW, $roleid, $context);
     assign_capability('block/exaquest:editallquestions', CAP_ALLOW, $roleid, $context);
     assign_capability('block/exaquest:addquestiontoexam', CAP_ALLOW, $roleid, $context);
@@ -390,9 +390,9 @@ function block_exaquest_set_up_roles() {
     assign_capability('block/exaquest:readquestionstatistics', CAP_ALLOW, $roleid, $context);
     assign_capability('block/exaquest:changestatusofreleasedquestions', CAP_ALLOW, $roleid, $context);
     assign_capability('block/exaquest:reviseownquestion', CAP_ALLOW, $roleid, $context);
-    assign_capability('block/exaquest:setstatustoreleased', CAP_ALLOW, $roleid, $context);
+    assign_capability('block/exaquest:setstatustofinalised', CAP_ALLOW, $roleid, $context);
     assign_capability('block/exaquest:editquestiontoreview', CAP_ALLOW, $roleid, $context);
-    assign_capability('block/exaquest:showreleasedquestions', CAP_ALLOW, $roleid, $context);
+    assign_capability('block/exaquest:showfinalisedquestions', CAP_ALLOW, $roleid, $context);
     assign_capability('block/exaquest:showquestionstorevise', CAP_ALLOW, $roleid, $context);
     assign_capability('block/exaquest:releasequestion', CAP_ALLOW, $roleid, $context);
     assign_capability('block/exaquest:editallquestions', CAP_ALLOW, $roleid, $context);
