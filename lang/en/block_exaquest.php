@@ -58,6 +58,9 @@ $string['questions_for_me_to_finalise'] = 'Questions for me to finalise';
 $string['compare_questions'] = 'Compare questions';
 
 
+//Questionbank
+
+$string['morgen dann'] = 'List of exams with status:';
 
 
 

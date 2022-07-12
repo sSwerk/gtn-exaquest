@@ -40,7 +40,7 @@ class change_status extends column_base {
     }
 
     protected function display_content($question, $rowclasses): void {
-        global $USER, $DB;
+        global $USER, $DB, $COURSE;
         //echo '<div class="container"><div class="row"><div class="col-md-12 text-right">';
         switch(intval($question->teststatus)){
 
@@ -88,7 +88,9 @@ class change_status extends column_base {
                 $(".changestatus<?php echo $question->questionbankentryid; ?>").click(function () {
                     var data = {
                         action: $(this).attr("value"),
-                        questionbankentryid: <?php echo $question->questionbankentryid; ?>
+                        questionbankentryid: <?php echo $question->questionbankentryid; ?>,
+                        questionid: <?php echo $question->id; ?>,
+                        courseid:<?php echo $COURSE->id; ?>
                     };
 
                     var ajax = $.ajax({
