@@ -42,7 +42,7 @@ class dashboard implements renderable, templatable {
         $data->questions_count = block_exaquest_get_questionbankentries_by_courseid_count($this->courseid);
         $data->questions_reviewed_count = block_exaquest_get_reviewed_questionbankentries_count($this->courseid);
         $data->questions_to_review_count = block_exaquest_get_questionbankentries_to_be_reviewed_count($this->courseid);
-        $data->questions_released_count = block_exaquest_get_questionbankentries_released_count($this->courseid);
+        $data->questions_released_count = block_exaquest_get_questionbankentries_to_be_reviewed_count($this->courseid);
         $data->questions_released_count = 0;
         $data->questions_released_to_review_count = 0;
 
