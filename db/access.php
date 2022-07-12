@@ -92,7 +92,7 @@ $capabilities = array(
         'captype' => 'write',
         'contextlevel' => CONTEXT_COURSE,
     ),
-    'block/exaquest:setstatustoreleased' => array(
+    'block/exaquest:setstatustofinalised' => array(
         'captype' => 'write',
         'contextlevel' => CONTEXT_COURSE,
     ),
@@ -108,7 +108,7 @@ $capabilities = array(
         'captype' => 'write',
         'contextlevel' => CONTEXT_COURSE,
     ),
-    'block/exaquest:showreleasedquestions' => array(
+    'block/exaquest:showfinalisedquestions' => array(
         'captype' => 'write',
         'contextlevel' => CONTEXT_COURSE,
     ),

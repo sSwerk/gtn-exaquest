@@ -65,9 +65,9 @@ class change_status extends column_base {
                 echo '<a href="#" class="changestatus'.$question->questionbankentryid.' btn btn-primary btn-sm" role="button" value="release_question"> Frage freigeben</a>';
                 echo '<a href="#" class="changestatus'.$question->questionbankentryid.' btn btn-secondary btn-sm" role="button" value="rework_question"> Zur Überarbeitung freigeben</a>';
                 break;
-            case BLOCK_EXAQUEST_QUESTIONSTATUS_TO_RELEASE:
+            case BLOCK_EXAQUEST_QUESTIONSTATUS_RELEASE_REVIEW:
                 break;
-            case BLOCK_EXAQUEST_QUESTIONSTATUS_RELEASED:
+            case BLOCK_EXAQUEST_QUESTIONSTATUS_RELEASE:
                 break;
             case BLOCK_EXAQUEST_QUESTIONSTATUS_IN_QUIZ:
                 break;
