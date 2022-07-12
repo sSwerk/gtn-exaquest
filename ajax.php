@@ -49,7 +49,7 @@ switch ($action) {
         //$DB->record_exists('block_exaquestquestionstatus', array("questionbankentryid" => $questionbankentryid));
         $data = new stdClass;
         $data->questionbankentryid = $questionbankentryid;
-        $data->status = BLOCK_EXAQUEST_QUESTIONSTATUS_RELEASE;
+        $data->status = BLOCK_EXAQUEST_QUESTIONSTATUS_RELEASED;
         $data->id = $DB->get_field('block_exaquestquestionstatus','id', array("questionbankentryid" => $questionbankentryid));
         $DB->update_record('block_exaquestquestionstatus', $data);
         break;
