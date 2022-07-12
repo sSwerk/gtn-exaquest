@@ -30,7 +30,6 @@ use html_writer;
  */
 
 class renderer extends plugin_renderer_base {
-
     // Those functions are deprecated... we use mustache instead
     ///**
     // * Defer to template.

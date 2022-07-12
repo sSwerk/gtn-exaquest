@@ -150,5 +150,13 @@ function xmldb_block_exaquest_upgrade($oldversion)
         upgrade_block_savepoint(true, 2022070501, 'exaquest');
     }
 
+    if ($oldversion < 2022071200) {
+        // redo the set_up_roles
+        $setuptask = new \block_exaquest\task\set_up_roles();
+        // queue it
+        \core\task\manager::queue_adhoc_task($setuptask);
+        upgrade_block_savepoint(true, 2022071200, 'exaquest');
+    }
+
     return $return_result;
 }

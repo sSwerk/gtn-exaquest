@@ -32,7 +32,6 @@ $output = $PAGE->get_renderer('block_exaquest');
 echo $output->header($context, $courseid, get_string('get_questions', 'block_exaquest'));
 
 
-
 if (($lastchanged = optional_param('lastchanged', 0, PARAM_INT)) !== 0) {
     $url->param('lastchanged', $lastchanged);
 }
