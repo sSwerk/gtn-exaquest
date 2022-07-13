@@ -66,7 +66,7 @@ class change_status extends column_base {
                 echo '<a href="#" class="changestatus'.$question->questionbankentryid.' btn btn-primary btn-sm" role="button" value="formal_review_done"> '.get_string('formal_review_done', 'block_exaquest').'</a>';
                 echo '<a href="#" class="changestatus'.$question->questionbankentryid.' btn btn-secondary btn-sm" role="button" value="rework_question"> '.get_string('revise_question', 'block_exaquest').'</a>';
                 break;
-            case BLOCK_EXAQUEST_QUESTIONSTATUS_TECHNICAL_AND_FORMAL_REVIEW_DONE:
+            case BLOCK_EXAQUEST_QUESTIONSTATUS_FINALISED:
                 echo '<a href="#" class="changestatus'.$question->questionbankentryid.' btn btn-primary btn-sm" role="button" value="release_question"> '.get_string('release_question', 'block_exaquest').'</a>';
                 echo '<a href="#" class="changestatus'.$question->questionbankentryid.' btn btn-secondary btn-sm" role="button" value="rework_question"> '.get_string('revise_question', 'block_exaquest').'</a>';
                 break;
