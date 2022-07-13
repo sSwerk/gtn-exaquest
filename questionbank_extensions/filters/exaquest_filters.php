@@ -98,22 +98,22 @@ class exaquest_filters extends condition {
 
 
         $html ='<div><div style="padding:5.5px;float:left">Select Questions:</div><select class="select custom-select searchoptions custom-select" id="id_filterstatus" style="margin-left:5px;margin-bottom:50px" name="filterstatus">
-                    <option '.$selected[BLOCK_EXAQUEST_FILTERSTATUS_ALL_QUESTIONS].' value="'.BLOCK_EXAQUEST_FILTERSTATUS_ALL_QUESTIONS.'">Show all questions</option>
-                    <optgroup label="Created:">
-                        <option '.$selected[BLOCK_EXAQUEST_FILTERSTATUS_MY_CREATED_QUESTIONS].' value="'.BLOCK_EXAQUEST_FILTERSTATUS_MY_CREATED_QUESTIONS.'">Show my created Questions</option>
+                    <option '.$selected[BLOCK_EXAQUEST_FILTERSTATUS_ALL_QUESTIONS].' value="'.BLOCK_EXAQUEST_FILTERSTATUS_ALL_QUESTIONS.'">'.get_string('show_all_questions', 'block_exaquest').'</option>
+                    <optgroup label="'.get_string('created', 'block_exaquest').'">
+                        <option '.$selected[BLOCK_EXAQUEST_FILTERSTATUS_MY_CREATED_QUESTIONS].' value="'.BLOCK_EXAQUEST_FILTERSTATUS_MY_CREATED_QUESTIONS.'">'.get_string('show_my_created_questions', 'block_exaquest').'</option>
                     </optgroup>
-                    <optgroup label="Review:">
-                        <option '.$selected[BLOCK_EXAQUEST_FILTERSTATUS_ALL_QUESTIONS_TO_REVIEW].' value="'.BLOCK_EXAQUEST_FILTERSTATUS_ALL_QUESTIONS_TO_REVIEW.'">Show all qustions to review</option>
-                        <option '.$selected[BLOCK_EXAQUEST_FILTERSTATUS_QUESTIONS_FOR_ME_TO_REVIEW].' value="'.BLOCK_EXAQUEST_FILTERSTATUS_QUESTIONS_FOR_ME_TO_REVIEW.'">Show questions for me to review</option>
+                    <optgroup label="'.get_string('review', 'block_exaquest').'">
+                        <option '.$selected[BLOCK_EXAQUEST_FILTERSTATUS_ALL_QUESTIONS_TO_REVIEW].' value="'.BLOCK_EXAQUEST_FILTERSTATUS_ALL_QUESTIONS_TO_REVIEW.'">'.get_string('show_all_qustions_to_review', 'block_exaquest').'</option>
+                        <option '.$selected[BLOCK_EXAQUEST_FILTERSTATUS_QUESTIONS_FOR_ME_TO_REVIEW].' value="'.BLOCK_EXAQUEST_FILTERSTATUS_QUESTIONS_FOR_ME_TO_REVIEW.'">'.get_string('show_questions_for_me_to_review', 'block_exaquest').'</option>
                     </optgroup>
-                    <optgroup label="Revise:">
-                        <option '.$selected[BLOCK_EXAQUEST_FILTERSTATUS_ALL_QUESTIONS_TO_REVISE].' value="'.BLOCK_EXAQUEST_FILTERSTATUS_ALL_QUESTIONS_TO_REVISE.'">Show questions to revise</option>
-                        <option '.$selected[BLOCK_EXAQUEST_FILTERSTATUS_QUESTIONS_FOR_ME_TO_REVISE].' value="'.BLOCK_EXAQUEST_FILTERSTATUS_QUESTIONS_FOR_ME_TO_REVISE.'">Show questions for me to revise</option>
+                    <optgroup label="'.get_string('revise', 'block_exaquest').'">
+                        <option '.$selected[BLOCK_EXAQUEST_FILTERSTATUS_ALL_QUESTIONS_TO_REVISE].' value="'.BLOCK_EXAQUEST_FILTERSTATUS_ALL_QUESTIONS_TO_REVISE.'">'.get_string('show_questions_to_revise', 'block_exaquest').'</option>
+                        <option '.$selected[BLOCK_EXAQUEST_FILTERSTATUS_QUESTIONS_FOR_ME_TO_REVISE].' value="'.BLOCK_EXAQUEST_FILTERSTATUS_QUESTIONS_FOR_ME_TO_REVISE.'">'.get_string('show_questions_for_me_to_revise', 'block_exaquest').'</option>
                     </optgroup>
-                    <optgroup label="Release:">
-                        <option '.$selected[BLOCK_EXAQUEST_FILTERSTATUS_ALL_QUESTIONS_TO_RELEASE].' value="'.BLOCK_EXAQUEST_FILTERSTATUS_ALL_QUESTIONS_TO_RELEASE.'">Show questions to release</option>
-                        <option '.$selected[BLOCK_EXAQUEST_FILTERSTATUS_QUESTIONS_FOR_ME_TO_RELEASE].' value="'.BLOCK_EXAQUEST_FILTERSTATUS_QUESTIONS_FOR_ME_TO_RELEASE.'">Show questions for me to release</option>
-                        <option '.$selected[BLOCK_EXAQUEST_FILTERSTATUS_All_RELEASED_QUESTIONS].' value="'.BLOCK_EXAQUEST_FILTERSTATUS_All_RELEASED_QUESTIONS.'">Show all released questions</option>
+                    <optgroup label="'.get_string('release', 'block_exaquest').'">
+                        <option '.$selected[BLOCK_EXAQUEST_FILTERSTATUS_ALL_QUESTIONS_TO_RELEASE].' value="'.BLOCK_EXAQUEST_FILTERSTATUS_ALL_QUESTIONS_TO_RELEASE.'">'.get_string('show_questions_to_release', 'block_exaquest').'</option>
+                        <option '.$selected[BLOCK_EXAQUEST_FILTERSTATUS_QUESTIONS_FOR_ME_TO_RELEASE].' value="'.BLOCK_EXAQUEST_FILTERSTATUS_QUESTIONS_FOR_ME_TO_RELEASE.'">'.get_string('show_questions_for_me_to_release', 'block_exaquest').'</option>
+                        <option '.$selected[BLOCK_EXAQUEST_FILTERSTATUS_All_RELEASED_QUESTIONS].' value="'.BLOCK_EXAQUEST_FILTERSTATUS_All_RELEASED_QUESTIONS.'">'.get_string('show_all_released_questions', 'block_exaquest').'</option>
                     </optgroup>
                 </select></div>';
 

@@ -60,7 +60,28 @@ $string['compare_questions'] = 'Compare questions';
 
 //Questionbank
 
-$string['morgen dann'] = 'List of exams with status:';
+$string['show_all_questions'] = 'Show all questions';
+$string['show_my_created_questions'] = 'Show my created Questions';
+$string['show_all_qustions_to_review'] = 'Show all qustions to review';
+$string['show_questions_for_me_to_review'] = 'Show questions for me to review';
+$string['show_questions_to_revise'] = 'Show questions to revise';
+$string['show_questions_for_me_to_revise'] = 'Show questions for me to revise';
+$string['show_questions_to_release'] = 'Show questions to release';
+$string['show_questions_for_me_to_release'] = 'Show questions for me to release';
+$string['show_all_released_questions'] = 'Show all released questions';
+
+$string['created'] = 'Created:';
+$string['review'] = 'Review:';
+$string['revise'] = 'Revise:';
+$string['release'] = 'Release:';
+
+$string['open_question_for_review'] = 'Open question for review';
+$string['formal_review_done'] = 'Finish fromal review';
+$string['technical_review_done'] = 'Finish technical review';
+$string['revise_question'] = 'Revise question';
+$string['release_question'] = 'Release question';
+
+
 
 
 
