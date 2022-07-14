@@ -18,6 +18,7 @@ namespace qbank_openquestionforreview;
 
 use core_question\local\bank\column_base;
 
+require_once(__DIR__ . '/../classes/output/popup_change_status.php');
 
 $PAGE->requires->js('/blocks/exaquest/javascript/jquery.js',true);
 /**
@@ -40,34 +41,38 @@ class change_status extends column_base {
     }
 
     protected function display_content($question, $rowclasses): void {
-        global $USER, $DB;
+        global $USER, $DB, $COURSE, $PAGE;
         //echo '<div class="container"><div class="row"><div class="col-md-12 text-right">';
+        $output = $PAGE->get_renderer('block_exaquest');
+        $popup_change_status = new \block_exaquest\output\popup_change_status(array(1,2,3));
+        echo $output->render($popup_change_status);
+
         switch(intval($question->teststatus)){
 
             case BLOCK_EXAQUEST_QUESTIONSTATUS_NEW:
             case BLOCK_EXAQUEST_QUESTIONSTATUS_TO_REVISE:
-                echo '<a href="#" class="changestatus'.$question->id.' btn btn-primary btn-sm" role="button" value="open_question_for_review"> Frage zur Begutachtung freigeben</a>';
+                echo '<a href="#" class="changestatus'.$question->questionbankentryid.' btn btn-primary btn-sm" role="button" value="open_question_for_review"> '.get_string('open_question_for_review', 'block_exaquest').'</a>';
                 break;
             case BLOCK_EXAQUEST_QUESTIONSTATUS_TO_ASSESS:
-                echo '<a href="#" class="changestatus'.$question->id.' btn btn-primary btn-sm" role="button" value="formal_review_done"> Formales Review finalisieren</a>';
-                echo '<a href="#" class="changestatus'.$question->id.' btn btn-primary btn-sm" role="button" value="technical_review_done"> Fachliches Review finalisieren</a>';
-                echo '<a href="#" class="changestatus'.$question->id.' btn btn-secondary btn-sm" role="button" value="rework_question"> Zur Überarbeitung freigeben</a>';
+                echo '<a href="#" class="changestatus'.$question->questionbankentryid.' btn btn-primary btn-sm" role="button" value="formal_review_done"> '.get_string('formal_review_done', 'block_exaquest').'</a>';
+                echo '<a href="#" class="changestatus'.$question->questionbankentryid.' btn btn-primary btn-sm" role="button" value="technical_review_done"> '.get_string('technical_review_done', 'block_exaquest').'</a>';
+                echo '<a href="#" class="changestatus'.$question->questionbankentryid.' btn btn-secondary btn-sm" role="button" value="rework_question"> '.get_string('revise_question', 'block_exaquest').'</a>';
                 break;
             case BLOCK_EXAQUEST_QUESTIONSTATUS_FORMAL_REVIEW_DONE:
-                echo '<a href="#" class="changestatus'.$question->id.' btn btn-primary btn-sm" role="button" value="technical_review_done"> Fachliches Review finalisieren</a>';
-                echo '<a href="#" class="changestatus'.$question->id.' btn btn-secondary btn-sm" role="button" value="rework_question"> Zur Überarbeitung freigeben</a>';
+                echo '<a href="#" class="changestatus'.$question->questionbankentryid.' btn btn-primary btn-sm" role="button" value="technical_review_done"> '.get_string('technical_review_done', 'block_exaquest').'</a>';
+                echo '<a href="#" class="changestatus'.$question->questionbankentryid.' btn btn-secondary btn-sm" role="button" value="rework_question"> '.get_string('revise_question', 'block_exaquest').'</a>';
                 break;
             case BLOCK_EXAQUEST_QUESTIONSTATUS_TECHNICAL_REVIEW_DONE:
-                echo '<a href="#" class="changestatus'.$question->id.' btn btn-primary btn-sm" role="button" value="formal_review_done"> Formales Review finalisieren</a>';
-                echo '<a href="#" class="changestatus'.$question->id.' btn btn-secondary btn-sm" role="button" value="rework_question"> Zur Überarbeitung freigeben</a>';
+                echo '<a href="#" class="changestatus'.$question->questionbankentryid.' btn btn-primary btn-sm" role="button" value="formal_review_done"> '.get_string('formal_review_done', 'block_exaquest').'</a>';
+                echo '<a href="#" class="changestatus'.$question->questionbankentryid.' btn btn-secondary btn-sm" role="button" value="rework_question"> '.get_string('revise_question', 'block_exaquest').'</a>';
                 break;
-            case BLOCK_EXAQUEST_QUESTIONSTATUS_TECHNICAL_AND_FORMAL_REVIEW_DONE:
-                echo '<a href="#" class="changestatus'.$question->id.' btn btn-primary btn-sm" role="button" value="release_question"> Frage freigeben</a>';
-                echo '<a href="#" class="changestatus'.$question->id.' btn btn-secondary btn-sm" role="button" value="rework_question"> Zur Überarbeitung freigeben</a>';
+            case BLOCK_EXAQUEST_QUESTIONSTATUS_FINALISED:
+                echo '<a href="#" class="changestatus'.$question->questionbankentryid.' btn btn-primary btn-sm" role="button" value="release_question"> '.get_string('release_question', 'block_exaquest').'</a>';
+                echo '<a href="#" class="changestatus'.$question->questionbankentryid.' btn btn-secondary btn-sm" role="button" value="rework_question"> '.get_string('revise_question', 'block_exaquest').'</a>';
                 break;
-            case BLOCK_EXAQUEST_QUESTIONSTATUS_RELEASE_REVIEW:
+            case BLOCK_EXAQUEST_QUESTIONSTATUS_FINALISED:
                 break;
-            case BLOCK_EXAQUEST_QUESTIONSTATUS_RELEASE:
+            case BLOCK_EXAQUEST_QUESTIONSTATUS_RELEASED:
                 break;
             case BLOCK_EXAQUEST_QUESTIONSTATUS_IN_QUIZ:
                 break;
@@ -85,10 +90,12 @@ class change_status extends column_base {
         <script type="text/javascript">
 
             $(document).ready(function() {
-                $(".changestatus<?php echo $question->id; ?>").click(function () {
+                $(".changestatus<?php echo $question->questionbankentryid; ?>").click(function () {
                     var data = {
                         action: $(this).attr("value"),
-                        questionbankentryid: <?php echo $question->id; ?>
+                        questionbankentryid: <?php echo $question->questionbankentryid; ?>,
+                        questionid: <?php echo $question->id; ?>,
+                        courseid:<?php echo $COURSE->id; ?>
                     };
 
                     var ajax = $.ajax({
@@ -124,7 +131,7 @@ class change_status extends column_base {
         }
 
         foreach($questions as $question){
-            $question->teststatus = $questionstatus[$question->id];
+            $question->teststatus = $questionstatus[$question->questionbankentryid];
         }
 
     }
