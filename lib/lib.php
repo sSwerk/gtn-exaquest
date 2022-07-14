@@ -35,12 +35,11 @@ const BLOCK_EXAQUEST_QUESTIONSTATUS_NEW = 0;
 const BLOCK_EXAQUEST_QUESTIONSTATUS_TO_ASSESS = 1;
 const BLOCK_EXAQUEST_QUESTIONSTATUS_FORMAL_REVIEW_DONE = 2;
 const BLOCK_EXAQUEST_QUESTIONSTATUS_TECHNICAL_REVIEW_DONE = 3;
-const BLOCK_EXAQUEST_QUESTIONSTATUS_TECHNICAL_AND_FORMAL_REVIEW_DONE = 4;
+const BLOCK_EXAQUEST_QUESTIONSTATUS_FINALISED = 4;
 const BLOCK_EXAQUEST_QUESTIONSTATUS_TO_REVISE = 5;
-const BLOCK_EXAQUEST_QUESTIONSTATUS_RELEASE_REVIEW = 6;
-const BLOCK_EXAQUEST_QUESTIONSTATUS_RELEASE = 7;
-const BLOCK_EXAQUEST_QUESTIONSTATUS_IN_QUIZ = 8;
-const BLOCK_EXAQUEST_QUESTIONSTATUS_LOCKED = 9;
+const BLOCK_EXAQUEST_QUESTIONSTATUS_RELEASED = 6;
+const BLOCK_EXAQUEST_QUESTIONSTATUS_IN_QUIZ = 7;
+const BLOCK_EXAQUEST_QUESTIONSTATUS_LOCKED = 8;
 
 /**
  * Misc
@@ -57,8 +56,8 @@ const BLOCK_EXAQUEST_FILTERSTATUS_ALL_QUESTIONS_TO_REVIEW = 2;
 const BLOCK_EXAQUEST_FILTERSTATUS_QUESTIONS_FOR_ME_TO_REVIEW = 3;
 const BLOCK_EXAQUEST_FILTERSTATUS_ALL_QUESTIONS_TO_REVISE = 4;
 const BLOCK_EXAQUEST_FILTERSTATUS_QUESTIONS_FOR_ME_TO_REVISE = 5;
-const BLOCK_EXAQUEST_FILTERSTATUS_ALL_QUESTIONS_TO_FINALISE = 6;
-const BLOCK_EXAQUEST_FILTERSTATUS_QUESTIONS_FOR_ME_TO_FINALISE = 7;
+const BLOCK_EXAQUEST_FILTERSTATUS_ALL_QUESTIONS_TO_RELEASE = 6;
+const BLOCK_EXAQUEST_FILTERSTATUS_QUESTIONS_FOR_ME_TO_RELEASE = 7;
 const BLOCK_EXAQUEST_FILTERSTATUS_All_RELEASED_QUESTIONS = 8;
 
 
@@ -234,24 +233,6 @@ function block_exaquest_get_questionbankentries_by_courseid_and_userid_count($co
     return $questions;
 }
 
-/**
- * Returns count of
- *
- * @param $courseid
- * @return array
- */
-function block_exaquest_get_reviewed_questionbankentries_count($courseid) {
-    global $DB;
-    $sql = "SELECT qs.id
-			FROM {" . BLOCK_EXAQUEST_DB_QUESTIONSTATUS . "} qs
-			WHERE qs.courseid = :courseid
-			AND qs.status = :status";
-
-    $questions = count($DB->get_records_sql($sql,
-        array("courseid" => $courseid, "status" => BLOCK_EXAQUEST_QUESTIONSTATUS_TECHNICAL_AND_FORMAL_REVIEW_DONE)));
-
-    return $questions;
-}
 
 /**
  * Returns count of
@@ -272,6 +253,65 @@ function block_exaquest_get_questionbankentries_to_be_reviewed_count($courseid) 
         array("courseid" => $courseid, "fachlichreviewdone" => BLOCK_EXAQUEST_QUESTIONSTATUS_TECHNICAL_REVIEW_DONE,
             "formalreviewdone" => BLOCK_EXAQUEST_QUESTIONSTATUS_FORMAL_REVIEW_DONE,
             "toassess" => BLOCK_EXAQUEST_QUESTIONSTATUS_TO_ASSESS)));
+
+    return $questions;
+}
+
+/**
+ * Returns count of
+ *
+ * TODO: reviewed == finalised ?
+ *
+ * @param $courseid
+ * @return array
+ */
+function block_exaquest_get_released_questionbankentries_count($courseid) {
+    global $DB;
+    $sql = "SELECT qs.id
+			FROM {" . BLOCK_EXAQUEST_DB_QUESTIONSTATUS . "} qs
+			WHERE qs.courseid = :courseid
+			AND qs.status = :finalised";
+
+    $questions = count($DB->get_records_sql($sql,
+        array("courseid" => $courseid, "finalised" => BLOCK_EXAQUEST_QUESTIONSTATUS_RELEASED)));
+
+    return $questions;
+}
+
+/**
+ * Returns count of
+ *
+ * @param $courseid
+ * @return array
+ */
+function block_exaquest_get_released_and_to_review_questionbankentries_count($courseid) {
+    global $DB;
+    $sql = "SELECT qs.id
+			FROM {" . BLOCK_EXAQUEST_DB_QUESTIONSTATUS . "} qs
+			WHERE qs.courseid = :courseid
+			AND qs.status = :finalised";
+
+    $questions = count($DB->get_records_sql($sql,
+        array("courseid" => $courseid, "finalised" => BLOCK_EXAQUEST_QUESTIONSTATUS_LOCKED)));
+
+    return $questions;
+}
+
+/**
+ * Returns count of
+ *
+ * @param $courseid
+ * @return array
+ */
+function block_exaquest_get_finalised_questionbankentries_count($courseid) {
+    global $DB;
+    $sql = "SELECT qs.id
+			FROM {" . BLOCK_EXAQUEST_DB_QUESTIONSTATUS . "} qs
+			WHERE qs.courseid = :courseid
+			AND qs.status = :finalised";
+
+    $questions = count($DB->get_records_sql($sql,
+        array("courseid" => $courseid, "finalised" => BLOCK_EXAQUEST_QUESTIONSTATUS_FINALISED)));
 
     return $questions;
 }
