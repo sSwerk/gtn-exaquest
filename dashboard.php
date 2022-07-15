@@ -86,5 +86,5 @@ if (is_enrolled($context, $USER, "block/exaquest:createquestion")) {
     echo "</div>";
 }
 
-echo '</div>';
+//echo '</div>';
 echo $output->footer();

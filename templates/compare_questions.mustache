@@ -1,10 +1,20 @@
+{{!
+* Exaquest similarity comparison extension
+*
+* @package    block_exaquest
+* @copyright  2022 Stefan Swerk
+* @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+}}
 <div id="exaquest-similarity-comparison">
 
     <p>TODO: insert comparison</p>
-    {{! Show the loading icon. }}
-    <div class="p-5">
-        {{> core/loading }}
-    </div>
+
+    {{#showLoading}}
+        {{! Show the loading icon. }}
+        <div class="p-5">
+            {{> core/loading }}
+        </div>
+    {{/showLoading}}
 
 
     {{#checkboxes}}
@@ -18,7 +28,7 @@
 
     {{#similarityrecords.0}}
         {{#isHeader}}
-            <table class="exaquest-similarity-comparison-table">
+            <table class="exaquest-similarity-comparison-table table-responsive table table-striped table-hover">
                 <tr>
                     <th class="exaquest-similarity-comparison-table-header">{{col_qid1}}</th>
                     <th class="exaquest-similarity-comparison-table-header">{{col_qid2}}</th>
@@ -30,15 +40,20 @@
                 </tr>
                 {{#similarityrecords}}
                     {{^isHeader}}
-                        <tr>
-                            <td class="exaquest-similarity-comparison-table-row">{{col_qid1}}</td>
-                            <td class="exaquest-similarity-comparison-table-row">{{col_qid2}}</td>
-                            <td class="exaquest-similarity-comparison-table-row">{{col_issimilar}}</td>
-                            <td class="exaquest-similarity-comparison-table-row">{{col_similarity}}</td>
-                            <td class="exaquest-similarity-comparison-table-row">{{{col_timestamp}}}</td>
-                            <td class="exaquest-similarity-comparison-table-row">{{col_threshold}}</td>
-                            <td class="exaquest-similarity-comparison-table-row">{{col_algorithm}}</td>
-                        </tr>
+                        {{#hightlightClass}}
+                            <tr class="{{hightlightClass}}">
+                        {{/hightlightClass}}
+                        {{^hightlightClass}}
+                            <tr>
+                        {{/hightlightClass}}
+                                <td class="exaquest-similarity-comparison-table-row">{{col_qid1}}</td>
+                                <td class="exaquest-similarity-comparison-table-row">{{col_qid2}}</td>
+                                <td class="exaquest-similarity-comparison-table-row">{{col_issimilar}}</td>
+                                <td class="exaquest-similarity-comparison-table-row">{{col_similarity}}</td>
+                                <td class="exaquest-similarity-comparison-table-row">{{{col_timestamp}}}</td>
+                                <td class="exaquest-similarity-comparison-table-row">{{col_threshold}}</td>
+                                <td class="exaquest-similarity-comparison-table-row">{{col_algorithm}}</td>
+                            </tr>
                     {{/isHeader}}
                 {{/similarityrecords}}
             </table>

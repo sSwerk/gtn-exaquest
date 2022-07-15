@@ -1,4 +1,29 @@
+#exaquest-similarity-comparison .identical {
+    background-color: rgba(255,0,0,.8)
+}
 
+#exaquest-similarity-comparison .extremelysimilar {
+    background-color: rgba(255,0,0,.6)
+}
 
+#exaquest-similarity-comparison .verysimilar {
+    background-color: rgba(255,0,0,.4)
+}
+
+#exaquest-similarity-comparison .similar {
+    background-color: rgba(255,0,0,.3)
+}
+
+#exaquest-similarity-comparison .notquitesimilar {
+    background-color: rgba(0,255,0,.2)
+}
+
+#exaquest-similarity-comparison .notsimilar {
+    background-color: rgba(0,255,0,.4)
+}
+
+#exaquest-similarity-comparison .different {
+    background-color: rgba(0,255,0,.7)
+}
 
 
