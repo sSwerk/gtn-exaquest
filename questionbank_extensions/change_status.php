@@ -54,7 +54,9 @@ class change_status extends column_base {
 
             case BLOCK_EXAQUEST_QUESTIONSTATUS_NEW:
             case BLOCK_EXAQUEST_QUESTIONSTATUS_TO_REVISE:
-            echo $output->render(new \block_exaquest\output\popup_change_status($questioncreators, 'open_question_for_review', get_string('open_question_for_review', 'block_exaquest'), $question->questionbankentryid));
+                if(intval($question->createdby) == $USER->id && has_capability('block/exaquest:setstatustoreview', \context_course::instance($COURSE->id))){
+                    echo $output->render(new \block_exaquest\output\popup_change_status($questioncreators, 'open_question_for_review', get_string('open_question_for_review', 'block_exaquest'), $question->questionbankentryid));
+                }
                 //echo '<a href="#" class="changestatus'.$question->questionbankentryid.' btn btn-primary btn-sm" role="button" value="open_question_for_review"> '.get_string('open_question_for_review', 'block_exaquest').'</a>';
                 break;
             case BLOCK_EXAQUEST_QUESTIONSTATUS_TO_ASSESS:

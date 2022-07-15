@@ -39,6 +39,7 @@ class edit_action_column_exaquest extends edit_action_column {
 
 
     protected function get_url_icon_and_label(\stdClass $question): array {
+        global $COURSE, $USER;
         if (!\question_bank::is_qtype_installed($question->qtype)) {
             // It sometimes happens that people end up with junk questions
             // in their question bank of a type that is no longer installed.
@@ -46,10 +47,8 @@ class edit_action_column_exaquest extends edit_action_column {
             return [null, null, null];
         }
 
-        if (question_has_capability_on($question, 'edit')) {
+        if (question_has_capability_on($question, 'edit') && $question->createdby == $USER->id && has_capability('block/exaquest:setstatustoreview', \context_course::instance($COURSE->id))) {
             return [$this->edit_question_moodle_url($question->id), 't/edit', $this->stredit];
-        } else if (question_has_capability_on($question, 'view')) {
-            return [$this->edit_question_moodle_url($question->id), 'i/info', $this->strview];
         } else {
             return [null, null, null];
         }

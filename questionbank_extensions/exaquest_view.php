@@ -344,7 +344,8 @@ class exaquest_view extends view {
      * @param bool $canadd
      */
     protected function create_new_question_form($category, $canadd): void {
-        if (\core\plugininfo\qbank::is_plugin_enabled('qbank_editquestion')) {
+        global $COURSE;
+        if (\core\plugininfo\qbank::is_plugin_enabled('qbank_editquestion') && has_capability('block/exaquest:createquestion', \context_course::instance($COURSE->id))) {
             echo editquestion_helper::create_new_question_button($category->id,
                 $this->requiredcolumns['edit_action_column_exaquest']->editquestionurl->params(), $canadd);
         }
