@@ -179,5 +179,18 @@ function xmldb_block_exaquest_upgrade($oldversion)
         upgrade_block_savepoint(true, 2022070501, 'exaquest');
     }
 
+    if ($oldversion < 2022070801) {
+
+        // Changing precision of field algorithm on table block_exaquest_similarity to (50).
+        $table = new xmldb_table('block_exaquest_similarity');
+        $field = new xmldb_field('algorithm', XMLDB_TYPE_CHAR, '50', null, null, null, null, 'threshold');
+
+        // Launch change of precision for field algorithm.
+        $dbman->change_field_precision($table, $field);
+
+        // Exaquest savepoint reached.
+        upgrade_block_savepoint(true, 2022070801, 'exaquest');
+    }
+
     return $return_result;
 }
