@@ -100,7 +100,7 @@ class change_status extends column_base {
                         questionid: <?php echo $question->id; ?>,
                         courseid: <?php echo $COURSE->id; ?>,
                         users: $('.userselectioncheckbox<?php echo $question->questionbankentryid; ?>:checkbox:checked').map(function(){ return $(this).val(); }).get(),
-                        $commenttext: $('.commenttext<?php echo $question->questionbankentryid; ?>').val(),
+                        commenttext: $('.commenttext<?php echo $question->questionbankentryid; ?>').val(),
                     };
                     var ajax = $.ajax({
                         method: "POST",

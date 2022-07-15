@@ -9,7 +9,7 @@ require_once($CFG->dirroot . '/comment/lib.php');
 $questionbankentryid = required_param('questionbankentryid', PARAM_INT);
 $questionid = required_param('questionid', PARAM_INT);
 $action = required_param('action', PARAM_TEXT);
-$courseid  = required_param('course', PARAM_INT);
+$courseid  = required_param('courseid', PARAM_INT);
 $users  = optional_param('users', null, PARAM_RAW);
 $commenttext = optional_param('commenttext', null, PARAM_TEXT);
 
