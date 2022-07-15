@@ -9,7 +9,9 @@ require_once($CFG->dirroot . '/comment/lib.php');
 $questionbankentryid = required_param('questionbankentryid', PARAM_INT);
 $questionid = required_param('questionid', PARAM_INT);
 $action = required_param('action', PARAM_TEXT);
-$courseid  = optional_param('course', null, PARAM_INT);
+$courseid  = required_param('courseid', PARAM_INT);
+$users  = optional_param('users', null, PARAM_RAW);
+$commenttext = optional_param('commenttext', null, PARAM_TEXT);
 
 switch ($action) {
     case ('open_question_for_review'):
@@ -60,21 +62,20 @@ switch ($action) {
         $data->status = BLOCK_EXAQUEST_QUESTIONSTATUS_TO_REVISE;
         $data->id = $DB->get_field('block_exaquestquestionstatus','id', array("questionbankentryid" => $questionbankentryid));
         $DB->update_record('block_exaquestquestionstatus', $data);
+        if($commenttext!= null){
+            $args = new stdClass;
+            $args->contextid = 1;
+            $args->course = $courseid;
+            $args->area = 'question';
+            $args->itemid = $questionid;
+            $args->component = 'qbank_comment';
+            $args->linktext = get_string('commentheader', 'qbank_comment');
+            $args->notoggle = true;
+            $args->autostart = true;
+            $args->displaycancel = false;
+            $comment = new comment($args);
+            $comment->add($commenttext);
+        }
         break;
 
 }
-
-$args = new stdClass;
-$args->contextid = 1;
-$args->course = $courseid;
-$args->area = 'question';
-$args->itemid = $questionid;
-$args->component = 'qbank_comment';
-$args->linktext = get_string('commentheader', 'qbank_comment');
-$args->notoggle = true;
-$args->autostart = true;
-$args->displaycancel = false;
-$comment = new comment($args);
-
-
-$comment->add("Halloooo");
