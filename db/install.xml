@@ -39,7 +39,7 @@
             <FIELD NAME="similarity" TYPE="number" LENGTH="20" NOTNULL="false" SEQUENCE="false" DECIMALS="19" COMMENT="Normalized similarity value between [0.0-1.0]"/>
             <FIELD NAME="timestamp_calculation" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="The UNIX timestamp when this similarity value was calculated."/>
             <FIELD NAME="threshold" TYPE="number" LENGTH="20" NOTNULL="false" SEQUENCE="false" DECIMALS="19" COMMENT="The threshold/cutoff value for determining similarity, range [0.0 - 1.0]"/>
-            <FIELD NAME="algorithm" TYPE="char" LENGTH="20" NOTNULL="false" SEQUENCE="false" COMMENT="The similarity algorithm or metric that was utilized for computing the similarity distance."/>
+            <FIELD NAME="algorithm" TYPE="char" LENGTH="50" NOTNULL="false" SEQUENCE="false" COMMENT="The similarity algorithm or metric that was utilized for computing the similarity distance."/>
           </FIELDS>
           <KEYS>
             <KEY NAME="primary" TYPE="primary" FIELDS="id"/>

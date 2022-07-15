@@ -85,3 +85,6 @@ $string['release_question'] = 'Release question';
 $string['exaquest:similarity_title'] = 'Similarity Comparison';
 $string['exaquest:similarity_button_tooltip'] = "Go to the Similarity Comparison overview";
 $string['exaquest:similarity_button_label'] = "Question Similarity Comparison overview";
+$string['exaquest:similarity_refresh_button_label'] = "Refresh Similarity Comparison overview";
+$string['exaquest:similarity_true'] = "True";
+$string['exaquest:similarity_false'] = "False";
