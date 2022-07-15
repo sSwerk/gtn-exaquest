@@ -12,7 +12,7 @@ $action = required_param('action', PARAM_TEXT);
 $courseid  = required_param('course', PARAM_INT);
 $users  = optional_param('users', null, PARAM_RAW);
 $commenttext = optional_param('commenttext', null, PARAM_TEXT);
-/*
+
 switch ($action) {
     case ('open_question_for_review'):
         //$DB->record_exists('block_exaquestquestionstatus', array("questionbankentryid" => $questionbankentryid));
@@ -78,4 +78,4 @@ switch ($action) {
         }
         break;
 
-}*/
+}
