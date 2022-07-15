@@ -49,34 +49,30 @@ class change_status extends column_base {
         $questioncreator->lastname = $question->creatorlastname;
         $questioncreator->id = $question->createdby;
         $questioncreators= array($questioncreator, $questioncreator);
-        echo $output->render(new \block_exaquest\output\popup_change_status($questioncreators, 'rework_question', get_string('revise_question', 'block_exaquest'), $question->questionbankentryid));
 
         switch(intval($question->teststatus)){
 
             case BLOCK_EXAQUEST_QUESTIONSTATUS_NEW:
             case BLOCK_EXAQUEST_QUESTIONSTATUS_TO_REVISE:
-                echo $output->render(new \block_exaquest\output\popup_change_status(array(1,2,3), 'open_question_for_review', get_string('open_question_for_review', 'block_exaquest'), $question->questionbankentryid));
+            echo $output->render(new \block_exaquest\output\popup_change_status($questioncreators, 'open_question_for_review', get_string('open_question_for_review', 'block_exaquest'), $question->questionbankentryid));
                 //echo '<a href="#" class="changestatus'.$question->questionbankentryid.' btn btn-primary btn-sm" role="button" value="open_question_for_review"> '.get_string('open_question_for_review', 'block_exaquest').'</a>';
                 break;
             case BLOCK_EXAQUEST_QUESTIONSTATUS_TO_ASSESS:
-                echo $output->render(new \block_exaquest\output\popup_change_status(array(1,2,3), 'formal_review_done', get_string('formal_review_done', 'block_exaquest'), $question->questionbankentryid));
-                echo $output->render(new \block_exaquest\output\popup_change_status(array(1,2,3), 'technical_review_done', get_string('technical_review_done', 'block_exaquest'), $question->questionbankentryid));
-                echo $output->render(new \block_exaquest\output\popup_change_status(array(1,2,3), 'rework_question', get_string('revise_question', 'block_exaquest'), $question->questionbankentryid));
-                //echo '<a href="#" class="changestatus'.$question->questionbankentryid.' btn btn-primary btn-sm" role="button" value="formal_review_done"> '.get_string('formal_review_done', 'block_exaquest').'</a>';
-                //echo '<a href="#" class="changestatus'.$question->questionbankentryid.' btn btn-primary btn-sm" role="button" value="technical_review_done"> '.get_string('technical_review_done', 'block_exaquest').'</a>';
-                //echo '<a href="#" class="changestatus'.$question->questionbankentryid.' btn btn-secondary btn-sm" role="button" value="rework_question"> '.get_string('revise_question', 'block_exaquest').'</a>';
+                echo '<button href="#" class="changestatus'.$question->questionbankentryid.' btn btn-primary" role="button" value="technical_review_done"> '.get_string('technical_review_done', 'block_exaquest').'</button>';
+                echo '<button href="#" class="changestatus'.$question->questionbankentryid.' btn btn-primary" role="button" value="formal_review_done"> '.get_string('formal_review_done', 'block_exaquest').'</button>';
+                echo $output->render(new \block_exaquest\output\popup_change_status($questioncreators, 'rework_question', get_string('revise_question', 'block_exaquest'), $question->questionbankentryid));
                 break;
             case BLOCK_EXAQUEST_QUESTIONSTATUS_FORMAL_REVIEW_DONE:
-                echo $output->render(new \block_exaquest\output\popup_change_status(array(1,2,3), 'technical_review_done', get_string('technical_review_done', 'block_exaquest'), $question->questionbankentryid));
-                echo $output->render(new \block_exaquest\output\popup_change_status(array(1,2,3), 'rework_question', get_string('revise_question', 'block_exaquest'), $question->questionbankentryid));
+                echo '<button href="#" class="changestatus'.$question->questionbankentryid.' btn btn-primary" role="button" value="technical_review_done"> '.get_string('technical_review_done', 'block_exaquest').'</button>';
+                echo $output->render(new \block_exaquest\output\popup_change_status($questioncreators, 'rework_question', get_string('revise_question', 'block_exaquest'), $question->questionbankentryid));
                 break;
             case BLOCK_EXAQUEST_QUESTIONSTATUS_TECHNICAL_REVIEW_DONE:
-                echo $output->render(new \block_exaquest\output\popup_change_status(array(1,2,3), 'formal_review_done', get_string('formal_review_done', 'block_exaquest'), $question->questionbankentryid));
-                echo $output->render(new \block_exaquest\output\popup_change_status(array(1,2,3), 'rework_question', get_string('revise_question', 'block_exaquest'), $question->questionbankentryid));
+                echo '<button href="#" class="changestatus'.$question->questionbankentryid.' btn btn-primary" role="button" value="formal_review_done"> '.get_string('formal_review_done', 'block_exaquest').'</button>';
+                echo $output->render(new \block_exaquest\output\popup_change_status($questioncreators, 'rework_question', get_string('revise_question', 'block_exaquest'), $question->questionbankentryid));
                 break;
             case BLOCK_EXAQUEST_QUESTIONSTATUS_FINALISED:
-                echo '<a href="#" class="changestatus'.$question->questionbankentryid.' btn btn-primary btn-sm" role="button" value="release_question"> '.get_string('release_question', 'block_exaquest').'</a>';
-                echo $output->render(new \block_exaquest\output\popup_change_status(array(1,2,3), 'rework_question', get_string('revise_question', 'block_exaquest'), $question->questionbankentryid));
+                echo '<button href="#" class="changestatus'.$question->questionbankentryid.' btn btn-primary" role="button" value="release_question"> '.get_string('release_question', 'block_exaquest').'</button>';
+                echo $output->render(new \block_exaquest\output\popup_change_status($questioncreators, 'rework_question', get_string('revise_question', 'block_exaquest'), $question->questionbankentryid));
                 break;
             case BLOCK_EXAQUEST_QUESTIONSTATUS_FINALISED:
                 break;
