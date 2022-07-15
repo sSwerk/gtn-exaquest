@@ -10,9 +10,15 @@ use stdClass;
 class popup_change_status implements renderable, templatable {
     /** @var string $fragenersteller Part of the data that should be passed to the template. */
     var $fragenersteller = null;
+    var $name = null;
+    var $questionbankentryid = null;
+    var $action = null;
 
-    public function __construct($fragenersteller) {
+    public function __construct($fragenersteller, $action, $name, $questionbankentryid) {
         $this->fragenersteller = $fragenersteller;
+        $this->name = $name;
+        $this->questionbankentryid = $questionbankentryid;
+        $this->action = $action;
     }
 
     /**
@@ -23,16 +29,12 @@ class popup_change_status implements renderable, templatable {
     public function export_for_template(renderer_base $output) {
         global $PAGE, $COURSE;
         $data = new stdClass();
+        $data->name = $this->name;
         $data->fragenersteller = array_values($this->fragenersteller);
-        foreach ($data->fragenersteller as $fragensteller){
-            $fragensteller->comma = true;
-        }
-        if(isset($data->fragenersteller) && !empty($data->fragenersteller)){
-            end($data->fragenersteller)->comma = false;
-        }
+        $data->questionbankentryid = $this->questionbankentryid;
 
-        $data->action =
-            $PAGE->url->out(false, array('action' => 'request_questions', 'sesskey' => sesskey(), 'courseid' => $COURSE->id));
+
+        $data->action = $this->action;
         $data->sesskey = sesskey();
         return $data;
     }
