@@ -1,0 +1,7 @@
+Lists of 6 third-party dependencies.
+     (GPL License) JaroWinkler PHP implementation ( Version 1.3 (c) Ivo Ugrina - https://github.com/iugrina/jarowinkler/)
+     (The Apache Software License, Version 2.0) SmithWatermanGotoh Java Implementation  ( (c) Simmetrics Authors 01/2016 - https://github.com/Simmetrics/simmetrics/blob/master/simmetrics-core/src/main/java/org/simmetrics/metrics/SmithWatermanGotoh.java)
+     (MIT License) PhpSpreadsheet ( (c) 2019 PhpSpreadsheet Authors - https://github.com/PHPOffice/PhpSpreadsheet/blob/master/LICENSE )
+     (MIT License) amphp/amp (Version 2.6.2 (c) 2015-2019 amphp, (c) 2016 PHP Asynchronous Interoperability Group - https://github.com/amphp/amp/blob/master/LICENSE),
+     (MIT License) amphp/parallel (Version 1.4.1 (c) 2015-2021 amphp - https://github.com/amphp/parallel/blob/master/LICENSE),
+     (MIT License) monolog/monolog (Version 2.5.0 (c) 2011-2020 Jordi Boggiano - https://github.com/Seldaek/monolog/blob/main/LICENSE)
