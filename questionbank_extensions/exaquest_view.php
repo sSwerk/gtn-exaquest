@@ -287,7 +287,7 @@ class exaquest_view extends view {
         $this->create_new_question_form($category, $canadd);
     }
 
-    function get_current_category_dashboard() {
+    function get_current_category_dashboard($categoryandcontext) {
         global $DB;
 
         $editcontexts = $this->contexts->having_one_edit_tab_cap('editq'); // tabname jsut copied for convinience bacasue it won't change
