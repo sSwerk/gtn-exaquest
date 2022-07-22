@@ -227,6 +227,7 @@ class exaquest_view extends view {
             // gets the parent course category for this course
             $category = end($DB->get_records('question_categories',['contextid' => $editcontexts[1]->id])); // end gives me the last element
         } else {
+            throw new \coding_exception('No parent course category found');
             $category = $this->get_current_category($categoryandcontext);
         }
 
@@ -296,6 +297,7 @@ class exaquest_view extends view {
             // gets the parent course category for this course
             $category = end($DB->get_records('question_categories',['contextid' => $editcontexts[1]->id])); // end gives me the last element
         } else {
+            throw new \coding_exception('No parent course category found');
             $category = $this->get_current_category($categoryandcontext);
         }
     }
