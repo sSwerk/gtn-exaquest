@@ -153,6 +153,7 @@ class exaquest_view extends view {
 
         $editcontexts = $this->contexts->having_one_edit_tab_cap($tabname);
 
+
         // Show the filters and search options.
         $this->wanted_filters($cat, $tagids, $showhidden, $recurse, $editcontexts, $showquestiontext, $filterstatus);
 
@@ -214,13 +215,19 @@ class exaquest_view extends view {
      */
     protected function display_question_list($pageurl, $categoryandcontext, $recurse = 1, $page = 0,
                                              $perpage = 100, $addcontexts = []): void {
-        global $OUTPUT;
+        global $OUTPUT, $DB;
         // This function can be moderately slow with large question counts and may time out.
         // We probably do not want to raise it to unlimited, so randomly picking 5 minutes.
         // Note: We do not call this in the loop because quiz ob_ captures this function (see raise() PHP doc).
         \core_php_time_limit::raise(300);
 
-        $category = $this->get_current_category($categoryandcontext);
+        $editcontexts = $this->contexts->having_one_edit_tab_cap('editq'); // tabname jsut copied for convinience bacasue it won't change
+        if($editcontexts[1] instanceof \context_coursecat){
+            // gets the parent course category for this course
+            $category = $DB->get_record('question_categories',['contextid' => $editcontexts[1]->id],'*',$strictness=IGNORE_MULTIPLE);
+        } else {
+            $category = $this->get_current_category($categoryandcontext);
+        }
 
         list($categoryid, $contextid) = explode(',', $categoryandcontext);
         $catcontext = \context::instance_by_id($contextid);
