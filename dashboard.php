@@ -80,7 +80,7 @@ if (is_enrolled($context, $USER, "block/exaquest:createquestion")) {
     $categoryandcontext = $pagevars["cat"];
     list($categoryid, $contextid) = explode(',', $categoryandcontext);
     $catcontext = \context::instance_by_id($contextid);
-    $category = $questionbank->get_current_category_dashboard($categoryandcontext);
+    $category = $questionbank->get_current_category_dashboard();
     $canadd = has_capability('moodle/question:add', $catcontext);
     $questionbank->create_new_question_form_dashboard($category, $canadd);
     echo "</div>";

@@ -222,9 +222,10 @@ class exaquest_view extends view {
         \core_php_time_limit::raise(300);
 
         $editcontexts = $this->contexts->having_one_edit_tab_cap('editq'); // tabname jsut copied for convinience bacasue it won't change
+        // If it is required to create sub question categories i have to iterate over it and find the context_coursecat
         if($editcontexts[1] instanceof \context_coursecat){
             // gets the parent course category for this course
-            $category = $DB->get_record('question_categories',['contextid' => $editcontexts[1]->id],'*',$strictness=IGNORE_MULTIPLE);
+            $category = end($DB->get_records('question_categories',['contextid' => $editcontexts[1]->id])); // end gives me the last element
         } else {
             $category = $this->get_current_category($categoryandcontext);
         }
@@ -286,8 +287,17 @@ class exaquest_view extends view {
         $this->create_new_question_form($category, $canadd);
     }
 
-    function get_current_category_dashboard($categoryandcontext) {
-        return $this->get_current_category($categoryandcontext);
+    function get_current_category_dashboard() {
+        global $DB;
+
+        $editcontexts = $this->contexts->having_one_edit_tab_cap('editq'); // tabname jsut copied for convinience bacasue it won't change
+        // If it is required to create sub question categories i have to iterate over it and find the context_coursecat
+        if($editcontexts[1] instanceof \context_coursecat){
+            // gets the parent course category for this course
+            $category = end($DB->get_records('question_categories',['contextid' => $editcontexts[1]->id])); // end gives me the last element
+        } else {
+            $category = $this->get_current_category($categoryandcontext);
+        }
     }
 
 
