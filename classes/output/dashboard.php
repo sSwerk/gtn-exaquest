@@ -66,6 +66,12 @@ class dashboard implements renderable, templatable {
         // this adds the subtemplate. The data, in this case fragenersteller, does not have to be given to THIS data, because it is in the data for request_questions_popup already
         $data->request_questions_popup = $this->request_questions_popup->export_for_template($output);
 
+        // similarity comparison button
+        $data->buttons = [
+                compare_questions::createShowOverviewButton(new moodle_url('/blocks/exaquest/similarity_comparison.php',
+                                                            array('courseid' => $this->courseid)), $this->courseid)
+        ];
+
         return $data;
     }
 }

@@ -28,6 +28,9 @@ class block_exaquest extends block_list {
             array('href' => $CFG->wwwroot . '/blocks/exaquest/dashboard.php?courseid=' . $COURSE->id));
         $this->content->items[] = html_writer::tag('a', 'get questions',
             array('href' => $CFG->wwwroot . '/blocks/exaquest/questbank.php?courseid=' . $COURSE->id));
+        // TODO: add custom plugin here
+        $this->content->items[] = html_writer::tag('a', 'similarity',
+            array('href' => $CFG->wwwroot . '/blocks/exaquest/similarity_comparison.php?courseid=' . $COURSE->id));
 
         return $this->content;
     }
