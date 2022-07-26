@@ -337,8 +337,8 @@ function block_exaquest_set_up_roles() {
 
 
     if (!$DB->record_exists('role', ['shortname' => 'admintechnpruefungsdurchf'])) {
-        $roleid = create_role('admin./techn. Prüfungsdurchf.', 'admintechnpruefungsdurchf', '', 'editingteacher');
-        $archetype = $DB->get_record('role', ['shortname' => 'editingteacher'])->id; // editingteacher archetype
+        $roleid = create_role('admin./techn. Prüfungsdurchf.', 'admintechnpruefungsdurchf', '', 'manager');
+        $archetype = $DB->get_record('role', ['shortname' => 'manager'])->id; // manager archetype
         $definitiontable = new core_role_define_role_table_advanced($context, $roleid); //
         $definitiontable->force_duplicate($archetype,
             $options); // overwrites everything that is set in the options. The rest stays.
@@ -379,8 +379,8 @@ function block_exaquest_set_up_roles() {
     assign_capability('block/exaquest:definequestionblockingtime', CAP_ALLOW, $roleid, $context);
 
     if (!$DB->record_exists('role', ['shortname' => 'pruefungsstudmis'])) {
-        $roleid = create_role('PrüfungsStudMis', 'pruefungsstudmis', '', 'editingteacher');
-        $archetype = $DB->get_record('role', ['shortname' => 'editingteacher'])->id; // editingteacher archetype
+        $roleid = create_role('PrüfungsStudMis', 'pruefungsstudmis', '', 'manager');
+        $archetype = $DB->get_record('role', ['shortname' => 'manager'])->id; // manager archetype
         $definitiontable = new core_role_define_role_table_advanced($context, $roleid); //
         $definitiontable->force_duplicate($archetype,
             $options); // overwrites everything that is set in the options. The rest stays.
@@ -396,8 +396,8 @@ function block_exaquest_set_up_roles() {
 
 
     if (!$DB->record_exists('role', ['shortname' => 'modulverantwortlicher'])) {
-        $roleid = create_role('Modulverantwortlicher', 'modulverantwortlicher', '', 'editingteacher');
-        $archetype = $DB->get_record('role', ['shortname' => 'editingteacher'])->id; // editingteacher archetype
+        $roleid = create_role('Modulverantwortlicher', 'modulverantwortlicher', '', 'manager');
+        $archetype = $DB->get_record('role', ['shortname' => 'manager'])->id; // manager archetype
         $definitiontable = new core_role_define_role_table_advanced($context, $roleid); //
         $definitiontable->force_duplicate($archetype,
             $options); // overwrites everything that is set in the options. The rest stays.
@@ -421,8 +421,8 @@ function block_exaquest_set_up_roles() {
 
 
     if (!$DB->record_exists('role', ['shortname' => 'fragenersteller'])) {
-        $roleid = create_role('Fragenersteller', 'fragenersteller', '', 'editingteacher');
-        $archetype = $DB->get_record('role', ['shortname' => 'editingteacher'])->id; // editingteacher archetype
+        $roleid = create_role('Fragenersteller', 'fragenersteller', '', 'manager');
+        $archetype = $DB->get_record('role', ['shortname' => 'manager'])->id; // manager archetype
         $definitiontable = new core_role_define_role_table_advanced($context, $roleid); //
         $definitiontable->force_duplicate($archetype,
             $options); // overwrites everything that is set in the options. The rest stays.
@@ -442,8 +442,8 @@ function block_exaquest_set_up_roles() {
 
 
     if (!$DB->record_exists('role', ['shortname' => 'fachlfragenreviewer'])) {
-        $roleid = create_role('fachl. Fragenreviewer', 'fachlfragenreviewer', '', 'editingteacher');
-        $archetype = $DB->get_record('role', ['shortname' => 'editingteacher'])->id; // editingteacher archetype
+        $roleid = create_role('fachl. Fragenreviewer', 'fachlfragenreviewer', '', 'manager');
+        $archetype = $DB->get_record('role', ['shortname' => 'manager'])->id; // manager archetype
         $definitiontable = new core_role_define_role_table_advanced($context, $roleid); //
         $definitiontable->force_duplicate($archetype,
             $options); // overwrites everything that is set in the options. The rest stays.
@@ -459,8 +459,8 @@ function block_exaquest_set_up_roles() {
     assign_capability('block/exaquest:editquestiontoreview', CAP_ALLOW, $roleid, $context);
 
     if (!$DB->record_exists('role', ['shortname' => 'beurteilungsmitwirkende'])) {
-        $roleid = create_role('Beurteilungsmitwirkende', 'beurteilungsmitwirkende', '', 'editingteacher');
-        $archetype = $DB->get_record('role', ['shortname' => 'editingteacher'])->id; // editingteacher archetype
+        $roleid = create_role('Beurteilungsmitwirkende', 'beurteilungsmitwirkende', '', 'manager');
+        $archetype = $DB->get_record('role', ['shortname' => 'manager'])->id; // manager archetype
         $definitiontable = new core_role_define_role_table_advanced($context, $roleid); //
         $definitiontable->force_duplicate($archetype,
             $options); // overwrites everything that is set in the options. The rest stays.
@@ -472,8 +472,8 @@ function block_exaquest_set_up_roles() {
     assign_capability('block/exaquest:beurteilungsmitwirkende', CAP_ALLOW, $roleid, $context);
 
     if (!$DB->record_exists('role', ['shortname' => 'fachlicherpruefer'])) {
-        $roleid = create_role('fachlicher Prüfer', 'fachlicherpruefer', '', 'editingteacher');
-        $archetype = $DB->get_record('role', ['shortname' => 'editingteacher'])->id; // editingteacher archetype
+        $roleid = create_role('fachlicher Prüfer', 'fachlicherpruefer', '', 'manager');
+        $archetype = $DB->get_record('role', ['shortname' => 'manager'])->id; // manager archetype
         $definitiontable = new core_role_define_role_table_advanced($context, $roleid); //
         $definitiontable->force_duplicate($archetype,
             $options); // overwrites everything that is set in the options. The rest stays.
@@ -489,8 +489,8 @@ function block_exaquest_set_up_roles() {
     assign_capability('block/exaquest:assignsecondexaminator', CAP_ALLOW, $roleid, $context);
 
     if (!$DB->record_exists('role', ['shortname' => 'pruefungsmitwirkende'])) {
-        $roleid = create_role('Prüfungsmitwirkende', 'pruefungsmitwirkende', '', 'editingteacher');
-        $archetype = $DB->get_record('role', ['shortname' => 'editingteacher'])->id; // editingteacher archetype
+        $roleid = create_role('Prüfungsmitwirkende', 'pruefungsmitwirkende', '', 'manager');
+        $archetype = $DB->get_record('role', ['shortname' => 'manager'])->id; // manager archetype
         $definitiontable = new core_role_define_role_table_advanced($context, $roleid); //
         $definitiontable->force_duplicate($archetype,
             $options); // overwrites everything that is set in the options. The rest stays.
@@ -503,8 +503,8 @@ function block_exaquest_set_up_roles() {
     assign_capability('block/exaquest:addquestiontoexam', CAP_ALLOW, $roleid, $context);
 
     if (!$DB->record_exists('role', ['shortname' => 'fachlicherzweitpruefer'])) {
-        $roleid = create_role('Fachlicher Zweitprüfer', 'fachlicherzweitpruefer', '', 'editingteacher');
-        $archetype = $DB->get_record('role', ['shortname' => 'editingteacher'])->id; // editingteacher archetype
+        $roleid = create_role('Fachlicher Zweitprüfer', 'fachlicherzweitpruefer', '', 'manager');
+        $archetype = $DB->get_record('role', ['shortname' => 'manager'])->id; // manager archetype
         $definitiontable = new core_role_define_role_table_advanced($context, $roleid); //
         $definitiontable->force_duplicate($archetype,
             $options); // overwrites everything that is set in the options. The rest stays.
