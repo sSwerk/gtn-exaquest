@@ -87,7 +87,7 @@ class change_status extends column_base {
                 }
                 break;
             case BLOCK_EXAQUEST_QUESTIONSTATUS_FINALISED:
-                if(has_capability('block/exaquest:releaseexam', \context_course::instance($COURSE->id))) {
+                if(has_capability('block/exaquest:releasequestion', \context_course::instance($COURSE->id))) {
                     echo '<button href="#" class="changestatus' . $question->questionbankentryid . ' btn btn-primary" role="button" value="release_question"> ' . get_string('release_question', 'block_exaquest') . '</button>';
                 }
                 if(has_capability('block/exaquest:editquestiontoreview', \context_course::instance($COURSE->id))) {
