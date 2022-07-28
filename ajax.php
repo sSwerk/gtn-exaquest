@@ -30,6 +30,20 @@ switch ($action) {
             $assigndata->reviewtype = BLOCK_EXAQUEST_DB_REVIEWTYPE_FACHLICH;
             $DB->insert_record('_block_exaquestreviewassign', $assigndata);
         }
+        if($commenttext!= null){
+            $args = new stdClass;
+            $args->contextid = 1;
+            $args->course = $courseid;
+            $args->area = 'question';
+            $args->itemid = $questionid;
+            $args->component = 'qbank_comment';
+            $args->linktext = get_string('commentheader', 'qbank_comment');
+            $args->notoggle = true;
+            $args->autostart = true;
+            $args->displaycancel = false;
+            $comment = new comment($args);
+            $comment->add($commenttext);
+        }
 
         break;
     case ('formal_review_done'):
