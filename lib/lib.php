@@ -316,6 +316,41 @@ function block_exaquest_get_finalised_questionbankentries_count($courseid) {
     return $questions;
 }
 
+
+function block_exaquest_set_up_roles_test()
+{
+    global $DB;
+    $context = \context_system::instance();
+    $options = array(
+        'shortname' => 0,
+        'name' => 0,
+        'description' => 0,
+        'permissions' => 1,
+        'archetype' => 0,
+        'contextlevels' => 1,
+        'allowassign' => 1,
+        'allowoverride' => 1,
+        'allowswitch' => 1,
+        'allowview' => 1);
+
+    if (!$DB->record_exists('role', ['shortname' => 'testen'])) {
+        $roleid = create_role('Test Role', 'testen', '', 'manager');
+        $archetype = intval($DB->get_record('role', ['shortname' => 'manager'])->id); // manager archetype
+        $definitiontable = new core_role_define_role_table_advanced($context, $roleid); //
+        $definitiontable->force_duplicate($archetype, $options); // overwrites everything that is set in the options. The rest stays.
+        $definitiontable->read_submitted_permissions(); // just to not throw a warning because some array is null
+        $definitiontable->save_changes();
+        $sourcerole = new \stdClass();
+        $sourcerole->id = $archetype;
+        role_cap_duplicate($sourcerole, $roleid);
+    } else {
+        $roleid = $DB->get_record('role', ['shortname' => 'admintechnpruefungsdurchf'])->id;
+    }
+    assign_capability('block/exaquest:admintechnpruefungsdurchf', CAP_ALLOW, $roleid, $context);
+    assign_capability('block/exaquest:technicalreview', CAP_ALLOW, $roleid, $context);
+    assign_capability('block/exaquest:executeexam', CAP_ALLOW, $roleid, $context);
+
+}
 /**
  * Sets up the roles in install.php and upgrade.php
  */
@@ -344,6 +379,9 @@ function block_exaquest_set_up_roles() {
             $options); // overwrites everything that is set in the options. The rest stays.
         $definitiontable->read_submitted_permissions(); // just to not throw a warning because some array is null
         $definitiontable->save_changes();
+        $sourcerole = new \stdClass();
+        $sourcerole->id = $archetype;
+        role_cap_duplicate($sourcerole, $roleid);
     } else {
         $roleid = $DB->get_record('role', ['shortname' => 'admintechnpruefungsdurchf'])->id;
     }
@@ -359,6 +397,9 @@ function block_exaquest_set_up_roles() {
             $options); // overwrites everything that is set in the options. The rest stays.
         $definitiontable->read_submitted_permissions(); // just to not throw a warning because some array is null
         $definitiontable->save_changes();
+        $sourcerole = new \stdClass();
+        $sourcerole->id = $archetype;
+        role_cap_duplicate($sourcerole, $roleid);
     } else {
         $roleid = $DB->get_record('role', ['shortname' => 'pruefungskoordination'])->id;
     }
@@ -386,6 +427,9 @@ function block_exaquest_set_up_roles() {
             $options); // overwrites everything that is set in the options. The rest stays.
         $definitiontable->read_submitted_permissions(); // just to not throw a warning because some array is null
         $definitiontable->save_changes();
+        $sourcerole = new \stdClass();
+        $sourcerole->id = $archetype;
+        role_cap_duplicate($sourcerole, $roleid);
     } else {
         $roleid = $DB->get_record('role', ['shortname' => 'pruefungsstudmis'])->id;
     }
@@ -403,6 +447,9 @@ function block_exaquest_set_up_roles() {
             $options); // overwrites everything that is set in the options. The rest stays.
         $definitiontable->read_submitted_permissions(); // just to not throw a warning because some array is null
         $definitiontable->save_changes();
+        $sourcerole = new \stdClass();
+        $sourcerole->id = $archetype;
+        role_cap_duplicate($sourcerole, $roleid);
     } else {
         $roleid = $DB->get_record('role', ['shortname' => 'modulverantwortlicher'])->id;
     }
@@ -428,6 +475,9 @@ function block_exaquest_set_up_roles() {
             $options); // overwrites everything that is set in the options. The rest stays.
         $definitiontable->read_submitted_permissions(); // just to not throw a warning because some array is null
         $definitiontable->save_changes();
+        $sourcerole = new \stdClass();
+        $sourcerole->id = $archetype;
+        role_cap_duplicate($sourcerole, $roleid);
     } else {
         $roleid = $DB->get_record('role', ['shortname' => 'fragenersteller'])->id;
     }
@@ -449,6 +499,9 @@ function block_exaquest_set_up_roles() {
             $options); // overwrites everything that is set in the options. The rest stays.
         $definitiontable->read_submitted_permissions(); // just to not throw a warning because some array is null
         $definitiontable->save_changes();
+        $sourcerole = new \stdClass();
+        $sourcerole->id = $archetype;
+        role_cap_duplicate($sourcerole, $roleid);
     } else {
         $roleid = $DB->get_record('role', ['shortname' => 'fachlfragenreviewer'])->id;
     }
@@ -466,6 +519,9 @@ function block_exaquest_set_up_roles() {
             $options); // overwrites everything that is set in the options. The rest stays.
         $definitiontable->read_submitted_permissions(); // just to not throw a warning because some array is null
         $definitiontable->save_changes();
+        $sourcerole = new \stdClass();
+        $sourcerole->id = $archetype;
+        role_cap_duplicate($sourcerole, $roleid);
     } else {
         $roleid = $DB->get_record('role', ['shortname' => 'beurteilungsmitwirkende'])->id;
     }
@@ -479,6 +535,9 @@ function block_exaquest_set_up_roles() {
             $options); // overwrites everything that is set in the options. The rest stays.
         $definitiontable->read_submitted_permissions(); // just to not throw a warning because some array is null
         $definitiontable->save_changes();
+        $sourcerole = new \stdClass();
+        $sourcerole->id = $archetype;
+        role_cap_duplicate($sourcerole, $roleid);
     } else {
         $roleid = $DB->get_record('role', ['shortname' => 'fachlicherpruefer'])->id;
     }
@@ -496,6 +555,9 @@ function block_exaquest_set_up_roles() {
             $options); // overwrites everything that is set in the options. The rest stays.
         $definitiontable->read_submitted_permissions(); // just to not throw a warning because some array is null
         $definitiontable->save_changes();
+        $sourcerole = new \stdClass();
+        $sourcerole->id = $archetype;
+        role_cap_duplicate($sourcerole, $roleid);
     } else {
         $roleid = $DB->get_record('role', ['shortname' => 'pruefungsmitwirkende'])->id;
     }
@@ -510,6 +572,9 @@ function block_exaquest_set_up_roles() {
             $options); // overwrites everything that is set in the options. The rest stays.
         $definitiontable->read_submitted_permissions(); // just to not throw a warning because some array is null
         $definitiontable->save_changes();
+        $sourcerole = new \stdClass();
+        $sourcerole->id = $archetype;
+        role_cap_duplicate($sourcerole, $roleid);
     } else {
         $roleid = $DB->get_record('role', ['shortname' => 'fachlicherzweitpruefer'])->id;
     }
