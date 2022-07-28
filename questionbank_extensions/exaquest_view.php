@@ -292,6 +292,8 @@ class exaquest_view extends view {
         global $DB;
 
         $editcontexts = $this->contexts->having_one_edit_tab_cap('editq'); // tabname jsut copied for convinience bacasue it won't change
+
+
         // If it is required to create sub question categories i have to iterate over it and find the context_coursecat
         if($editcontexts[1] instanceof \context_coursecat){
             // gets the parent course category for this course
@@ -300,6 +302,7 @@ class exaquest_view extends view {
             throw new \coding_exception('No parent course category found');
             $category = $this->get_current_category($categoryandcontext);
         }
+        return $category;
     }
 
 

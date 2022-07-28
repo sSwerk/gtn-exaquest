@@ -21,6 +21,16 @@ switch ($action) {
         $data->status = BLOCK_EXAQUEST_QUESTIONSTATUS_TO_ASSESS;
         $data->id = $DB->get_field('block_exaquestquestionstatus','id', array("questionbankentryid" => $questionbankentryid));
         $DB->update_record('block_exaquestquestionstatus', $data);
+        foreach($users as $user){
+            $assigndata = new stdClass;
+            $assigndata->questionbankentryid = $questionbankentryid;
+            $assigndata->reviewerid = $user;
+            $assigndata->reviewtype = BLOCK_EXAQUEST_DB_REVIEWTYPE_FORMAL;
+            $DB->insert_record('_block_exaquestreviewassign', $assigndata);
+            $assigndata->reviewtype = BLOCK_EXAQUEST_DB_REVIEWTYPE_FACHLICH;
+            $DB->insert_record('_block_exaquestreviewassign', $assigndata);
+        }
+
         break;
     case ('formal_review_done'):
         //$DB->record_exists('block_exaquestquestionstatus', array("questionbankentryid" => $questionbankentryid))

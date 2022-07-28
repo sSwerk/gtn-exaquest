@@ -128,6 +128,21 @@ function block_exaquest_get_fragenersteller_by_courseid($courseid) {
 }
 
 /**
+ *
+ * Returns all fragenersteller of this course
+ *
+ * @param $courseid
+ * @return array
+ */
+function block_exaquest_get_reviewer_by_courseid($courseid) {
+    $context = context_course::instance($courseid);
+    $userarray = array();
+    $userarray = array_merge($userarray, get_enrolled_users($context, 'block/exaquest:modulverantwortlicher'));
+    $userarray = array_merge($userarray, get_enrolled_users($context, 'block/exaquest:fachlfragenreviewer'));
+    return $userarray;
+}
+
+/**
  * Returns count of questionbankentries that have to be revised of this course of this user
  * used e.g. for the fragenersteller to see which questions they should revise
  *
@@ -148,6 +163,7 @@ function block_exaquest_get_questionbankentries_to_revise_count($courseid, $user
 
     return $questions;
 }
+
 
 /**
  * Returns all count of questionbankentries that have to be formally reviewed

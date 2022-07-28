@@ -55,7 +55,8 @@ class change_status extends column_base {
             case BLOCK_EXAQUEST_QUESTIONSTATUS_NEW:
             case BLOCK_EXAQUEST_QUESTIONSTATUS_TO_REVISE:
                 if(intval($question->createdby) == $USER->id && has_capability('block/exaquest:setstatustoreview', \context_course::instance($COURSE->id))){
-                    echo $output->render(new \block_exaquest\output\popup_change_status($questioncreators, 'open_question_for_review', get_string('open_question_for_review', 'block_exaquest'), $question->questionbankentryid));
+                    $usertoselect = block_exaquest_get_reviewer_by_courseid($COURSE->id);
+                    echo $output->render(new \block_exaquest\output\popup_change_status($usertoselect, 'open_question_for_review', get_string('open_question_for_review', 'block_exaquest'), $question->questionbankentryid));
                 }
                 //echo '<a href="#" class="changestatus'.$question->questionbankentryid.' btn btn-primary btn-sm" role="button" value="open_question_for_review"> '.get_string('open_question_for_review', 'block_exaquest').'</a>';
                 break;
@@ -63,7 +64,7 @@ class change_status extends column_base {
                 if(has_capability('block/exaquest:technicalreview', \context_course::instance($COURSE->id))) {
                     echo '<button href="#" class="changestatus' . $question->questionbankentryid . ' btn btn-primary" role="button" value="technical_review_done"> ' . get_string('technical_review_done', 'block_exaquest') . '</button>';
                 }
-                if(has_capability('block/exaquest:setstatustoreview', \context_course::instance($COURSE->id))) {
+                if(has_capability('block/exaquest:technicalreview', \context_course::instance($COURSE->id))) {
                     echo '<button href="#" class="changestatus' . $question->questionbankentryid . ' btn btn-primary" role="button" value="formal_review_done"> ' . get_string('formal_review_done', 'block_exaquest') . '</button>';
                 }
                 if(has_capability('block/exaquest:reviseownquestion', \context_course::instance($COURSE->id))) {
