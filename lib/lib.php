@@ -404,6 +404,7 @@ function block_exaquest_set_up_roles() {
     assign_capability('block/exaquest:admintechnpruefungsdurchf', CAP_ALLOW, $roleid, $context);
     assign_capability('block/exaquest:technicalreview', CAP_ALLOW, $roleid, $context);
     assign_capability('block/exaquest:executeexam', CAP_ALLOW, $roleid, $context);
+    assign_capability('enrol/category:synchronised', CAP_ALLOW, $roleid, $context);
 
     if (!$DB->record_exists('role', ['shortname' => 'pruefungskoordination'])) {
         $roleid = create_role('Prüfungskoordination', 'pruefungskoordination', '', 'manager');
@@ -434,6 +435,7 @@ function block_exaquest_set_up_roles() {
     assign_capability('block/exaquest:addquestiontoexam', CAP_ALLOW, $roleid, $context);
     assign_capability('block/exaquest:assignsecondexaminator', CAP_ALLOW, $roleid, $context);
     assign_capability('block/exaquest:definequestionblockingtime', CAP_ALLOW, $roleid, $context);
+    assign_capability('enrol/category:synchronised', CAP_ALLOW, $roleid, $context);
 
     if (!$DB->record_exists('role', ['shortname' => 'pruefungsstudmis'])) {
         $roleid = create_role('PrüfungsStudMis', 'pruefungsstudmis', '', 'manager');
@@ -453,6 +455,7 @@ function block_exaquest_set_up_roles() {
     assign_capability('block/exaquest:readquestionstatistics', CAP_ALLOW, $roleid, $context);
     assign_capability('block/exaquest:showquestionstorevise', CAP_ALLOW, $roleid, $context);
     assign_capability('block/exaquest:addquestiontoexam', CAP_ALLOW, $roleid, $context);
+    assign_capability('enrol/category:synchronised', CAP_ALLOW, $roleid, $context);
 
 
     if (!$DB->record_exists('role', ['shortname' => 'modulverantwortlicher'])) {
@@ -480,6 +483,7 @@ function block_exaquest_set_up_roles() {
     assign_capability('block/exaquest:showquestionstorevise', CAP_ALLOW, $roleid, $context);
     assign_capability('block/exaquest:releasequestion', CAP_ALLOW, $roleid, $context);
     assign_capability('block/exaquest:editallquestions', CAP_ALLOW, $roleid, $context);
+    assign_capability('enrol/category:synchronised', CAP_ALLOW, $roleid, $context);
 
 
 
@@ -505,6 +509,7 @@ function block_exaquest_set_up_roles() {
     assign_capability('block/exaquest:reviseownquestion', CAP_ALLOW, $roleid, $context);
     assign_capability('block/exaquest:showownrevisedquestions', CAP_ALLOW, $roleid, $context);
     assign_capability('block/exaquest:showquestionstorevise', CAP_ALLOW, $roleid, $context);
+    assign_capability('enrol/category:synchronised', CAP_ALLOW, $roleid, $context);
 
 
     if (!$DB->record_exists('role', ['shortname' => 'fachlfragenreviewer'])) {
@@ -526,6 +531,7 @@ function block_exaquest_set_up_roles() {
     assign_capability('block/exaquest:changestatusofreleasedquestions', CAP_ALLOW, $roleid, $context);
     assign_capability('block/exaquest:showquestionstoreview', CAP_ALLOW, $roleid, $context);
     assign_capability('block/exaquest:editquestiontoreview', CAP_ALLOW, $roleid, $context);
+    assign_capability('enrol/category:synchronised', CAP_ALLOW, $roleid, $context);
 
     if (!$DB->record_exists('role', ['shortname' => 'beurteilungsmitwirkende'])) {
         $roleid = create_role('Beurteilungsmitwirkende', 'beurteilungsmitwirkende', '', 'manager');
@@ -542,6 +548,7 @@ function block_exaquest_set_up_roles() {
         $roleid = $DB->get_record('role', ['shortname' => 'beurteilungsmitwirkende'])->id;
     }
     assign_capability('block/exaquest:beurteilungsmitwirkende', CAP_ALLOW, $roleid, $context);
+    assign_capability('enrol/category:synchronised', CAP_ALLOW, $roleid, $context);
 
     if (!$DB->record_exists('role', ['shortname' => 'fachlicherpruefer'])) {
         $roleid = create_role('fachlicher Prüfer', 'fachlicherpruefer', '', 'manager');
@@ -562,6 +569,7 @@ function block_exaquest_set_up_roles() {
     assign_capability('block/exaquest:addquestiontoexam', CAP_ALLOW, $roleid, $context);
     assign_capability('block/exaquest:releaseexam', CAP_ALLOW, $roleid, $context);
     assign_capability('block/exaquest:assignsecondexaminator', CAP_ALLOW, $roleid, $context);
+    assign_capability('enrol/category:synchronised', CAP_ALLOW, $roleid, $context);
 
     if (!$DB->record_exists('role', ['shortname' => 'pruefungsmitwirkende'])) {
         $roleid = create_role('Prüfungsmitwirkende', 'pruefungsmitwirkende', '', 'manager');
@@ -579,6 +587,7 @@ function block_exaquest_set_up_roles() {
     }
     assign_capability('block/exaquest:pruefungsmitwirkende', CAP_ALLOW, $roleid, $context);
     assign_capability('block/exaquest:addquestiontoexam', CAP_ALLOW, $roleid, $context);
+    assign_capability('enrol/category:synchronised', CAP_ALLOW, $roleid, $context);
 
     if (!$DB->record_exists('role', ['shortname' => 'fachlicherzweitpruefer'])) {
         $roleid = create_role('Fachlicher Zweitprüfer', 'fachlicherzweitpruefer', '', 'manager');
@@ -595,6 +604,7 @@ function block_exaquest_set_up_roles() {
         $roleid = $DB->get_record('role', ['shortname' => 'fachlicherzweitpruefer'])->id;
     }
     assign_capability('block/exaquest:fachlicherzweitpruefer', CAP_ALLOW, $roleid, $context);
+    assign_capability('enrol/category:synchronised', CAP_ALLOW, $roleid, $context);
 
     //
     //role_assign($roleid, $USER->id, $contextid);
