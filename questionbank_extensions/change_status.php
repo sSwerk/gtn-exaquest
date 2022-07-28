@@ -61,10 +61,10 @@ class change_status extends column_base {
                 //echo '<a href="#" class="changestatus'.$question->questionbankentryid.' btn btn-primary btn-sm" role="button" value="open_question_for_review"> '.get_string('open_question_for_review', 'block_exaquest').'</a>';
                 break;
             case BLOCK_EXAQUEST_QUESTIONSTATUS_TO_ASSESS:
-                if(has_capability('block/exaquest:technicalreview', \context_course::instance($COURSE->id))) {
+                if(has_capability('block/exaquest:editquestiontoreview', \context_course::instance($COURSE->id))) {
                     echo '<button href="#" class="changestatus' . $question->questionbankentryid . ' btn btn-primary" role="button" value="technical_review_done"> ' . get_string('technical_review_done', 'block_exaquest') . '</button>';
                 }
-                if(has_capability('block/exaquest:technicalreview', \context_course::instance($COURSE->id))) {
+                if(has_capability('block/exaquest:editquestiontoreview', \context_course::instance($COURSE->id))) {
                     echo '<button href="#" class="changestatus' . $question->questionbankentryid . ' btn btn-primary" role="button" value="formal_review_done"> ' . get_string('formal_review_done', 'block_exaquest') . '</button>';
                 }
                 if(has_capability('block/exaquest:reviseownquestion', \context_course::instance($COURSE->id))) {
