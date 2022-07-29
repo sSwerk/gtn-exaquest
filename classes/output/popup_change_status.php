@@ -9,13 +9,13 @@ use stdClass;
 
 class popup_change_status implements renderable, templatable {
     /** @var string $fragenersteller Part of the data that should be passed to the template. */
-    var $fragenersteller = null;
+    var $selectusers = null;
     var $name = null;
     var $questionbankentryid = null;
     var $action = null;
 
-    public function __construct($fragenersteller, $action, $name, $questionbankentryid) {
-        $this->fragenersteller = $fragenersteller;
+    public function __construct($selectusers, $action, $name, $questionbankentryid) {
+        $this->selectusers = $selectusers;
         $this->name = $name;
         $this->questionbankentryid = $questionbankentryid;
         $this->action = $action;
@@ -30,8 +30,9 @@ class popup_change_status implements renderable, templatable {
         global $PAGE, $COURSE;
         $data = new stdClass();
         $data->name = $this->name;
-        $data->fragenersteller = array_values($this->fragenersteller);
+        $data->selectusers = array_values($this->selectusers);
         $data->questionbankentryid = $this->questionbankentryid;
+
 
 
         $data->action = $this->action;

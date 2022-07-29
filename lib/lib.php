@@ -129,7 +129,7 @@ function block_exaquest_get_fragenersteller_by_courseid($courseid) {
 
 /**
  *
- * Returns all fragenersteller of this course
+ * Returns all who have the right to review of this course
  *
  * @param $courseid
  * @return array
@@ -141,6 +141,7 @@ function block_exaquest_get_reviewer_by_courseid($courseid) {
     $userarray = array_merge($userarray, get_enrolled_users($context, 'block/exaquest:fachlfragenreviewer'));
     return $userarray;
 }
+
 
 /**
  * Returns count of questionbankentries that have to be revised of this course of this user

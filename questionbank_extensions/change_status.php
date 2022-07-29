@@ -48,7 +48,7 @@ class change_status extends column_base {
         $questioncreator->firstname = $question->creatorfirstname;
         $questioncreator->lastname = $question->creatorlastname;
         $questioncreator->id = $question->createdby;
-        $questioncreators= array($questioncreator, $questioncreator);
+        $questioncreators= array($questioncreator);
 
         switch(intval($question->teststatus)){
 
@@ -133,6 +133,18 @@ class change_status extends column_base {
                         }
                         console.log("Error in action '" + data.action + "'", errorMsg, 'ret', ret);
                     });
+                });
+
+                $(".disable<?php echo $question->questionbankentryid; ?>").attr('disabled', true);
+
+                $('.commenttext<?php echo $question->questionbankentryid; ?>').on('keyup',function() {
+                    var textarea_value = $('.commenttext<?php echo $question->questionbankentryid; ?>').val();
+
+                    if(textarea_value != '') {
+                        $(".disable<?php echo $question->questionbankentryid; ?>").attr('disabled', false);
+                    } else {
+                        $(".disable<?php echo $question->questionbankentryid; ?>").attr('disabled', true);
+                    }
                 });
             });
 

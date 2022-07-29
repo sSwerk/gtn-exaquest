@@ -20,6 +20,10 @@ $string['fachlich_review_questions_label'] = 'The following questions are marked
 $string['messageprovider:newquestionsrequest'] = 'New questions have been requested';
 $string['please_create_new_questions'] = 'Please create new questions in <a href="{$a->url}">{$a->fullname}</a>';
 $string['please_create_new_questions_subject'] = 'Please create new questions in {$a->fullname}';
+$string['please_revise_question'] = 'Please revise question';
+$string['please_review_question'] = 'Please review question';
+
+
 
 // Roles and Capabilities
 $string['exaquest:fragenersteller'] = 'Create questions in Exaquest block';

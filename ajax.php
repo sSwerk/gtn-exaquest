@@ -3,7 +3,7 @@
 require __DIR__ . '/inc.php';
 
 
-global $DB, $CFG, $COURSE;
+global $DB, $CFG, $COURSE, $USER;
 require_once($CFG->dirroot . '/comment/lib.php');
 
 $questionbankentryid = required_param('questionbankentryid', PARAM_INT);
@@ -21,14 +21,25 @@ switch ($action) {
         $data->status = BLOCK_EXAQUEST_QUESTIONSTATUS_TO_ASSESS;
         $data->id = $DB->get_field('block_exaquestquestionstatus','id', array("questionbankentryid" => $questionbankentryid));
         $DB->update_record('block_exaquestquestionstatus', $data);
-        foreach($users as $user){
-            $assigndata = new stdClass;
-            $assigndata->questionbankentryid = $questionbankentryid;
-            $assigndata->reviewerid = $user;
-            $assigndata->reviewtype = BLOCK_EXAQUEST_DB_REVIEWTYPE_FORMAL;
-            $DB->insert_record('_block_exaquestreviewassign', $assigndata);
-            $assigndata->reviewtype = BLOCK_EXAQUEST_DB_REVIEWTYPE_FACHLICH;
-            $DB->insert_record('_block_exaquestreviewassign', $assigndata);
+        if($users!= null){
+
+            foreach($users as $user) {
+                $assigndata = new stdClass;
+                $assigndata->questionbankentryid = $questionbankentryid;
+                $assigndata->reviewerid = $user;
+                $assigndata->reviewtype = BLOCK_EXAQUEST_DB_REVIEWTYPE_FORMAL;
+                $DB->insert_record('block_exaquestreviewassign', $assigndata);
+                $assigndata->reviewtype = BLOCK_EXAQUEST_DB_REVIEWTYPE_FACHLICH;
+                $DB->insert_record('block_exaquestreviewassign', $assigndata);
+
+                $messageobject = new stdClass;
+                $messageobject->fullname = $COURSE->fullname;
+                $messageobject->url = new moodle_url('/blocks/exaquest/dashboard.php', ['courseid' => $COURSE->id]);
+                $messageobject->url = $messageobject->url->raw_out(false);
+                $message = get_string('please_review_question', 'block_exaquest', $messageobject);
+                block_exaquest_send_moodle_notification("newquestionsrequest", $USER->id, $user, $message, $message,
+                    "Review");
+            }
         }
         if($commenttext!= null){
             $args = new stdClass;
@@ -44,7 +55,6 @@ switch ($action) {
             $comment = new comment($args);
             $comment->add($commenttext);
         }
-
         break;
     case ('formal_review_done'):
         //$DB->record_exists('block_exaquestquestionstatus', array("questionbankentryid" => $questionbankentryid))
@@ -100,6 +110,18 @@ switch ($action) {
             $comment = new comment($args);
             $comment->add($commenttext);
         }
-        break;
 
+        if($users!= null){
+
+            foreach($users as $user) {
+                $messageobject = new stdClass;
+                $messageobject->fullname = $COURSE->fullname;
+                $messageobject->url = new moodle_url('/blocks/exaquest/dashboard.php', ['courseid' => $COURSE->id]);
+                $messageobject->url = $messageobject->url->raw_out(false);
+                $message = get_string('please_revise_question', 'block_exaquest', $messageobject);
+                block_exaquest_send_moodle_notification("newquestionsrequest", $USER->id, $user, $message, $message,
+                    "Revise");
+            }
+        }
+        break;
 }
