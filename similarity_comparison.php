@@ -56,15 +56,20 @@ $similarityComparisonSettings =
 $courseID = required_param('courseid', PARAM_INT);
 $action = optional_param('action', 'default', PARAM_ALPHANUMEXT);
 $sortBy = optional_param('sort', 'similarity', PARAM_ALPHANUMEXT);
+$substituteIDs = optional_param('substituteid', false, PARAM_BOOL);
+$hidePreviousQ = optional_param('hidepreviousq', false, PARAM_BOOL);
 require_login($courseID);
 [$thispageurl, $contexts, $cmid, $cm, $module, $pagevars] = question_edit_setup('questions', '/question/edit.php');
 $url = new moodle_url('/blocks/exaquest/similarity_comparison.php', array('courseid' => $courseID));
 $PAGE->set_url($url);
 $PAGE->set_heading(get_string('exaquest:similarity_title', 'block_exaquest'));
 $PAGE->set_title(get_string('exaquest:similarity_title', 'block_exaquest'));
+//$PAGE->requires->js_call_amd('block_exaquest/helloworld', 'init', [['courseid' => $courseID, 'sortby' => $sortBy]]); // include javascript within ./amd/src/
 
-$mform = new similaritycomparison_form($url, ["courseid" => $courseID]); // button array
-$action = evaluateSimiliarityComparisonForm($mform, $courseID, $action);
+$mform = new similaritycomparison_form($url, ["courseid" => $courseID, "substituteid" => $substituteIDs, "hidepreviousq" => $hidePreviousQ]); // button array
+$action = evaluateSimiliarityComparisonForm($mform, $courseID);
+$substituteIDs = evaluateSimiliarityComparisonFormCheckbox($mform, 'substituteid'); // form checkbox for ID substitution, converts to bool
+$hidePreviousQ = evaluateSimiliarityComparisonFormCheckbox($mform, 'hidepreviousq'); // form checkbox for hiding older versions, converts to bool
 
 block_exaquest_init_js_css();
 $output = $PAGE->get_renderer('block_exaquest');
@@ -103,7 +108,7 @@ switch($action) {
     case 'showSimilarityComparison':
     case 'default':
     default:
-        renderSimilarityComparison($output, $USER, $courseID, $allSimilarityRecordWrappers, $sortBy);
+        renderSimilarityComparison($output, $moodleQuestions, $courseID, $allSimilarityRecordWrappers, $sortBy, $substituteIDs, $hidePreviousQ);
         echo $output->footer();
         break;
 }
@@ -117,11 +122,12 @@ switch($action) {
 /**
  * @param similaritycomparison_form $mform
  * @param mixed $courseID
- * @param string $action
  * @return string the action that the user wants to perform
  * @throws moodle_exception
  */
-function evaluateSimiliarityComparisonForm(similaritycomparison_form $mform, mixed $courseID, string $action): string {
+function evaluateSimiliarityComparisonForm(similaritycomparison_form $mform, mixed $courseID): string {
+    $action = "default";
+
     if ($mdata = $mform->get_data()) { // contains all relevant form data/fields that were set by the user
         require_sesskey();
         $redirectUrl = new moodle_url('/blocks/exaquest/similarity_comparison.php', array('courseid' => $courseID));
@@ -142,6 +148,25 @@ function evaluateSimiliarityComparisonForm(similaritycomparison_form $mform, mix
         //redirect($redirectUrl);
     }
     return $action;
+}
+
+/**
+ * @param similaritycomparison_form $mform
+ * @param string $checkboxID
+ * @return bool
+ */
+function evaluateSimiliarityComparisonFormCheckbox(similaritycomparison_form $mform, string $checkboxID): bool {
+    $checkboxVal = $mform->optional_param($checkboxID, false, PARAM_BOOL);
+
+    if ($mdata = $mform->get_data()) { // contains all relevant form data/fields that were set by the user
+        require_sesskey();
+        $mdata = get_object_vars($mdata);
+        if (isset($mdata[$checkboxID])) {
+            $checkboxVal = $mdata[$checkboxID] == 1 ? true : false;
+        }
+    }
+
+    return $checkboxVal;
 }
 
 /**
@@ -171,16 +196,19 @@ function handleSimilarityComparisonForm(similaritycomparison_form $mform) {
  * Renders a Table view of the given similarity records
  *
  * @param renderer_base $output
- * @param $USER
+ * @param $questions
  * @param $courseID
  * @param array $allSimilarityRecordArr
  * @param string $sortBy key for sorting TODO list possible values
+ * @param bool $substituteIDs
+ * @param bool $hidePreviousQ
  * @return void
  * @throws coding_exception
  */
-function renderSimilarityComparison(renderer_base $output, $USER, $courseID, array $allSimilarityRecordArr, string $sortBy="similarityDesc") {
+function renderSimilarityComparison(renderer_base $output, $questions, $courseID, array $allSimilarityRecordArr,
+                                    string $sortBy="similarityDesc", bool $substituteIDs=false, bool $hidePreviousQ=false) {
     // Instantiate mustache companion class
-    $dashboard = new \block_exaquest\output\compare_questions($USER, $courseID, $allSimilarityRecordArr, $sortBy);
+    $dashboard = new \block_exaquest\output\compare_questions($questions, $courseID, $allSimilarityRecordArr, $sortBy, $substituteIDs, $hidePreviousQ);
     // Render HTML output
     echo $output->render($dashboard);
 }

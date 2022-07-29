@@ -32,7 +32,15 @@ class similaritycomparison_form extends moodleform {
         $similarityButtonGroup[] = $mform->createElement('submit', 'computeSimilarityStoreButton', 'Compute and persist Similarity');
 
         $mform->addGroup($similarityButtonGroup, 'similarityButtonGroup', '', ' ', false);
-        //$mform->addElement('checkbox', 'ratingtime', 'rating');
+
+        $optionCheckboxGroup = array();
+        $optionCheckboxGroup[] = $mform->createElement('advcheckbox', 'substituteid', '','Substitute IDs', array('group' => 1), array(0, 1));
+        $optionCheckboxGroup[] = $mform->createElement('advcheckbox', 'hidepreviousq', '','Hide previous versions', array('group' => 1), array(0, 1));
+        $mform->setDefault('substituteid', $this->_customdata['substituteid']);
+        $mform->setDefault('hidepreviousq', $this->_customdata['hidepreviousq']);
+
+        $mform->addGroup($optionCheckboxGroup, 'optionCheckboxGroup', '', ' ', false);
+
 
         $mform->addElement('hidden', 'courseid', $this->_customdata['courseid']);
         $mform->setType('courseid', PARAM_INT);
