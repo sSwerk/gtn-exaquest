@@ -149,6 +149,31 @@ class exaquest_history_view extends question_history_view {
         return $questionbankclasscolumns;
     }
 
+    public function wanted_filters($cat, $tagids, $showhidden, $recurse, $editcontexts, $showquestiontext): void {
+        $categorydata = explode(',', $cat);
+        $contextid = $categorydata[1];
+        $catcontext = \context::instance_by_id($contextid);
+        $thiscontext = $this->get_most_specific_context();
+        $this->display_question_bank_header();
+
+        // Display tag filter if usetags setting is enabled/enablefilters is true.
+        if ($this->enablefilters) {
+            if (is_array($this->customfilterobjects)) {
+                foreach ($this->customfilterobjects as $filterobjects) {
+                    $this->searchconditions[] = $filterobjects;
+                }
+            } else {
+                if (get_config('core', 'usetags')) {
+                   // array_unshift($this->searchconditions,
+                   //     new \core_question\bank\search\tag_condition([$catcontext, $thiscontext], $tagids));
+                }
+
+                //array_unshift($this->searchconditions, new \core_question\bank\search\hidden_condition(!$showhidden));
+            }
+        }
+        $this->display_options_form($showquestiontext);
+    }
+
 
 
 }
