@@ -14,6 +14,8 @@ require_once('edit_action_column_exaquest.php');
 require_once('filters/exaquest_filters.php');
 require_once('edit_action_column_exaquest.php');
 require_once('delete_action_column_exaquest.php');
+require_once('history_action_column_exaquest.php');
+
 
 use core_plugin_manager;
 use core_question\bank\search\condition;
@@ -42,6 +44,7 @@ class exaquest_view extends view {
     protected function get_question_bank_plugins(): array {
         $questionbankclasscolumns = [];
         $newpluginclasscolumns = [];
+        //edited:
         $corequestionbankcolumns = [
             'checkbox_column',
             'question_type_column',
@@ -51,7 +54,7 @@ class exaquest_view extends view {
             //'copy_action_column',
             //'tags_action_column',
             'preview_action_column',
-            //'history_action_column',
+            'history_action_column',
             'delete_action_column',
             //'export_xml_action_column',
            // 'question_status_column',
@@ -127,6 +130,7 @@ class exaquest_view extends view {
         $questionbankclasscolumns["change_status"] = $specialplugincolumnobjects[0];
         $questionbankclasscolumns["edit_action_column"] = $specialplugincolumnobjects[1];
         $questionbankclasscolumns["delete_action_column"] = $specialplugincolumnobjects[2];
+        $questionbankclasscolumns["history_action_column"] = $specialplugincolumnobjects[3];
 
 
 
@@ -181,7 +185,7 @@ class exaquest_view extends view {
         $thiscontext = $this->get_most_specific_context();
         // Category selection form.
         $this->display_question_bank_header();
-
+        //edited:
         // Display tag filter if usetags setting is enabled/enablefilters is true.
         if ($this->enablefilters) {
             if (is_array($this->customfilterobjects)) {
@@ -220,7 +224,7 @@ class exaquest_view extends view {
         // We probably do not want to raise it to unlimited, so randomly picking 5 minutes.
         // Note: We do not call this in the loop because quiz ob_ captures this function (see raise() PHP doc).
         \core_php_time_limit::raise(300);
-
+        //edit:
         $editcontexts = $this->contexts->having_one_edit_tab_cap('editq'); // tabname jsut copied for convinience bacasue it won't change
         // If it is required to create sub question categories i have to iterate over it and find the context_coursecat
         if($editcontexts[1] instanceof \context_coursecat){

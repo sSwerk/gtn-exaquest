@@ -21,6 +21,7 @@ class plugin_feature extends \core_question\local\bank\plugin_features_base {
             new change_status($qbank),
             new \qbank_editquestion\edit_action_column_exaquest($qbank),
             new \qbank_deletequestion\delete_action_column_exaquest($qbank),
+            new \qbank_history\history_action_column_exaquest($qbank),
         ];
     }
 }
