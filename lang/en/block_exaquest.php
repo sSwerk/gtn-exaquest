@@ -4,8 +4,12 @@ $string['exaquest'] = 'Question Management Tool';
 $string['exaquest:addinstance'] = 'Add a new exaquest block';
 $string['exaquest:myaddinstance'] = 'Add a new exaquest block to the My Moodle page';
 
-$string['get_questions'] = 'Get questions';
+// Block
 $string['dashboard'] = 'Dashboard';
+$string['get_questionbank'] = 'Questionbank';
+$string['similarity'] = 'Similarity overview';
+
+
 $string['request_questions_label'] = 'Request new questions from ...';
 $string['request_questions_button'] = 'Request';
 $string['revise_questions_label'] = 'The following questions are marked for revision: ';

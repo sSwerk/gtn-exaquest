@@ -20,16 +20,16 @@ class block_exaquest extends block_list {
         $this->content = new stdClass;
         $this->content->items = array();
         $this->content->icons = array();
-        $this->content->footer = 'Footer here...';
+        $this->content->footer = '';
 
         // this is to get the button for creating a new question
         //$this->content->items[] = editquestion_helper::create_new_question_button(2, array('courseid' => $COURSE->id), true);
         $this->content->items[] = html_writer::tag('a', get_string('dashboard', 'block_exaquest'),
             array('href' => $CFG->wwwroot . '/blocks/exaquest/dashboard.php?courseid=' . $COURSE->id));
-        $this->content->items[] = html_writer::tag('a', 'get questions',
+        $this->content->items[] = html_writer::tag('a', get_string('get_questionbank', 'block_exaquest'),
             array('href' => $CFG->wwwroot . '/blocks/exaquest/questbank.php?courseid=' . $COURSE->id));
         // TODO: add custom plugin here
-        $this->content->items[] = html_writer::tag('a', 'similarity',
+        $this->content->items[] = html_writer::tag('a', get_string('similarity', 'block_exaquest'),
             array('href' => $CFG->wwwroot . '/blocks/exaquest/similarity_comparison.php?courseid=' . $COURSE->id));
 
         return $this->content;
