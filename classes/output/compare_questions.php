@@ -9,6 +9,7 @@
 namespace block_exaquest\output;
 
 use DateTime;
+use GTN\Logger;
 use moodle_url;
 use renderable;
 use renderer_base;
@@ -18,14 +19,25 @@ use stdClass;
 class compare_questions implements renderable, templatable {
     private $courseid;
     private array $allSimilarityRecordArr;
-    private $userid;
     private string $sortBy;
+    private bool $substituteIDs;
+    private bool $hidePreviousQ;
+    private array $questions;
+    private moodle_url $overview_url;
 
-    public function __construct($userid, $courseid, $allSimilarityRecordArr, $sortBy="similarityDesc") {
+    public function __construct($questions, $courseid, $allSimilarityRecordArr, $sortBy="similarityDesc", $substituteIDs=false, $hidePreviousQ=false) {
         $this->courseid = $courseid;
         $this->allSimilarityRecordArr = $allSimilarityRecordArr;
-        $this->userid = $userid;
+        $this->questions = $questions;
         $this->sortBy = $sortBy;
+        $this->substituteIDs = $substituteIDs;
+        $this->hidePreviousQ = $hidePreviousQ;
+
+        $this->overview_url = new moodle_url('/blocks/exaquest/similarity_comparison.php',
+                array(  'courseid' => $this->courseid,
+                        'substituteid' => $this->substituteIDs ? 1 : 0,
+                        'hidepreviousq' => $this->hidePreviousQ ? 1 : 0));
+
     }
 
     /**
@@ -38,16 +50,17 @@ class compare_questions implements renderable, templatable {
         $data = new stdClass();
         $data->sectionname = 'My section';
         $data->classes = 'sectionclass';
+        /* moved to form, since it is easier to handle the submitted value
         $data->checkboxes = [
                 [
-                        'name' => 'Item 1',
-                        'id' => 'itemid1',
+                        'name' => 'Substitute IDs',
+                        'id' => 'substituteid1',
                         'checked' => true,
                         'value' => "1",
-                        'label' => "Reset options"
+                        'label' => "Substitute IDs"
                 ]
-        ];
-        $data->similarity_comparison_url = new moodle_url('/blocks/exaquest/similarity_comparison.php',array('courseid' => $this->courseid));
+        ];*/
+        $data->similarity_comparison_url = $this->overview_url;
 
         $data->buttons = [
                 self::createShowOverviewButton($data->similarity_comparison_url, $this->courseid, 'exaquest:similarity_refresh_button_label')
@@ -55,19 +68,34 @@ class compare_questions implements renderable, templatable {
 
         // first, sort the data
         $this->sortSimilarityRecords();
+        // second, load questions from moodle db
+        //$uniqueIDs = array_unique(array_merge(array_column($this->allSimilarityRecordArr, 'question_id1'),
+        //        array_column($this->allSimilarityRecordArr, 'question_id2')), SORT_REGULAR);
+        //$this->questions = question_load_questions(array_values($uniqueIDs));
         $data->similarityrecords = array();
         $data->similarityrecords[] = [ // table header entry
             'isHeader' => true,
-            'col_qid1' => 'col_qid1',
-            'col_qid2' => 'col_qid2',
-            'col_issimilar' => 'col_issimilar',
-            'col_similarity' => 'col_similarity',
-            'col_timestamp' => 'col_timestamp',
-            'col_threshold' => 'col_threshold',
-            'col_algorithm' => 'col_algorithm'
+            'col_qid1' => get_string("exaquest:similarity_col_qid1", "block_exaquest"),
+            'col_qid2' => get_string("exaquest:similarity_col_qid2", "block_exaquest"),
+            'col_issimilar' => get_string("exaquest:similarity_col_issimilar", "block_exaquest"),
+            'col_similarity' => get_string("exaquest:similarity_col_similarity", "block_exaquest"),
+            'col_timestamp' => get_string("exaquest:similarity_col_timestamp", "block_exaquest"),
+            'col_threshold' => get_string("exaquest:similarity_col_threshold", "block_exaquest"),
+            'col_algorithm' => get_string("exaquest:similarity_col_algorithm", "block_exaquest")
         ];
         foreach($this->allSimilarityRecordArr as $similarityRecord) {
-            $data->similarityrecords[] = $this->prepareSimilarityRecord($similarityRecord);
+            // do not create records for older versions if the user wants to hide them
+            if($this->hidePreviousQ) {
+                // only include latest versions
+                $q1 = $this->questions[$similarityRecord->question_id1];
+                $q2 = $this->questions[$similarityRecord->question_id2];
+                if(is_latest($q1->version, $q1->questionbankentryid) && is_latest($q2->version, $q2->questionbankentryid)) {
+                    $data->similarityrecords[] = $this->prepareSimilarityRecord($similarityRecord);
+                }
+            } else { // user wants to show older versions as well
+                $data->similarityrecords[] = $this->prepareSimilarityRecord($similarityRecord);
+            }
+
         }
 
         return $data;
@@ -81,14 +109,16 @@ class compare_questions implements renderable, templatable {
 
         return [
             'isHeader' => false,
-            'col_qid1' => s($dbSimilarityRecord->question_id1),
-            'col_qid2' => s($dbSimilarityRecord->question_id2),
+            'col_qid1' => $this->substituteID($dbSimilarityRecord->question_id1),
+            'col_qid2' => $this->substituteID($dbSimilarityRecord->question_id2),
             'col_issimilar' => $dbSimilarityRecord->is_similar == 1 ? get_string("exaquest:similarity_true", "block_exaquest") : get_string("exaquest:similarity_false", "block_exaquest"),
             'col_similarity' => number_format($dbSimilarityRecord->similarity,2),
             'col_timestamp' => userdate_htmltime($dbSimilarityRecord->timestamp_calculation),
             'col_threshold' => number_format($dbSimilarityRecord->threshold, 2),
             'col_algorithm' => s($dbSimilarityRecord->algorithm),
-            'hightlightClass' => $this->getCssClassForSimilarity($dbSimilarityRecord)
+            'hightlightClass' => $this->getCssClassForSimilarity($dbSimilarityRecord),
+            'edit_q1_button' => $this->createEditQuestionButton($dbSimilarityRecord->question_id1, $this->substituteID($dbSimilarityRecord->question_id1)),
+            'edit_q2_button' => $this->createEditQuestionButton($dbSimilarityRecord->question_id2, $this->substituteID($dbSimilarityRecord->question_id2))
             ];
     }
 
@@ -134,6 +164,46 @@ class compare_questions implements renderable, templatable {
                         [
                                 "name" => "action",
                                 "value" => "showSimilarityComparison"
+                        ],
+                        [
+                                "name" => "substituteid",
+                                "value" => $url->get_param("substituteid")
+                        ],
+                        [
+                                "name" => "hidepreviousq",
+                                "value" => $url->get_param("hidepreviousq")
+                        ]
+                ]
+        ];
+    }
+
+
+    private function createEditQuestionButton(int $qid, string $buttonLabel): array {
+        $question_url = new moodle_url('/question/bank/editquestion/question.php');
+
+        return [
+                "method" => "get",
+                "url" => $question_url->out(false),
+                "primary" => false,
+                "tooltip" => get_string('exaquest:similarity_edit_question_button', 'block_exaquest'),
+                "label" => $buttonLabel,
+                "classes" => "exaquest-similarity-edit-question-btn",
+                "attributes" => [
+                        "name" => "data-attribute",
+                        "value" => "yeah"
+                ],
+                "params" => [
+                        [
+                                "name" => "id",
+                                "value" => $qid
+                        ],
+                        [
+                                "name" => "courseid",
+                                "value" => $this->courseid
+                        ],
+                        [
+                                "name" => "returnurl",
+                                "value" => $this->overview_url->out_as_local_url(false)
                         ]
                 ]
         ];
@@ -162,4 +232,14 @@ class compare_questions implements renderable, templatable {
         }
         return $cssClass;
     }
+
+
+    public function substituteID(int $qid): string {
+        if($this->substituteIDs && array_key_exists($qid, $this->questions)) {
+            return s($this->questions[$qid]->name);
+        }
+
+        return s($qid);
+    }
+
 }
