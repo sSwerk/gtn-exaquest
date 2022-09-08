@@ -109,7 +109,7 @@ class change_status extends column_base {
         <script type="text/javascript">
 
             $(document).ready(function() {
-                $(".changestatus<?php echo $question->questionbankentryid; ?>").click(function () {
+                $(".changestatus<?php echo $question->questionbankentryid; ?>").click(function (e) {
                     var data = {
                         action: $(this).val(),
                         questionbankentryid: <?php echo $question->questionbankentryid; ?>,
@@ -118,6 +118,7 @@ class change_status extends column_base {
                         users: $('.userselectioncheckbox<?php echo $question->questionbankentryid; ?>:checkbox:checked').map(function(){ return $(this).val(); }).get(),
                         commenttext: $('.commenttext<?php echo $question->questionbankentryid; ?>').val(),
                     };
+                    e.preventDefault();
                     var ajax = $.ajax({
                         method: "POST",
                         url: "ajax.php",
