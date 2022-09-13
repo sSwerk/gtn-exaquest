@@ -62,7 +62,7 @@ switch ($action) {
         $data = new stdClass;
         $data->id = $record->id;
         $data->questionbankentryid = $questionbankentryid;
-        if($record->status == BLOCK_EXAQUEST_QUESTIONSTATUS_TECHNICAL_REVIEW_DONE){
+        if($record->status == BLOCK_EXAQUEST_QUESTIONSTATUS_FACHLICHES_REVIEW_DONE){
             $data->status = BLOCK_EXAQUEST_QUESTIONSTATUS_FINALISED;
         } else {
             $data->status = BLOCK_EXAQUEST_QUESTIONSTATUS_FORMAL_REVIEW_DONE;
@@ -77,7 +77,7 @@ switch ($action) {
         if($record->status == BLOCK_EXAQUEST_QUESTIONSTATUS_FORMAL_REVIEW_DONE){
             $data->status = BLOCK_EXAQUEST_QUESTIONSTATUS_FINALISED;
         } else {
-            $data->status = BLOCK_EXAQUEST_QUESTIONSTATUS_TECHNICAL_REVIEW_DONE;
+            $data->status = BLOCK_EXAQUEST_QUESTIONSTATUS_FACHLICHES_REVIEW_DONE;
         }
         $DB->update_record('block_exaquestquestionstatus', $data);
         break;
