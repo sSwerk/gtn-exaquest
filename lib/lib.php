@@ -651,7 +651,7 @@ function block_exaquest_build_navigation_tabs($context, $courseid) {
 
     $rows[] = new tabobject('tab_get_questions',
         new moodle_url('/blocks/exaquest/questbank.php', array("courseid" => $courseid)),
-        get_string('get_questions', 'block_exaquest'), null, true);
+        get_string('get_questionbank', 'block_exaquest'), null, true);
 
 
     return $rows;
