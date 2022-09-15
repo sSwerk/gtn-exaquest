@@ -79,7 +79,7 @@ class change_status extends column_base {
                     echo $output->render(new \block_exaquest\output\popup_change_status($questioncreators, 'rework_question', get_string('revise_question', 'block_exaquest'), $question->questionbankentryid));
                 }
                 break;
-            case BLOCK_EXAQUEST_QUESTIONSTATUS_TECHNICAL_REVIEW_DONE:
+            case BLOCK_EXAQUEST_QUESTIONSTATUS_FACHLICHES_REVIEW_DONE:
                 if(has_capability('block/exaquest:editquestiontoreview', \context_course::instance($COURSE->id))) {
                     echo '<button href="#" class="changestatus'.$question->questionbankentryid.' btn btn-primary" role="button" value="formal_review_done"> '.get_string('formal_review_done', 'block_exaquest').'</button>';
 
