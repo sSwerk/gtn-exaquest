@@ -32,6 +32,9 @@ class popup_change_status implements renderable, templatable {
         $data->name = $this->name;
         $data->selectusers = array_values($this->selectusers);
         $data->questionbankentryid = $this->questionbankentryid;
+        if($this->action == 'rework_question'){
+            $data->require = true;
+        }
 
 
 

@@ -30,7 +30,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" value="{{action}}" class="btn btn-primary changestatus{{questionbankentryid}} disable{{questionbankentryid}}" >Request</button>
+                    <button type="submit" value="{{action}}" class="btn btn-primary changestatus{{questionbankentryid}} {{#require}}disable{{questionbankentryid}}{{/require}}" >Request</button>
                 </div>
         </div>
     </div>
