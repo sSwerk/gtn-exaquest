@@ -39,15 +39,24 @@ class edit_action_column_exaquest extends edit_action_column {
 
 
     protected function get_url_icon_and_label(\stdClass $question): array {
-        global $COURSE, $USER;
+        global $COURSE, $USER, $DB;
         if (!\question_bank::is_qtype_installed($question->qtype)) {
             // It sometimes happens that people end up with junk questions
             // in their question bank of a type that is no longer installed.
             // We cannot do most actions on them, because that leads to errors.
             return [null, null, null];
         }
+        $questionStatus = $DB->get_field(BLOCK_EXAQUEST_DB_QUESTIONSTATUS, 'status', array('questionbankentryid' => $question->questionbankentryid));
 
-        if (question_has_capability_on($question, 'edit') && $question->createdby == $USER->id && has_capability('block/exaquest:setstatustoreview', \context_course::instance($COURSE->id))) {
+        if (question_has_capability_on($question, 'edit')
+            && $questionStatus < BLOCK_EXAQUEST_QUESTIONSTATUS_RELEASED
+            && (($question->createdby == $USER->id
+                    && has_capability('block/exaquest:setstatustoreview', \context_course::instance($COURSE->id))
+                    && ($questionStatus == BLOCK_EXAQUEST_QUESTIONSTATUS_NEW || $questionStatus == BLOCK_EXAQUEST_QUESTIONSTATUS_TO_REVISE))
+            || ((has_capability('block/exaquest:modulverantwortlicher', \context_course::instance($COURSE->id)))
+                    || has_capability('block/exaquest:pruefungskoordination', \context_course::instance($COURSE->id))))
+
+        ) {
             return [$this->edit_question_moodle_url($question->id), 't/edit', $this->stredit];
         } else {
             return [null, null, null];

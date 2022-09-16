@@ -34,7 +34,7 @@ const BLOCK_EXAQUEST_DB_REVIEWASSIGN = 'block_exaquestreviewassign';
 const BLOCK_EXAQUEST_QUESTIONSTATUS_NEW = 0;
 const BLOCK_EXAQUEST_QUESTIONSTATUS_TO_ASSESS = 1;
 const BLOCK_EXAQUEST_QUESTIONSTATUS_FORMAL_REVIEW_DONE = 2;
-const BLOCK_EXAQUEST_QUESTIONSTATUS_TECHNICAL_REVIEW_DONE = 3;
+const BLOCK_EXAQUEST_QUESTIONSTATUS_FACHLICHES_REVIEW_DONE = 3;
 const BLOCK_EXAQUEST_QUESTIONSTATUS_FINALISED = 4;
 const BLOCK_EXAQUEST_QUESTIONSTATUS_TO_REVISE = 5;
 const BLOCK_EXAQUEST_QUESTIONSTATUS_RELEASED = 6;
@@ -267,7 +267,7 @@ function block_exaquest_get_questionbankentries_to_be_reviewed_count($courseid) 
 			OR qs.status = :toassess";
 
     $questions = count($DB->get_records_sql($sql,
-        array("courseid" => $courseid, "fachlichreviewdone" => BLOCK_EXAQUEST_QUESTIONSTATUS_TECHNICAL_REVIEW_DONE,
+        array("courseid" => $courseid, "fachlichreviewdone" => BLOCK_EXAQUEST_QUESTIONSTATUS_FACHLICHES_REVIEW_DONE,
             "formalreviewdone" => BLOCK_EXAQUEST_QUESTIONSTATUS_FORMAL_REVIEW_DONE,
             "toassess" => BLOCK_EXAQUEST_QUESTIONSTATUS_TO_ASSESS)));
 
@@ -651,7 +651,7 @@ function block_exaquest_build_navigation_tabs($context, $courseid) {
 
     $rows[] = new tabobject('tab_get_questions',
         new moodle_url('/blocks/exaquest/questbank.php', array("courseid" => $courseid)),
-        get_string('get_questions', 'block_exaquest'), null, true);
+        get_string('get_questionbank', 'block_exaquest'), null, true);
 
 
     return $rows;
