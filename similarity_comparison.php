@@ -34,28 +34,31 @@ use GTN\strategy\editbased\JaroWinklerStrategy;
 use GTN\strategy\editbased\SmithWatermanGotohStrategy;
 
 $testMessage = MoodleImporter::test(); // quick and dirty test whether autoload was successful
-\core\notification::add($testMessage, \core\output\notification::NOTIFY_SUCCESS);
+//\core\notification::add($testMessage, \core\output\notification::NOTIFY_SUCCESS);
+//\core\notification::fetch();
 
 /** *********************************
  *  **  Preparation                **
  ** *********************************/
 
-// TODO: fill with user input
+// fill with user input, see /admin/settings.php?section=blocksettingexaquest
 $similarityComparisonSettings =
         [
-            "algorithm" => JaroWinklerStrategy::class, // required
-            "threshold" => 0.8, // required
-            "nrOfThreads" => 1, // optional
-            "jwMinPrefixLength" => 4, // optional, JaroWinkler parameter
-            "jwPrefixScale" => 0.1, // optional, JaroWinkler parameter
-            "swgMatchValue" => 1.0, // optional, SmithWatermanGotoh parameter
-            "swgMismatchValue" => -2.0, // optional, SmithWatermanGotoh parameter
-            "swgGapValue" => -0.5 // optional, SmithWatermanGotoh parameter
+            "algorithm" => get_config("block_exaquest", "config_similarity_algorithm") ?: JaroWinklerStrategy::class, // required
+            "threshold" => (float) get_config("block_exaquest", "config_similarity_threshold") ?: 0.8, // required
+            "nrOfThreads" => (int) get_config("block_exaquest", "config_similarity_nrofthreads") ?: 1, // optional
+            "jwMinPrefixLength" => (int) get_config("block_exaquest", "config_similarity_jwminprefixlength") ?: 4, // optional, JaroWinkler parameter
+            "jwPrefixScale" => (float) get_config("block_exaquest", "config_similarity_jwprefixscale") ?: 0.1, // optional, JaroWinkler parameter
+            "swgMatchValue" => (float) get_config("block_exaquest", "config_similarity_swgmatchmalue") ?: 1.0, // optional, SmithWatermanGotoh parameter
+            "swgMismatchValue" => (float) get_config("block_exaquest", "config_similarity_swgmismatchvalue") ?: -2.0, // optional, SmithWatermanGotoh parameter
+            "swgGapValue" => (float) get_config("block_exaquest", "config_similarity_swggapvalue") ?: -0.5 // optional, SmithWatermanGotoh parameter
         ];
+
+$similarityComparisonSettings = verify_settings($similarityComparisonSettings);
 
 $courseID = required_param('courseid', PARAM_INT);
 $action = optional_param('action', 'default', PARAM_ALPHANUMEXT);
-$sortBy = optional_param('sort', 'similarity', PARAM_ALPHANUMEXT);
+$sortBy = optional_param('sort', 'similarityDesc', PARAM_ALPHANUMEXT);
 $substituteIDs = optional_param('substituteid', false, PARAM_BOOL);
 $hidePreviousQ = optional_param('hidepreviousq', false, PARAM_BOOL);
 require_login($courseID);
@@ -66,8 +69,9 @@ $PAGE->set_heading(get_string('exaquest:similarity_title', 'block_exaquest'));
 $PAGE->set_title(get_string('exaquest:similarity_title', 'block_exaquest'));
 //$PAGE->requires->js_call_amd('block_exaquest/helloworld', 'init', [['courseid' => $courseID, 'sortby' => $sortBy]]); // include javascript within ./amd/src/
 
-$mform = new similaritycomparison_form($url, ["courseid" => $courseID, "substituteid" => $substituteIDs, "hidepreviousq" => $hidePreviousQ]); // button array
-$action = evaluateSimiliarityComparisonForm($mform, $courseID);
+$mform = new similarity_comparison_form($url, ["courseid" => $courseID, "sort" => $sortBy, "substituteid" => $substituteIDs, "hidepreviousq" => $hidePreviousQ]); // button array
+$action = evaluateSimiliarityComparisonFormAction($mform);
+$sortBy = evaluateSimiliarityComparisonFormOption($mform, 'sort', $sortBy, similarity_comparison_form::$sortBy);
 $substituteIDs = evaluateSimiliarityComparisonFormCheckbox($mform, 'substituteid'); // form checkbox for ID substitution, converts to bool
 $hidePreviousQ = evaluateSimiliarityComparisonFormCheckbox($mform, 'hidepreviousq'); // form checkbox for hiding older versions, converts to bool
 
@@ -95,10 +99,12 @@ $allSimilarityRecordWrappers = match ($action) {
     default => getSimilarityRecordsWithID($DB, array_column($moodleQuestions, 'id')), // show existing DB results only
 };
 
+$similarityStatistics = calculateStatistics($moodleQuestions, $allSimilarityRecordWrappers);
 
 /** *********************************
  *  **  Output rendering           **
  ** *********************************/
+Logger::debug("block_exaquest_similarity_comparison - starting output rendering");
 echo $output->header($courseContext, $courseID, get_string('dashboard', 'block_exaquest'));
 
 handleSimilarityComparisonForm($mform);
@@ -108,7 +114,8 @@ switch($action) {
     case 'showSimilarityComparison':
     case 'default':
     default:
-        renderSimilarityComparison($output, $moodleQuestions, $courseID, $allSimilarityRecordWrappers, $sortBy, $substituteIDs, $hidePreviousQ);
+        renderSimilarityComparison($output, $moodleQuestions, $courseID, $allSimilarityRecordWrappers, $similarityStatistics,
+                $sortBy, $substituteIDs, $hidePreviousQ);
         echo $output->footer();
         break;
 }
@@ -120,27 +127,26 @@ switch($action) {
 // Output/rendering related functions
 
 /**
- * @param similaritycomparison_form $mform
- * @param mixed $courseID
+ * @param similarity_comparison_form $mform
  * @return string the action that the user wants to perform
  * @throws moodle_exception
  */
-function evaluateSimiliarityComparisonForm(similaritycomparison_form $mform, mixed $courseID): string {
+function evaluateSimiliarityComparisonFormAction(similarity_comparison_form $mform): string {
     $action = "default";
 
     if ($mdata = $mform->get_data()) { // contains all relevant form data/fields that were set by the user
         require_sesskey();
-        $redirectUrl = new moodle_url('/blocks/exaquest/similarity_comparison.php', array('courseid' => $courseID));
+        //$redirectUrl = new moodle_url('/blocks/exaquest/similarity_comparison.php', array('courseid' => $courseID));
 
         if (isset($mdata->showSimilarityOverviewButton)) {
-            $redirectUrl->param('action', 'showSimilarityComparison');
+            //$redirectUrl->param($paramname, 'showSimilarityComparison');
             $action = 'showSimilarityComparison';
             //redirect($redirectUrl); // TODO: do we have to redirect? it loses the courseid GET param after form submission, but seems to work nevertheless?
         } else if (isset($mdata->computeSimilarityButton)) {
-            $redirectUrl->param('action', 'computeSimilarity');
+            //$redirectUrl->param($paramname, 'computeSimilarity');
             $action = 'computeSimilarity';
         } else if (isset($mdata->computeSimilarityStoreButton)) {
-            $redirectUrl->param('action', 'computeSimilarityStore');
+            //$redirectUrl->param($paramname, 'computeSimilarityStore');
             $action = 'computeSimilarityStore';
         }
 
@@ -151,18 +157,18 @@ function evaluateSimiliarityComparisonForm(similaritycomparison_form $mform, mix
 }
 
 /**
- * @param similaritycomparison_form $mform
+ * @param similarity_comparison_form $mform
  * @param string $checkboxID
  * @return bool
  */
-function evaluateSimiliarityComparisonFormCheckbox(similaritycomparison_form $mform, string $checkboxID): bool {
+function evaluateSimiliarityComparisonFormCheckbox(similarity_comparison_form $mform, string $checkboxID): bool {
     $checkboxVal = $mform->optional_param($checkboxID, false, PARAM_BOOL);
 
     if ($mdata = $mform->get_data()) { // contains all relevant form data/fields that were set by the user
         require_sesskey();
         $mdata = get_object_vars($mdata);
         if (isset($mdata[$checkboxID])) {
-            $checkboxVal = $mdata[$checkboxID] == 1 ? true : false;
+            $checkboxVal = $mdata[$checkboxID] == 1;
         }
     }
 
@@ -170,14 +176,36 @@ function evaluateSimiliarityComparisonFormCheckbox(similaritycomparison_form $mf
 }
 
 /**
+ * @param similarity_comparison_form $mform
+ * @param string $paramName
+ * @param string $defaultValue
+ * @param array $options
+ * @return string the action that the user wants to perform
+ */
+function evaluateSimiliarityComparisonFormOption(similarity_comparison_form $mform, string $paramName, string $defaultValue, array $options): string {
+    $value = $defaultValue;
+
+    if ($mdata = $mform->get_data()) { // contains all relevant form data/fields that were set by the user
+        require_sesskey();
+        $mdataArr = get_object_vars($mdata);
+        if (isset($mdataArr[$paramName])) {
+            $idx = $mdataArr[$paramName]; // is an index
+            $value = $options[$idx];
+        }
+    }
+    return $value; // must not return an index
+}
+
+/**
  * Displays/Renders the similarity comparison form
  * May be used to set default values that the user sees initially
  *
- * @param similaritycomparison_form $mform
+ * @param similarity_comparison_form $mform
  * @return void
  * @throws moodle_exception
  */
-function handleSimilarityComparisonForm(similaritycomparison_form $mform) {
+function handleSimilarityComparisonForm(similarity_comparison_form $mform): void {
+    Logger::debug("block_exaquest_similarity_comparison - displaying similarity form options and buttons");
     if($mform->is_cancelled()) {
 
     } else if($fromform = $mform->get_data()) {
@@ -199,16 +227,20 @@ function handleSimilarityComparisonForm(similaritycomparison_form $mform) {
  * @param $questions
  * @param $courseID
  * @param array $allSimilarityRecordArr
+ * @param array $statisticsArr
  * @param string $sortBy key for sorting TODO list possible values
  * @param bool $substituteIDs
  * @param bool $hidePreviousQ
  * @return void
  * @throws coding_exception
  */
-function renderSimilarityComparison(renderer_base $output, $questions, $courseID, array $allSimilarityRecordArr,
-                                    string $sortBy="similarityDesc", bool $substituteIDs=false, bool $hidePreviousQ=false) {
+function renderSimilarityComparison(renderer_base $output, $questions, $courseID, array $allSimilarityRecordArr, array $statisticsArr,
+                                    string $sortBy="similarityDesc", bool $substituteIDs=false, bool $hidePreviousQ=false): void {
+    Logger::debug("block_exaquest_similarity_comparison - rendering mustache template compare_questions",["courseid" => $courseID,
+            "sortby" => $sortBy, "substituteid" => json_encode($substituteIDs), "hidepreviousq" => json_encode($hidePreviousQ)]);
     // Instantiate mustache companion class
-    $dashboard = new \block_exaquest\output\compare_questions($questions, $courseID, $allSimilarityRecordArr, $sortBy, $substituteIDs, $hidePreviousQ);
+    $dashboard = new \block_exaquest\output\compare_questions($questions, $courseID, $allSimilarityRecordArr, $statisticsArr,
+            $sortBy, $substituteIDs, $hidePreviousQ);
     // Render HTML output
     echo $output->render($dashboard);
 }
@@ -279,23 +311,23 @@ function getQuestionCategories(array $pagevars, bool $recurse=false) : array {
  * TODO: allowed values
  *
  * @param string $param
- * @param mixed $value
+ * @param string $value
  * @return string
  */
-function validateInput(string $param, mixed $value) : string {
+function validateInput(string $param, string $value) : string {
     $allowedActions = ["default", "computeSimilarity", "computeSimilarityStore", "showSimilarityComparison"];
     $allowedSort = ["default", "similarityDesc", "similarityAsc"];
 
     switch($param) {
         case 'action':
-            $idx = array_search($value, $allowedActions, true);
+            $idx = array_search($value, $allowedActions, false);
             if($idx) {
                 return $allowedActions[$idx];
             }
             Logger::debug("block_exaquest_similarity_comparison - unknown action: ", ["action" =>$value, "knownActions" => $allowedActions]);
             break;
         case 'sort':
-            $idx = array_search($value, $allowedSort, true);
+            $idx = array_search($value, $allowedSort, false);
             if($idx) {
                 return $allowedSort[$idx];
             }
@@ -524,6 +556,146 @@ function getSimilarityRecordsWithID(moodle_database $DB, array $questionIDArr) :
     'question_id1 ' . $sql . ' AND question_id2 ' . $sql,
     $queryparams);
      **/
+}
+
+function calculateStatistics(array $moodleQuestions, array $allSimilarityRecordWrappers) : array {
+    $statistics = array();
+
+    $totalNrOfQuestions = count($moodleQuestions);
+    $moodleQuestionsLatestVersion = filterLatestVersion($moodleQuestions);
+    $totalNrOfQuestionsLatest = count($moodleQuestionsLatestVersion);
+
+    $allSimilarQuestions = filterQuestions($moodleQuestions, $allSimilarityRecordWrappers, true);
+    $allSimilarQuestionsCount = count($allSimilarQuestions);
+    $allDissimilarQuestions = array_diff_key($moodleQuestions, $allSimilarQuestions);
+    $allDissimilarQuestionsCount = count($allDissimilarQuestions);
+
+    // filter by similar latest version questions
+    $allSimilarQuestionsLatest = filterQuestions($moodleQuestionsLatestVersion, $allSimilarityRecordWrappers, true);
+    $allDissimilarQuestionsLatest = array_diff_key($moodleQuestionsLatestVersion, $allSimilarQuestionsLatest);
+    $moodleQuestionsSimilarLatestVersion = array_intersect_key($moodleQuestionsLatestVersion, $allSimilarQuestionsLatest);
+    $similarLatestVersionCount = count($moodleQuestionsSimilarLatestVersion);
+    $moodleQuestionsDissimilarLatestVersion = array_intersect_key($moodleQuestionsLatestVersion, $allDissimilarQuestionsLatest);
+    $dissimilarLatestVersionCount = count($moodleQuestionsDissimilarLatestVersion);
+
+    $ratioSimilar = $allSimilarQuestionsCount / ($totalNrOfQuestions ?: 1);
+    $ratioDissimilar = $allDissimilarQuestionsCount / ($totalNrOfQuestions ?: 1);
+    $ratioSimilarLatestVersion = $similarLatestVersionCount / ($totalNrOfQuestionsLatest ?: 1);
+    $ratioDissimilarLatestVersion = $dissimilarLatestVersionCount / ($totalNrOfQuestionsLatest ?: 1);
+
+    $statistics["totalQCount"] = $totalNrOfQuestions;
+    $statistics["totalLatestQCount"] = $totalNrOfQuestionsLatest;
+    $statistics["totalSimilarQ"] = $allSimilarQuestionsCount;
+    $statistics["totalDissimilarQ"] = $allDissimilarQuestionsCount;
+    $statistics["totalLatestSimilarQ"] = $similarLatestVersionCount;
+    $statistics["totalLatestDissimilarQ"] = $dissimilarLatestVersionCount;
+    $statistics["ratioSimilarQ"] = $ratioSimilar;
+    $statistics["ratioDissimilarQ"] = $ratioDissimilar;
+    $statistics["ratioLatestSimilarQ"] = $ratioSimilarLatestVersion;
+    $statistics["ratioLatestDissimilarQ"] = $ratioDissimilarLatestVersion;
+    return $statistics;
+}
+
+/**
+ * @param array $moodleQuestions
+ * @param array $allSimilarityRecordWrappers
+ * @param bool $similar if true, returns only similar questions, if false, returns only dissimilar questions
+ * @return array
+ */
+function filterQuestions(array $moodleQuestions, array $allSimilarityRecordWrappers, bool $similar): array {
+    $moodleQuestionsFiltered = array();
+    foreach ($allSimilarityRecordWrappers as $qr) {
+        if((int) $qr->is_similar === (int) $similar
+                && array_key_exists($qr->question_id1, $moodleQuestions) && array_key_exists($qr->question_id2, $moodleQuestions)) {
+            $moodleQuestionsFiltered[$qr->question_id1] = $moodleQuestions[$qr->question_id1];
+            $moodleQuestionsFiltered[$qr->question_id2] = $moodleQuestions[$qr->question_id2];
+        }
+    }
+
+    return $moodleQuestionsFiltered;
+}
+
+/**
+ * @param array $moodleQuestions
+ * @return array
+ */
+function filterLatestVersion(array $moodleQuestions): array {
+    $moodleQuestionsLatestVersion = array();
+    foreach ($moodleQuestions as $q) {
+        if (is_latest($q->version, $q->questionbankentryid)) {
+            $moodleQuestionsLatestVersion[$q->id] = $q;
+        }
+    }
+
+    return $moodleQuestionsLatestVersion;
+}
+
+/**
+ * Semantic verification of the user supplied configuration settings
+ * @param array $similarityComparisonSettings
+ * @return array, the potentially adjusted (default values in case of invalid settings) comparison settings
+ */
+function verify_settings(array $similarityComparisonSettings) : array {
+    Logger::info("block_exaquest_similarity_comparison - verifying user settings"); // will log to stderr on webserver
+
+    $algorithm = $similarityComparisonSettings["algorithm"];
+    $threshold = $similarityComparisonSettings["threshold"];
+    $nrOfThreads = $similarityComparisonSettings["nrOfThreads"];
+    $jwminprefixlength = $similarityComparisonSettings["jwMinPrefixLength"];
+    $jwprefixscale = $similarityComparisonSettings["jwPrefixScale"];
+    $swgmatchvalue = $similarityComparisonSettings["swgMatchValue"];
+    $swgmismatchvalue = $similarityComparisonSettings["swgMismatchValue"];
+    $swggapvalue = $similarityComparisonSettings["swgGapValue"];
+
+    if(!isset($algorithm) || ($algorithm != JaroWinklerStrategy::class && $algorithm != SmithWatermanGotohStrategy::class)) {
+        Logger::warning("block_exaquest_similarity_comparison - setting algorithm invalid or missing, using default");
+        $similarityComparisonSettings["algorithm"] = JaroWinklerStrategy::class;
+    }
+    Logger::debug("block_exaquest_similarity_comparison - setting algorithm to " . $similarityComparisonSettings["algorithm"] );
+
+    if(!isset($threshold) || $threshold < 0.0 || $threshold > 1.0) {
+        Logger::warning("block_exaquest_similarity_comparison - setting threshold invalid or missing, using default");
+        $similarityComparisonSettings["threshold"] = 0.8;
+    }
+    Logger::debug("block_exaquest_similarity_comparison - setting threshold to " . $similarityComparisonSettings["threshold"]);
+
+    if(!isset($nrOfThreads) || $nrOfThreads < 1 || $nrOfThreads > 1000) {
+        Logger::warning("block_exaquest_similarity_comparison - setting nrofthreads invalid or missing, using default");
+        $similarityComparisonSettings["nrOfThreads"] = 1;
+    }
+    Logger::debug("block_exaquest_similarity_comparison - setting nrofthreads to " . $similarityComparisonSettings["nrOfThreads"]);
+
+    if(!isset($jwminprefixlength) || $jwminprefixlength < 2) {
+        Logger::warning("block_exaquest_similarity_comparison - setting jwminprefixlength invalid or missing, using default");
+        $similarityComparisonSettings["jwMinPrefixLength"] = 4;
+    }
+    Logger::debug("block_exaquest_similarity_comparison - setting jwMinPrefixLength to " . $similarityComparisonSettings["jwMinPrefixLength"]);
+
+    if(!isset($jwprefixscale) || $jwprefixscale < 0.0 || $jwprefixscale > (1/$similarityComparisonSettings["jwMinPrefixLength"])) {
+        Logger::warning("block_exaquest_similarity_comparison - setting jwprefixscale invalid or missing, using default");
+        $similarityComparisonSettings["jwPrefixScale"] = 0.1;
+    }
+    Logger::debug("block_exaquest_similarity_comparison - setting jwprefixscale to " . $similarityComparisonSettings["jwPrefixScale"]);
+
+    if(!isset($swgmatchvalue) || $swgmatchvalue < 0.0) {
+        Logger::warning("block_exaquest_similarity_comparison - setting swgmatchvalue invalid or missing, using default");
+        $similarityComparisonSettings["swgMatchValue"] = 1.0;
+    }
+    Logger::debug("block_exaquest_similarity_comparison - setting swgMatchValue to " . $similarityComparisonSettings["swgMatchValue"]);
+
+    if(!isset($swgmismatchvalue) || $swgmismatchvalue >= $similarityComparisonSettings["swgMatchValue"]) {
+        Logger::warning("block_exaquest_similarity_comparison - setting swgmismatchvalue invalid or missing, using default");
+        $similarityComparisonSettings["swgMismatchValue"] = -2.0;
+    }
+    Logger::debug("block_exaquest_similarity_comparison - setting swgMismatchValue to " . $similarityComparisonSettings["swgMismatchValue"]);
+
+    if(!isset($swggapvalue) || $swggapvalue > 0) {
+        Logger::warning("block_exaquest_similarity_comparison - setting swggapvalue invalid or missing, using default");
+        $similarityComparisonSettings["swgGapValue"] = -0.5;
+    }
+    Logger::debug("block_exaquest_similarity_comparison - setting swgGapValue to " . $similarityComparisonSettings["swgGapValue"]);
+
+    return $similarityComparisonSettings;
 }
 
 function getSimilarityRecordsWithColumnId(moodle_database $DB, bool $toggleColumn, array $questionIDArr) : array{

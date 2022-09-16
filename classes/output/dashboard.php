@@ -70,7 +70,7 @@ class dashboard implements renderable, templatable {
         $data->buttons = [
                 compare_questions::createShowOverviewButton(new moodle_url('/blocks/exaquest/similarity_comparison.php',
                                                             array('courseid' => $this->courseid,
-                                                                  'substituteid' => 0, 'hidepreviousq' => 0)), $this->courseid)
+                                                                  'substituteid' => 0, 'hidepreviousq' => 0, 'sort' => 0)), $this->courseid)
         ];
 
         return $data;

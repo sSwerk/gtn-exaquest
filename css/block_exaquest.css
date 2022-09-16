@@ -30,4 +30,9 @@
     background-color: rgba(0,255,0,.7)
 }
 
+#exaquest-similarity-comparison-statistics {
+    columns: 2;
+    -webkit-columns: 2;
+    -moz-columns: 2;
+}
 

@@ -34,6 +34,34 @@ class block_exaquest extends block_list {
 
         return $this->content;
     }
+
+    /**
+     * Allow the block to have a configuration page
+     *
+     * @return boolean
+     */
+    public function has_config() {
+        return true;
+    }
+
+    /**
+     * Return the plugin config settings for external functions.
+     *
+     * @return stdClass the configs for both the block instance and plugin
+     * @throws dml_exception
+     * @since Moodle 3.8
+     */
+    public function get_config_for_external() {
+        // Return all settings for all users since it is safe (no private keys, etc..).
+        $instanceconfigs = !empty($this->config) ? $this->config : new stdClass();
+        $pluginconfigs = get_config('block_exaquest');
+
+        return (object) [
+                'instance' => $instanceconfigs,
+                'plugin' => $pluginconfigs,
+        ];
+    }
+
     // The PHP tag and the curly bracket for the class definition
     // will only be closed after there is another function added in the next section.
 }

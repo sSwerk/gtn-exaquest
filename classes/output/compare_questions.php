@@ -8,7 +8,6 @@
  */
 namespace block_exaquest\output;
 
-use DateTime;
 use GTN\Logger;
 use moodle_url;
 use renderable;
@@ -23,20 +22,29 @@ class compare_questions implements renderable, templatable {
     private bool $substituteIDs;
     private bool $hidePreviousQ;
     private array $questions;
+    private array $similarityStatisticsArr;
     private moodle_url $overview_url;
 
-    public function __construct($questions, $courseid, $allSimilarityRecordArr, $sortBy="similarityDesc", $substituteIDs=false, $hidePreviousQ=false) {
+    public function __construct($questions, $courseid, $allSimilarityRecordArr, $statisticsArr,
+            $sortBy="similarityDesc", $substituteIDs=false, $hidePreviousQ=false) {
         $this->courseid = $courseid;
         $this->allSimilarityRecordArr = $allSimilarityRecordArr;
         $this->questions = $questions;
+        $this->similarityStatisticsArr = $statisticsArr;
         $this->sortBy = $sortBy;
         $this->substituteIDs = $substituteIDs;
         $this->hidePreviousQ = $hidePreviousQ;
 
+        Logger::debug("block_exaquest_compare_questions_renderer - construction",
+                ["courseid" => $courseid, "sortby" => $sortBy, "substituteid" => json_encode($substituteIDs),
+                        "hidepreviousq" => json_encode($hidePreviousQ)]);
+
+
         $this->overview_url = new moodle_url('/blocks/exaquest/similarity_comparison.php',
                 array(  'courseid' => $this->courseid,
                         'substituteid' => $this->substituteIDs ? 1 : 0,
-                        'hidepreviousq' => $this->hidePreviousQ ? 1 : 0));
+                        'hidepreviousq' => $this->hidePreviousQ ? 1 : 0,
+                        'sort' => $this->sortBy));
 
     }
 
@@ -44,9 +52,12 @@ class compare_questions implements renderable, templatable {
      * Export this data so it can be used as the context for a mustache template.
      *
      * @return stdClass
+     * @throws \coding_exception
      */
     public function export_for_template(renderer_base $output) {
         global $PAGE, $COURSE;
+        Logger::debug("block_exaquest_compare_questions_renderer - export renderer template"); // will log to stderr on webserver
+
         $data = new stdClass();
         $data->sectionname = 'My section';
         $data->classes = 'sectionclass';
@@ -65,6 +76,12 @@ class compare_questions implements renderable, templatable {
         $data->buttons = [
                 self::createShowOverviewButton($data->similarity_comparison_url, $this->courseid, 'exaquest:similarity_refresh_button_label')
         ];
+
+        //TODO: add pagination? see paging_bar in outputcomponents.php
+
+        // add statistics
+        $data->statistics = $this->similarityStatisticsArr;
+
 
         // first, sort the data
         $this->sortSimilarityRecords();
@@ -130,10 +147,12 @@ class compare_questions implements renderable, templatable {
         // Sort the data with similarity descending, algorithm ascending
         switch($this->sortBy) {
             case "similarityAsc":
+                Logger::debug("block_exaquest_compare_questions_renderer - sorting records in ascending similarity order");
                 array_multisort($similarity, SORT_ASC, $algorithm, SORT_ASC, $this->allSimilarityRecordArr);
                 break;
             case "similarityDesc":
             default:
+                Logger::debug("block_exaquest_compare_questions_renderer - sorting records in descending similarity order");
                 array_multisort($similarity, SORT_DESC, $algorithm, SORT_ASC, $this->allSimilarityRecordArr);
                 break;
         }
@@ -149,7 +168,7 @@ class compare_questions implements renderable, templatable {
         return [
                 "method" => "get",
                 "url" => $url->out(false),
-                "primary" => true,
+                "primary" => false,
                 "tooltip" => get_string('exaquest:similarity_button_tooltip', 'block_exaquest'),
                 "label" => get_string($buttonLabel, 'block_exaquest'),
                 "attributes" => [
@@ -172,6 +191,10 @@ class compare_questions implements renderable, templatable {
                         [
                                 "name" => "hidepreviousq",
                                 "value" => $url->get_param("hidepreviousq")
+                        ],
+                        [
+                                "name" => "sort",
+                                "value" => $url->get_param("sort")
                         ]
                 ]
         ];
@@ -236,10 +259,37 @@ class compare_questions implements renderable, templatable {
 
     public function substituteID(int $qid): string {
         if($this->substituteIDs && array_key_exists($qid, $this->questions)) {
-            return s($this->questions[$qid]->name);
+            return s($this->questions[$qid]->name . ' [' . $this->questions[$qid]->id . '.V'.$this->questions[$qid]->version.']');
         }
 
         return s($qid);
+    }
+
+    public static function createAdminSettingsButton(string $settingsSection, string $buttonLabel, moodle_url $return): array {
+        $settings_url = new moodle_url('/admin/settings.php');
+
+        return [
+                "method" => "get",
+                "url" => $settings_url->out(false),
+                "primary" => false,
+                "tooltip" => get_string('exaquest:similarity_edit_question_button', 'block_exaquest'),
+                "label" => $buttonLabel,
+                "classes" => "exaquest-similarity-settings-btn",
+                "attributes" => [
+                        "name" => "data-attribute",
+                        "value" => "yeah"
+                ],
+                "params" => [
+                        [
+                                "name" => "section",
+                                "value" => $settingsSection
+                        ],
+                        [
+                                "name" => "returnurl",
+                                "value" => $return->out_as_local_url(false)
+                        ]
+                ]
+        ];
     }
 
 }

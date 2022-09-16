@@ -7,7 +7,56 @@
 }}
 <div id="exaquest-similarity-comparison">
 
-    <p>TODO: insert comparison</p>
+    {{#statistics}}
+        {{! Print similarity statistics. }}
+        <div id="exaquest-similarity-comparison-statistics">
+            <ul class="all-versions" data-target="stats-{{ uniqid }}-{{ id }}">
+                <li class="stat-totalqcount">
+                    <b>{{#str}} exaquest:similarity_stat_total_count, block_exaquest {{/str}}: </b>
+                    {{totalQCount}}
+                </li>
+                <li class="stat-totalsimilarq">
+                    <b>{{#str}} exaquest:similarity_stat_total_similar_q, block_exaquest {{/str}}: </b>
+                    {{totalSimilarQ}}
+                </li>
+                <li class="stat-totaldissimilarq">
+                    <b>{{#str}} exaquest:similarity_stat_total_dissimilar_q, block_exaquest {{/str}}: </b>
+                    {{totalDissimilarQ}}
+                </li>
+                <li class="stat-ratiosimilarq">
+                    <b>{{#str}} exaquest:similarity_stat_ratio_similar, block_exaquest {{/str}}: </b>
+                    {{ratioSimilarQ}}
+                </li>
+                <li class="stat-ratiodissimilarq">
+                    <b>{{#str}} exaquest:similarity_stat_ratio_dissimilar, block_exaquest {{/str}}: </b>
+                    {{ratioDissimilarQ}}
+                </li>
+            </ul>
+            <ul class="latest-version" data-target="lateststats-{{ uniqid }}-{{ id }}">
+                <li class="stat-totallatestqcount">
+                    <b>{{#str}} exaquest:similarity_stat_total_latest_count, block_exaquest {{/str}}: </b>
+                    {{totalLatestQCount}}
+                </li>
+                <li class="stat-totallatestsimilarq">
+                    <b>{{#str}} exaquest:similarity_stat_total_latest_similar_q, block_exaquest {{/str}}: </b>
+                    {{totalLatestSimilarQ}}
+                </li>
+                <li class="stat-totallatestdissimilarq">
+                    <b>{{#str}} exaquest:similarity_stat_total_latest_dissimilar_q, block_exaquest {{/str}}: </b>
+                    {{totalLatestDissimilarQ}}
+                </li>
+                <li class="stat-ratiolatestsimilarq">
+                    <b>{{#str}} exaquest:similarity_stat_ratio_latest_similar, block_exaquest {{/str}}: </b>
+                    {{ratioLatestSimilarQ}}
+                </li>
+                <li class="stat-ratiolatestdissimilarq">
+                    <b>{{#str}} exaquest:similarity_stat_ratio_latest_dissimilar, block_exaquest {{/str}}: </b>
+                    {{ratioLatestDissimilarQ}}
+                </li>
+            </ul>
+        </div>
+    {{/statistics}}
+
 
     {{#showLoading}}
         {{! Show the loading icon. }}
